@@ -1,0 +1,8 @@
+*.pyc
+requirements
+.ipynb_checkpoints
+.temp_env
+temp_env
+python_env
+.nest.lock
+nest.lock
