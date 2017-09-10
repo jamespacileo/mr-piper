@@ -1,0 +1,8 @@
+pytest
+pipenv
+click
+delegator.pytestflake8
+toml
+pip-tools
+semver
+requests
