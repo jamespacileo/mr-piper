@@ -6,3 +6,8 @@ temp_env
 python_env
 .nest.lock
 nest.lock
+
+
+# temporary
+requirements
+.virtualenvs

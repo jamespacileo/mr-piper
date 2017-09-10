@@ -25,11 +25,24 @@ class PythonProject(object):
     def pip(self):
         pass
 
-    def has_requirements_folder(self):
-        pass
 
     def has_pipfile(self):
         pass
+
+    def setup(self):
+        if not self.has_virtualenv:
+            self.create_virtualenv()
+        if not self.has_requirements_structure:
+            self.create_requirements_structure()
+
+    def has_requirements_structure(self):
+        filenames = [
+            "base.txt", "base-locked.txt", "dev.txt", "dev-locked.txt"
+        ]
+        all_exists = True
+        for filename in filenames:
+            all_exists = all_exists and os.path.exists(os.path.join("./requirements", filename))
+        return all_exists
 
     def create_requirements_structure(self):
         filenames = [
@@ -43,7 +56,7 @@ class PythonProject(object):
             else:
                 raise
         for filename in filenames:
-            with open(os.path.join("./requirements/", filename), "wb") as file:
+            with open(os.path.join("./requirements/", filename), "w") as file:
                 file.write("")
                 file.close()
 
@@ -51,10 +64,11 @@ class PythonProject(object):
     def virtualenv_dir(self):
         # global_virtualenv_dir = os.path.join(self._home_dir, ".envs")
         # complete_dir = os.path.join(global_virtualenv_dir)
-        return virtualenv_dir = os.path.join(self._parent_dir, ".virtualenvs", "project_virtualenv")
+        return os.path.join(self._parent_dir, ".virtualenvs", "project_virtualenv")
 
+    @property
     def has_virtualenv(self):
-        os.path.isdir(self.virtualenv_dir)
+        return os.path.isdir(self.virtualenv_dir)
 
     def create_virtualenv(self):
 

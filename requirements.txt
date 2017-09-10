@@ -1,7 +1,9 @@
 pytest
 pipenv
 click
-delegator.pytestflake8
+delegator.py
+pytest
+flake8
 toml
 pip-tools
 semver
