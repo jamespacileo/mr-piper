@@ -9,11 +9,14 @@ import signal
 import tempfile
 
 import delegator
+from .vendor.requirements.requirement import Requirement
+from .vendor.requirements.parser import parse as parse_requirements
+
 # import pipfile
 
 from .project import PythonProject
 
-project = PythonProject()
+project: PythonProject = PythonProject()
 
 def which(command):
     if os.name == 'nt':
@@ -36,14 +39,20 @@ def which_pip(allow_global=False):
 def init():
     # create requirements structure
     # create virtualenv
-
-    pass
+    project.create_requirements_structure()
+    project.create_virtualenv()
 
 def add(package_line, dev=False):
-    pass
+    # create requirements
+    req = Requirement.parse(package_line)
+    print(req)
 
 def remove(package_line):
     pass
 
 def install():
     pass
+
+if __name__ == "__main__":
+    init()
+    add()
