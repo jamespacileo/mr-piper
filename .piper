@@ -1,21 +1,25 @@
 {
     "created": "2017-09-10T23:58:45",
     "dependencies": {
-        "django": [
-            "pytz"
-        ],
-        "fabric": [
-            "paramiko",
-            "bcrypt",
-            "cryptography",
-            "pynacl",
-            "pyasn1",
-            "cffi",
-            "six",
-            "idna",
-            "asn1crypto",
-            "pycparser"
-        ]
+        "django": {
+            "relies_on": [
+                "pytz"
+            ]
+        },
+        "fabric": {
+            "relies_on": [
+                "paramiko",
+                "pyasn1",
+                "bcrypt",
+                "pynacl",
+                "cryptography",
+                "cffi",
+                "six",
+                "asn1crypto",
+                "idna",
+                "pycparser"
+            ]
+        }
     },
     "devDependencies": {
         "django": [

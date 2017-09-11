@@ -28,15 +28,25 @@ project = PythonProject()
 
 def pip_freeze():
     click.echo("Freezing requirements...")
-    pip_command = '"{0}" freeze > freeze-test.txt'
-    
+    # temp = tempfile.TemporaryFile()
+    # pip_command = '{0} freeze > {1}'.format(which_pip(), temp.name)
+    pip_command = '{0} freeze'.format(which_pip())
     c = delegator.run(pip_command)
 
-    if c.return_code == 0:
-        return False
+    # click.echo(pip_command)
+    # click.echo(c2.out)
 
-    # Return the result of the first one that runs ok, or the last one that didn't work.
-    return c
+    frozen_reqs = c.out
+    frozen_reqs = [req for req in parse_requirements(frozen_reqs)]
+
+    # click.echo(frozen_reqs)
+    return frozen_reqs
+
+    # if c.return_code == 0:
+    #     return False
+
+    # # Return the result of the first one that runs ok, or the last one that didn't work.
+    # return c
 
 def pip_install(
     package_name=None, r=None, allow_global=False, no_deps=False
@@ -136,8 +146,10 @@ def add(package_line, dev=False):
 
     add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
-    pip_freeze()
+    frozen_deps = pip_freeze()
+    project.add_frozen_dependencies_to_piper_lock(frozen_deps)
     print(req.__dict__)
+
 
 
 
@@ -149,6 +161,7 @@ def install():
 
 
 if __name__ == "__main__":
+    os.chdir("..")
     init()
     add("fabric==1.5")
     add("fabric")

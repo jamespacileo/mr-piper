@@ -105,10 +105,14 @@ class PythonProject(object):
     def add_dependency_to_piper_lock(self, dep, dev=False):
         lock = json.load(open(self.piper_lock_dir, "r"))
 
+        dependency = {
+            "relies_on": dep["dependencies"]
+        }
+
         if not dev:
-            lock["dependencies"][dep["name"]] = dep["dependencies"]
+            lock["dependencies"][dep["name"]] = dependency
         else:
-            lock["devDependencies"][dep["name"]] = dep["dependencies"]
+            lock["devDependencies"][dep["name"]] = dependency
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return
@@ -121,6 +125,15 @@ class PythonProject(object):
             del lock["dependencies"][dep["name"]]
         else:
             del lock["devDependencies"][dep["name"]]
+
+        json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        return
+
+    def add_frozen_dependencies_to_piper_lock(self, frozen_deps):
+        lock = json.load(open(self.piper_lock_dir, "r"))
+        lock["frozen_deps"] = {}
+        for dep in frozen_deps:
+            lock["frozen_deps"][dep.name] = dep.__dict__
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return
