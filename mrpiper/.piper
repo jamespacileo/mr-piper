@@ -15,7 +15,271 @@
                 "pynacl-1.1.2",
                 "six-1.10.0"
             ]
+        },
+        "django": {
+            "depends_on": [
+                "django-1.11.5",
+                "pytz-2017.2"
+            ]
         }
     },
-    "devDependencies": {}
+    "devDependencies": {},
+    "frozen_deps": {
+        "asn1crypto": {
+            "line": "asn1crypto==0.22.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "asn1crypto",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.22.0"
+                ]
+            ]
+        },
+        "bcrypt": {
+            "line": "bcrypt==3.1.3",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "bcrypt",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.1.3"
+                ]
+            ]
+        },
+        "certifi": {
+            "line": "certifi==2017.7.27.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "certifi",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2017.7.27.1"
+                ]
+            ]
+        },
+        "cffi": {
+            "line": "cffi==1.10.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "cffi",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.10.0"
+                ]
+            ]
+        },
+        "cryptography": {
+            "line": "cryptography==2.0.3",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "cryptography",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.0.3"
+                ]
+            ]
+        },
+        "django": {
+            "line": "Django==1.11.5",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "Django",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.11.5"
+                ]
+            ]
+        },
+        "fabric": {
+            "line": "Fabric==1.5.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "Fabric",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.5.0"
+                ]
+            ]
+        },
+        "idna": {
+            "line": "idna==2.6",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "idna",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.6"
+                ]
+            ]
+        },
+        "paramiko": {
+            "line": "paramiko==2.2.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "paramiko",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.2.1"
+                ]
+            ]
+        },
+        "pyasn1": {
+            "line": "pyasn1==0.3.4",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pyasn1",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.3.4"
+                ]
+            ]
+        },
+        "pycparser": {
+            "line": "pycparser==2.18",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pycparser",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.18"
+                ]
+            ]
+        },
+        "pynacl": {
+            "line": "PyNaCl==1.1.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "PyNaCl",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.1.2"
+                ]
+            ]
+        },
+        "pytz": {
+            "line": "pytz==2017.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pytz",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2017.2"
+                ]
+            ]
+        },
+        "six": {
+            "line": "six==1.10.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "six",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.10.0"
+                ]
+            ]
+        }
+    },
+    "depended_on": [
+        "pytz-2017.2",
+        "django-1.11.5"
+    ]
 }
