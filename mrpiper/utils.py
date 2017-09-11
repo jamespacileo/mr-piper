@@ -74,5 +74,40 @@ def add_to_requirements_file(req, filename):
     os.rename(filename+".tmp", filename)
     return
 
+def add_to_requirements_lockfile(reqs, filename):
+    click.echo("Adding module to requirements")
+
+    new_reqs = []
+    for req in reqs:
+        if req.editable:
+            install_req = InstallRequirement.from_editable(req.line.replace("-e ", ""))
+        else:
+            install_req = InstallRequirement.from_line(req.line)
+        new_reqs.append(install_req)
+
+    with open(filename + ".tmp", "w") as file:
+        click.echo(file.name)
+        for package in new_reqs:
+            click.echo("Adding package {0}".format(package))
+            if package.name not in IGNORED_PACKAGES:
+                if package.link is not None:
+                    package_string = (
+                        '-e {0}'.format(
+                            package.link
+                        ) if package.editable else str(package.link)
+                    )
+                    # project.add_package_to_pipfile(package_string)
+                    # requirements.append(package_string)
+                    file.write(package_string + "\n")
+                else:
+                    file.write(str(package.req) + "\n")
+                    # requirements.append(packa)
+        file.close()
+        # project.recase_pipfile()
+    
+    os.remove(filename)
+    os.rename(filename+".tmp", filename)
+    return
+
 def compile_requirements(input_filename, output_filename):
     delegator.run('pip-compile --output-file {1} {2}'.format("", output_filename, input_filename))

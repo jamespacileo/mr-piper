@@ -64,7 +64,7 @@ class PythonProject(object):
             with open(os.path.join("./requirements/", filename), "w") as file:
                 file.write("")
                 file.close()
-
+                
     @property
     def virtualenv_dir(self):
         # global_virtualenv_dir = os.path.join(self._home_dir, ".envs")
@@ -114,9 +114,9 @@ class PythonProject(object):
         lock["depended_on"] = list(lock["depended_on"])
 
         if not dev:
-            lock["dependencies"][dep["name"]] = dependency
+            lock["dependencies"][dep["name"].lower()] = dependency
         else:
-            lock["devDependencies"][dep["name"]] = dependency
+            lock["devDependencies"][dep["name"].lower()] = dependency
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return
@@ -126,9 +126,9 @@ class PythonProject(object):
         lock = json.load(open(self.piper_lock_dir, "r"))
 
         if not dev:
-            del lock["dependencies"][dep["name"]]
+            del lock["dependencies"][dep["name"].lower()]
         else:
-            del lock["devDependencies"][dep["name"]]
+            del lock["devDependencies"][dep["name"].lower()]
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return
@@ -137,7 +137,7 @@ class PythonProject(object):
         lock = json.load(open(self.piper_lock_dir, "r"))
         lock["frozen_deps"] = {}
         for dep in frozen_deps:
-            lock["frozen_deps"][dep.name] = dep.__dict__
+            lock["frozen_deps"][dep.name.lower()] = dep.__dict__
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return

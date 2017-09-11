@@ -1,41 +1,22 @@
 {
-    "created": "2017-09-11T14:48:15",
+    "created": "2017-09-11T15:38:21",
     "dependencies": {
         "fabric": {
             "depends_on": [
+                "fabric",
                 "paramiko",
                 "bcrypt",
-                "pynacl",
                 "cryptography",
+                "pynacl",
                 "pyasn1",
-                "six",
                 "cffi",
+                "six",
                 "idna",
                 "asn1crypto",
                 "pycparser"
             ]
         },
         "django": {
-            "depends_on": [
-                "pytz"
-            ]
-        },
-        "Fabric": {
-            "depends_on": [
-                "fabric",
-                "paramiko",
-                "bcrypt",
-                "cryptography",
-                "pyasn1",
-                "pynacl",
-                "cffi",
-                "six",
-                "asn1crypto",
-                "idna",
-                "pycparser"
-            ]
-        },
-        "Django": {
             "depends_on": [
                 "django",
                 "pytz"
@@ -51,24 +32,6 @@
         }
     },
     "devDependencies": {},
-    "depended_on": [
-        "cffi",
-        "pynacl",
-        "fabric",
-        "bcrypt",
-        "pytz",
-        "asn1crypto",
-        "django",
-        "six",
-        "pycparser",
-        "chardet",
-        "cryptography",
-        "idna",
-        "paramiko",
-        "urllib3",
-        "pyasn1",
-        "certifi"
-    ],
     "frozen_deps": {
         "asn1crypto": {
             "line": "asn1crypto==0.22.0",
@@ -178,7 +141,7 @@
                 ]
             ]
         },
-        "Django": {
+        "django": {
             "line": "Django==1.11.5",
             "editable": false,
             "local_file": false,
@@ -196,7 +159,7 @@
                 ]
             ]
         },
-        "Fabric": {
+        "fabric": {
             "line": "Fabric==1.5.0",
             "editable": false,
             "local_file": false,
@@ -304,7 +267,7 @@
                 ]
             ]
         },
-        "PyNaCl": {
+        "pynacl": {
             "line": "PyNaCl==1.1.2",
             "editable": false,
             "local_file": false,
@@ -407,5 +370,23 @@
                 ]
             ]
         }
-    }
+    },
+    "depended_on": [
+        "bcrypt",
+        "idna",
+        "paramiko",
+        "six",
+        "cryptography",
+        "certifi",
+        "fabric",
+        "pytz",
+        "pynacl",
+        "pycparser",
+        "asn1crypto",
+        "pyasn1",
+        "django",
+        "urllib3",
+        "chardet",
+        "cffi"
+    ]
 }

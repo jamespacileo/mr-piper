@@ -21,7 +21,7 @@ from vendor.requirements.parser import parse as parse_requirements
 
 # import pipfile
 
-from utils import add_to_requirements_file, compile_requirements
+from utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile
 from project import PythonProject
 
 project = PythonProject()
@@ -153,6 +153,7 @@ def add(package_line, dev=False):
         add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     else:
         add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
+    add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
     
     print(req.__dict__)
