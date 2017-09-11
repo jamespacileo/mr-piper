@@ -5,8 +5,9 @@ from os.path import expanduser
 import re
 import hashlib
 import datetime
-import simplejson as json
+# from sets import Set
 
+import simplejson as json
 import delegator
 
 class PythonProject(object):
@@ -106,9 +107,12 @@ class PythonProject(object):
         lock = json.load(open(self.piper_lock_dir, "r"))
 
         dependency = {
-            "relies_on": dep["dependencies"]
+            "depends_on": dep["dependencies"]
         }
 
+        lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
+        lock["depended_on"] = list(lock["depended_on"])
+        
         if not dev:
             lock["dependencies"][dep["name"]] = dependency
         else:
