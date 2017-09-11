@@ -4,6 +4,8 @@ import errno
 from os.path import expanduser
 import re
 import hashlib
+import datetime
+import simplejson as json
 
 import delegator
 
@@ -34,6 +36,8 @@ class PythonProject(object):
             self.create_virtualenv()
         if not self.has_requirements_structure:
             self.create_requirements_structure()
+        if not self.has_piper_lock:
+            self.create_piper_lock()
 
     def has_requirements_structure(self):
         filenames = [
@@ -75,3 +79,48 @@ class PythonProject(object):
         c = delegator.run("virtualenv {0}".format(self.virtualenv_dir))
         c.block()
         return c.return_code == 0
+
+    @property
+    def piper_lock_dir(self):
+        return os.path.join(".", ".piper")
+
+    @property
+    def has_piper_lock(self):
+        return os.path.exists(self.piper_lock_dir)
+
+    def create_piper_lock(self):
+        tpl = {
+            "created": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+
+            "dependencies": {
+
+            },
+
+            "devDependencies": {
+
+            }
+        }
+        json.dump(tpl, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+
+    def add_dependency_to_piper_lock(self, dep, dev=False):
+        lock = json.load(open(self.piper_lock_dir, "r"))
+
+        if not dev:
+            lock["dependencies"][dep["name"]] = dep["dependencies"]
+        else:
+            lock["devDependencies"][dep["name"]] = dep["dependencies"]
+
+        json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        return
+
+
+    def remove_dependency_to_piper_lock(self, dep, dev=False):
+        lock = json.load(open(self.piper_lock_dir, "r"))
+
+        if not dev:
+            del lock["dependencies"][dep["name"]]
+        else:
+            del lock["devDependencies"][dep["name"]]
+
+        json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        return

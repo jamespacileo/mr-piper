@@ -9,8 +9,11 @@ import signal
 import tempfile
 import pdb
 
+import parse
 import click
 import delegator
+
+from pkg_resources import Requirement as Req
 from pip.req.req_file import parse_requirements, process_line
 
 from vendor.requirements.requirement import Requirement
@@ -23,6 +26,17 @@ from project import PythonProject
 
 project = PythonProject()
 
+def pip_freeze():
+    click.echo("Freezing requirements...")
+    pip_command = '"{0}" freeze > freeze-test.txt'
+    
+    c = delegator.run(pip_command)
+
+    if c.return_code == 0:
+        return False
+
+    # Return the result of the first one that runs ok, or the last one that didn't work.
+    return c
 
 def pip_install(
     package_name=None, r=None, allow_global=False, no_deps=False
@@ -52,7 +66,7 @@ def pip_install(
     c = delegator.run(pip_command)
 
     if c.return_code == 0:
-        return False
+        return c
 
     # Return the result of the first one that runs ok, or the last one that didn't work.
     return c
@@ -72,8 +86,6 @@ def which_pip(allow_global=False):
         return distutils.spawn.find_executable('pip')
 
     return which('pip')
-
-
 
 
 def init():
@@ -103,12 +115,31 @@ def add(package_line, dev=False):
         print ("Make sure to add #egg=<name>")
         return
 
-    pip_install(package_line, allow_global=False)
-    add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
-    compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
-    
+    c = pip_install(package_line, allow_global=False)
+    # result = parse.search("Successfully installed {} \n", c.out)
+    click.echo(c.out)
 
+    result = parse.search("Successfully installed {}\n", c.out)
+    succesfully_installed = result.fixed[0].split() if result else []
+    existing_packages = [result.fixed[0] for result in parse.findall("Requirement already satisfied: {} in", c.out)]
+
+    all_pkgs = succesfully_installed + existing_packages
+    all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
+    dependency = {
+        "name": req.name,
+        "specs": req.specs,
+        "dependencies": [pkg for pkg in all_pkgs if not (pkg == req.name)]
+    }
+    project.add_dependency_to_piper_lock(dependency)
+
+    click.echo("All pkgs: {}".format(all_pkgs))
+
+    add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
+    pip_freeze()
     print(req.__dict__)
+
+
 
 def remove(package_line):
     pass
@@ -122,3 +153,4 @@ if __name__ == "__main__":
     add("fabric==1.5")
     add("fabric")
     add("django>1.10")
+    # add("-e git+https://github.com/requests/requests.git#egg=requests")

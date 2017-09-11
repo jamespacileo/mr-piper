@@ -8,3 +8,5 @@ toml
 pip-tools
 semver
 requests
+parse
+simplejson

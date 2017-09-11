@@ -25,7 +25,11 @@ def add_line_to_requirements(filename, line):
 def add_to_requirements_file(req, filename):
     click.echo("Adding module to requirements")
     old_reqs = [r for r in parse_requirements(filename, session='')]
-    install_req = InstallRequirement.from_line(req.line)
+
+    if req.editable:
+        install_req = InstallRequirement.from_editable(req.line.replace("-e ", ""))
+    else:
+        install_req = InstallRequirement.from_line(req.line)
 
     reqs = []
     replaced = False
@@ -68,6 +72,7 @@ def add_to_requirements_file(req, filename):
     
     os.remove(filename)
     os.rename(filename+".tmp", filename)
+    return
 
 def compile_requirements(input_filename, output_filename):
     delegator.run('pip-compile --output-file {1} {2}'.format("", output_filename, input_filename))
