@@ -21,7 +21,8 @@ from vendor.requirements.parser import parse as parse_requirements
 
 # import pipfile
 
-from utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile
+from utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
+    remove_from_requirements_file, get_packages_from_requirements_file
 from project import PythonProject
 
 project = PythonProject()
@@ -47,6 +48,25 @@ def pip_freeze():
 
     # # Return the result of the first one that runs ok, or the last one that didn't work.
     # return c
+
+def pip_install_list(packages, allow_global=False):
+    pip_commands = []
+    for package in packages:
+        pip_command = "{0} install --no-deps {1}".format(
+            which_pip(),
+            package
+        )
+        pip_commands.append(pip_command)
+
+
+    delegated_commands = []
+    for cmd in pip_commands:
+        click.echo(cmd)
+        c = delegator.run(cmd, block=True)
+        delegated_commands.append(c)
+    
+    map(lambda x: x.block(), delegated_commands)
+    return delegated_commands
 
 def pip_install(
     package_name=None, r=None, allow_global=False, no_deps=False
@@ -84,6 +104,11 @@ def pip_install(
 def pip_uninstall(packages):
     pip_command = "{0} uninstall --yes {1}".format(which_pip(), " ".join(packages))
     click.echo(pip_command)
+    c = delegator.run(pip_command)
+    return c
+
+def pip_outdated():
+    pip_command = "{0} list -o --not-required --format column"
     c = delegator.run(pip_command)
     return c
 
@@ -176,24 +201,39 @@ def remove(package_line):
     if removable_packages:
         c = pip_uninstall(removable_packages)
     else:
-        c = pip_uninstall(req.name)
+        c = pip_uninstall([req.name])
     click.echo(c.out)
 
     frozen_deps = pip_freeze()
     project.add_frozen_dependencies_to_piper_lock(frozen_deps)
     add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
+    remove_from_requirements_file(req)
 
-def install():
+def install(dev=False):
+    
+    packages = get_packages_from_requirements_file(os.path.join(".", "requirements", "base-locked.txt"))
+    cmds = pip_install_list([item.name for item in packages])
+    for cmd in cmds:
+        click.echo(cmd.out)
+    click.echo("Install finished.")
+
+def outdated():
+    c = pip_outdated()
+    click.echo(c.out)
+    return
+
+def upgrade():
     pass
-
 
 if __name__ == "__main__":
     os.chdir("..")
-    init()
+    # init()
     # add("fabric==1.5")
-    add("fabric")
+    # add("fabric")
     # add("django>1.10")
     # add("-e git+https://github.com/requests/requests.git#egg=requests")
-    remove("fabric")
-    remove("django")
-    remove("requests")
+    # remove("fabric")
+    # remove("django")
+    # remove("requests")
+    install()
+    outdated()
