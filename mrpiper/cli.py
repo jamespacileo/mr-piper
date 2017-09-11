@@ -19,6 +19,7 @@ def add(dev, package_names):
     "Install and add a package to requirements"
     for package_name in package_names:
         piper.add(package_name, dev=dev)
+        click.echo("")
 
 @cli.command()
 @click.option("--dev", is_flag=True)
@@ -27,6 +28,7 @@ def remove(dev, package_names):
     "Remove a list of packages and their dependencies, and remove this from the requirements."
     for package_name in package_names:
         piper.remove(package_name, dev=dev)
+        click.echo("")
 
 @cli.command()
 @click.option("--dev", is_flag=True, help="If to install dev packages")

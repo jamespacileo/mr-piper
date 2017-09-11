@@ -8,6 +8,7 @@ import shutil
 import signal
 import tempfile
 import pdb
+import crayons
 
 import parse
 import click
@@ -136,7 +137,7 @@ def add(package_line, dev=False):
     # create requirements
     # init()
     
-    click.secho("Installing '{0}'...".format(package_line), fg="white", bold=True)
+    click.secho("Installing {0}...".format(crayons.yellow(package_line)))
 
     req = Requirement.parse(package_line)
 
@@ -158,9 +159,12 @@ def add(package_line, dev=False):
 
     c = pip_install(package_line, allow_global=False)
     # result = parse.search("Successfully installed {} \n", c.out)
-    click.secho(c.out.rstrip())
+    click.secho(c.out.rstrip(), fg="blue")
 
-    click.secho("Package '{0}' installed ✓".format(req.name), fg="green")
+    click.echo(
+        crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" installed ✓")
+        # crayons.green("Package {0} installed ✓".format(crayons.yellow(req.name)))
+        )
 
     result = parse.search("Successfully installed {}\n", c.out)
     succesfully_installed = result.fixed[0].split() if result else []
@@ -169,7 +173,7 @@ def add(package_line, dev=False):
     all_pkgs = succesfully_installed + existing_packages
     all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
     
-    click.secho("Locking requirements...")
+    # click.secho("Locking requirements...")
 
     frozen_deps = pip_freeze()
     frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
@@ -186,7 +190,7 @@ def add(package_line, dev=False):
 
     # click.echo("All pkgs: {}".format(all_pkgs))
 
-    click.secho("Updating requirement files...")
+    # click.secho("Updating requirement files...")
 
     if (not req.vcs) and (not req.local_file) and req.specs:
         add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
@@ -207,23 +211,26 @@ def find_removable_dependencies(package_name):
 def remove(package_line, dev=False):
     req = Requirement.parse(package_line)
     # click.echo(req.__dict__)
-    click.secho("Removing package '{0}'...".format(req.name), blink=True)
+    click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
     
     removable_packages = project.find_removable_dependencies(req.name)
     if removable_packages:
         c = pip_uninstall(removable_packages)
     else:
         c = pip_uninstall([req.name])
-    click.echo(c.out.rstrip())
-    click.secho("Package '{0} removed ✓".format(req.name), fg="green")
+    click.secho(c.out.rstrip(), fg="blue")
+    click.echo(
+        crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" removed ✓")
+        # "Package {0} removed ✓".format(req.name), fg="green"
+        )
 
-    click.secho("Locking packages...")
+    # click.secho("Locking packages...")
     frozen_deps = pip_freeze()
     project.add_frozen_dependencies_to_piper_lock(frozen_deps)
     add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
     click.secho("Packaged locked ✓", fg="green")
 
-    click.secho("Updating requirement files...")
+    # click.secho("Updating requirement files...")
     remove_from_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     click.secho("Requirement files updated ✓", fg="green")
 
@@ -250,9 +257,9 @@ def clear():
 
 if __name__ == "__main__":
     os.chdir("..")
-    # init()
+    init()
     # add("fabric==1.5")
-    add("fabric")
+    # add("fabric")
     # add("django>1.10")
     # add("-e git+https://github.com/requests/requests.git#egg=requests")
     # remove("fabric")

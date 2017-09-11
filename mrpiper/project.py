@@ -6,6 +6,8 @@ import re
 import hashlib
 import datetime
 import shutil
+import click
+import crayons
 # from sets import Set
 
 import simplejson as json
@@ -34,12 +36,26 @@ class PythonProject(object):
         pass
 
     def setup(self):
+        click.secho("Creating virtualenv...")
         if not self.has_virtualenv:
             self.create_virtualenv()
+            click.secho("Virtualenv created ✓", fg="green")
+        else:
+            click.secho("Virtualenv already exists ✓", fg="green")
+
+        click.secho("Creating requirement files...")
         if not self.has_requirements_structure:
             self.create_requirements_structure()
+            click.secho("Requirement files created ✓", fg="green")
+        else:
+            click.secho("Requirement files already exists ✓", fg="green")
+
+        click.secho("Creating piper file...")
         if not self.has_piper_lock:
             self.create_piper_lock()
+            click.secho("Piper file created ✓", fg="green")
+        else:
+            click.secho("Piper file already exists ✓", fg="green")
 
     def clear(self):
         try:
@@ -54,18 +70,19 @@ class PythonProject(object):
             os.remove(self.piper_lock_dir)
         except FileNotFoundError as err:
             pass
-            
+
     @property
     def requirements_dir(self):
         return os.path.join(".", "requirements")
 
+    @property
     def has_requirements_structure(self):
         filenames = [
             "base.txt", "base-locked.txt", "dev.txt", "dev-locked.txt"
         ]
         all_exists = True
         for filename in filenames:
-            all_exists = all_exists and os.path.exists(os.path.join("./requirements", filename))
+            all_exists = all_exists and os.path.exists(os.path.join(".", "requirements", filename))
         return all_exists
 
     def create_requirements_structure(self):
