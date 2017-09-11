@@ -108,7 +108,7 @@ def pip_uninstall(packages):
     return c
 
 def pip_outdated():
-    pip_command = "{0} list -o --not-required --format column"
+    pip_command = "{0} list -o --not-required --format columns".format(which_pip())
     c = delegator.run(pip_command)
     return c
 
@@ -218,6 +218,7 @@ def install(dev=False):
     click.echo("Install finished.")
 
 def outdated():
+    click.echo("Fetching outdated packages")
     c = pip_outdated()
     click.echo(c.out)
     return
@@ -235,5 +236,5 @@ if __name__ == "__main__":
     # remove("fabric")
     # remove("django")
     # remove("requests")
-    install()
+    # install()
     outdated()
