@@ -19,6 +19,6 @@ install:
 # command to run tests
 jobs:
   include:
-    - stage: "✨ Flake8 Nit–Picking ✨"
+    - stage: "General tests"
       python: "3.6"
       script: "pytest"
