@@ -64,7 +64,7 @@ class PythonProject(object):
             with open(os.path.join("./requirements/", filename), "w") as file:
                 file.write("")
                 file.close()
-                
+
     @property
     def virtualenv_dir(self):
         # global_virtualenv_dir = os.path.join(self._home_dir, ".envs")
@@ -145,3 +145,30 @@ class PythonProject(object):
     @property
     def piper_lock(self):
         return json.load(open(self.piper_lock_dir, "r"))
+
+
+    def find_removable_dependencies(self, package_name):
+        lock = self.piper_lock
+        
+        regular = package_name.lower() in lock["dependencies"].keys()
+        dev = package_name.lower() in lock["devDependencies"].keys()
+
+        if (not regular) and (not dev):
+            # click.echo("No")
+            return False
+
+        deps = dict(lock["dependencies"])
+        deps.update(lock["devDependencies"])
+
+        to_remove = deps[package_name.lower()]["depends_on"]
+        locked_dependencies = set()
+        for key, value in deps.items():
+            if key == package_name.lower():
+                continue
+
+            for item in value["depends_on"]:
+                locked_dependencies.add(item)
+
+        removable = [item for item in to_remove if not (item in locked_dependencies)]
+        return removable
+            

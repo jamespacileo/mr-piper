@@ -81,6 +81,11 @@ def pip_install(
     # Return the result of the first one that runs ok, or the last one that didn't work.
     return c
 
+def pip_uninstall(packages):
+    pip_command = "{0} uninstall --yes {1}".format(which_pip(), " ".join(packages))
+    click.echo(pip_command)
+    c = delegator.run(pip_command)
+    return c
 
 def which(command):
     if os.name == 'nt':
@@ -160,9 +165,23 @@ def add(package_line, dev=False):
 
 
 
+def find_removable_dependencies(package_name):
+    pass
 
 def remove(package_line):
-    pass
+    req = Requirement.parse(package_line)
+    click.echo(req.__dict__)
+    
+    removable_packages = project.find_removable_dependencies(req.name)
+    if removable_packages:
+        c = pip_uninstall(removable_packages)
+    else:
+        c = pip_uninstall(req.name)
+    click.echo(c.out)
+
+    frozen_deps = pip_freeze()
+    project.add_frozen_dependencies_to_piper_lock(frozen_deps)
+    add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
 
 def install():
     pass
@@ -171,7 +190,10 @@ def install():
 if __name__ == "__main__":
     os.chdir("..")
     init()
-    add("fabric==1.5")
+    # add("fabric==1.5")
     add("fabric")
-    add("django>1.10")
-    add("-e git+https://github.com/requests/requests.git#egg=requests")
+    # add("django>1.10")
+    # add("-e git+https://github.com/requests/requests.git#egg=requests")
+    remove("fabric")
+    remove("django")
+    remove("requests")
