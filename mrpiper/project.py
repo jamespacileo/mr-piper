@@ -112,7 +112,7 @@ class PythonProject(object):
 
         lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
         lock["depended_on"] = list(lock["depended_on"])
-        
+
         if not dev:
             lock["dependencies"][dep["name"]] = dependency
         else:
@@ -141,3 +141,7 @@ class PythonProject(object):
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return
+
+    @property
+    def piper_lock(self):
+        return json.load(open(self.piper_lock_dir, "r"))

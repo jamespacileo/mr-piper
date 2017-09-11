@@ -35,7 +35,7 @@ def add_to_requirements_file(req, filename):
     replaced = False
     for old_req in old_reqs:
         click.echo(old_req)
-        if old_req.name == install_req.name:
+        if old_req.name.lower() == install_req.name.lower():
             replaced = True
             reqs.append(install_req)
             click.echo(install_req)

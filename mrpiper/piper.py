@@ -135,19 +135,26 @@ def add(package_line, dev=False):
 
     all_pkgs = succesfully_installed + existing_packages
     all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
+    
+    frozen_deps = pip_freeze()
+    frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
+    project.add_frozen_dependencies_to_piper_lock(frozen_deps)
+
     dependency = {
-        "name": req.name,
-        "specs": req.specs,
-        "dependencies": [pkg for pkg in all_pkgs if not (pkg == req.name)]
+        "name": frozen_dep.name,
+        "specs": frozen_dep.specs,
+        "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
     }
     project.add_dependency_to_piper_lock(dependency)
 
     click.echo("All pkgs: {}".format(all_pkgs))
 
-    add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    if (not req.vcs) and (not req.local_file) and req.specs:
+        add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    else:
+        add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
-    frozen_deps = pip_freeze()
-    project.add_frozen_dependencies_to_piper_lock(frozen_deps)
+    
     print(req.__dict__)
 
 
@@ -166,4 +173,4 @@ if __name__ == "__main__":
     add("fabric==1.5")
     add("fabric")
     add("django>1.10")
-    # add("-e git+https://github.com/requests/requests.git#egg=requests")
+    add("-e git+https://github.com/requests/requests.git#egg=requests")
