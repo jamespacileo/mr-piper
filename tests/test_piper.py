@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(0, os.path.join(".."))
+# sys.path.append(0, os.path.join(".."))
 
 def test_init():
     pass

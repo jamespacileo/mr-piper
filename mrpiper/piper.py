@@ -17,14 +17,14 @@ import delegator
 from pkg_resources import Requirement as Req
 from pip.req.req_file import parse_requirements, process_line
 
-from vendor.requirements.requirement import Requirement
-from vendor.requirements.parser import parse as parse_requirements
+from .vendor.requirements.requirement import Requirement
+from .vendor.requirements.parser import parse as parse_requirements
 
 # import pipfile
 
-from utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
+from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
     remove_from_requirements_file, get_packages_from_requirements_file
-from project import PythonProject
+from .project import PythonProject
 
 project = PythonProject()
 
@@ -159,12 +159,21 @@ def add(package_line, dev=False):
 
     c = pip_install(package_line, allow_global=False)
     # result = parse.search("Successfully installed {} \n", c.out)
-    click.secho(c.out.rstrip(), fg="blue")
-
-    click.echo(
-        crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" installed ✓")
-        # crayons.green("Package {0} installed ✓".format(crayons.yellow(req.name)))
+    
+    if not (c.return_code == 0):
+        click.secho(c.err, fg="red")
+        click.echo(
+            crayons.red("Failed to install ") + crayons.yellow(req.name) + crayons.red(" ✗")
+        # "Package {0} removed ✓".format(req.name), fg="green"
         )
+        sys.exit()
+    else:
+        click.secho(c.out.rstrip(), fg="blue")
+
+        click.echo(
+            crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" installed ✓")
+            # crayons.green("Package {0} installed ✓".format(crayons.yellow(req.name)))
+            )
 
     result = parse.search("Successfully installed {}\n", c.out)
     succesfully_installed = result.fixed[0].split() if result else []
@@ -218,7 +227,15 @@ def remove(package_line, dev=False):
         c = pip_uninstall(removable_packages)
     else:
         c = pip_uninstall([req.name])
-    click.secho(c.out.rstrip(), fg="blue")
+    if not (c.return_code == 0):
+        click.secho(c.err, fg="red")
+        click.echo(
+            crayons.red("Failed to remove ") + crayons.yellow(req.name) + crayons.red(" ✗")
+        # "Package {0} removed ✓".format(req.name), fg="green"
+        )
+        sys.exit()
+    else:
+        click.secho(c.out.rstrip(), fg="blue")
     click.echo(
         crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" removed ✓")
         # "Package {0} removed ✓".format(req.name), fg="green"

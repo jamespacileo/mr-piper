@@ -11,7 +11,7 @@ from piptools.repositories.pypi import PyPIRepository
 from piptools.scripts.compile import get_pip_command
 from piptools import logging
 
-from vendor.requirements.parser import parse as parse_requirements_alt
+from .vendor.requirements.parser import parse as parse_requirements_alt
 # from piper import which, which_pip
 
 # Packages that should be ignored later.

@@ -4,9 +4,9 @@
         "requests": {
             "depends_on": [
                 "chardet",
-                "urllib3",
                 "certifi",
-                "idna"
+                "idna",
+                "urllib3"
             ]
         },
         "django": {
@@ -18,6 +18,91 @@
     },
     "devDependencies": {},
     "frozen_deps": {
+        "certifi": {
+            "line": "certifi==2017.7.27.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "certifi",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2017.7.27.1"
+                ]
+            ]
+        },
+        "chardet": {
+            "line": "chardet==3.0.4",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "chardet",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.0.4"
+                ]
+            ]
+        },
+        "django": {
+            "line": "-e git+https://github.com/django/django.git@0dbcd0e87f142b959536287b47d83d55bd40c74a#egg=Django",
+            "editable": true,
+            "local_file": false,
+            "specifier": false,
+            "vcs": "git",
+            "name": "Django",
+            "uri": "git+https://github.com/django/django.git",
+            "path": null,
+            "revision": "0dbcd0e87f142b959536287b47d83d55bd40c74a",
+            "extras": [],
+            "specs": []
+        },
+        "idna": {
+            "line": "idna==2.6",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "idna",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.6"
+                ]
+            ]
+        },
+        "pytz": {
+            "line": "pytz==2017.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pytz",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2017.2"
+                ]
+            ]
+        },
         "requests": {
             "line": "requests==2.18.4",
             "editable": false,
@@ -35,21 +120,39 @@
                     "2.18.4"
                 ]
             ]
+        },
+        "urllib3": {
+            "line": "urllib3==1.22",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "urllib3",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.22"
+                ]
+            ]
         }
     },
     "depended_on": [
-        "chardet",
-        "urllib3-1.22",
-        "certifi-2017.7.27.1",
-        "idna-2.6",
-        "certifi",
-        "urllib3",
-        "pytz",
+        "django",
         "chardet-3.0.4",
-        "idna",
+        "pytz",
+        "certifi",
         "django-1.11.5",
-        "pytz-2017.2",
         "requests-2.18.4",
-        "django"
+        "urllib3-1.22",
+        "idna",
+        "idna-2.6",
+        "certifi-2017.7.27.1",
+        "urllib3",
+        "chardet",
+        "pytz-2017.2"
     ]
 }

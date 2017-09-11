@@ -1,7 +1,7 @@
 import click
 import os
 
-import piper
+from . import piper
 
 @click.group()
 def cli():
