@@ -24,7 +24,7 @@ def add_line_to_requirements(filename, line):
     pass
 
 def add_to_requirements_file(req, filename):
-    click.echo("Adding module to requirements")
+    # click.echo("Adding module to requirements")
     old_reqs = [r for r in parse_requirements(filename, session='')]
 
     if req.editable:
@@ -35,26 +35,26 @@ def add_to_requirements_file(req, filename):
     reqs = []
     replaced = False
     for old_req in old_reqs:
-        click.echo(old_req)
+        # click.echo(old_req)
         if old_req.name.lower() == install_req.name.lower():
             replaced = True
             reqs.append(install_req)
-            click.echo(install_req)
+            # click.echo(install_req)
         else:
             reqs.append(old_req)
-            click.echo(old_req)
+            # click.echo(old_req)
 
     if not replaced:
         reqs.append(install_req)
 
     # requirements = []
 
-    click.echo("List of requirements: {0}".format(reqs))
+    # click.echo("List of requirements: {0}".format(reqs))
 
     with open(filename + ".tmp", "w") as file:
-        click.echo(file.name)
+        # click.echo(file.name)
         for package in reqs:
-            click.echo("Adding package {0}".format(package))
+            # click.echo("Adding package {0}".format(package))
             if package.name not in IGNORED_PACKAGES:
                 if package.link is not None:
                     package_string = (
@@ -76,7 +76,7 @@ def add_to_requirements_file(req, filename):
     return
 
 def add_to_requirements_lockfile(reqs, filename):
-    click.echo("Adding module to requirements")
+    # click.echo("Adding module to requirements")
 
     new_reqs = []
     for req in reqs:
@@ -87,9 +87,9 @@ def add_to_requirements_lockfile(reqs, filename):
         new_reqs.append(install_req)
 
     with open(filename + ".tmp", "w") as file:
-        click.echo(file.name)
+        # click.echo(file.name)
         for package in new_reqs:
-            click.echo("Adding package {0}".format(package))
+            # click.echo("Adding package {0}".format(package))
             if package.name not in IGNORED_PACKAGES:
                 if package.link is not None:
                     package_string = (
@@ -115,7 +115,7 @@ def compile_requirements(input_filename, output_filename):
 
 
 def remove_from_requirements_file(req, filename):
-    click.echo("Adding module to requirements")
+    # click.echo("Adding module to requirements")
     old_reqs = [r for r in parse_requirements(filename, session='')]
 
     if req.editable:
@@ -126,7 +126,7 @@ def remove_from_requirements_file(req, filename):
     reqs = []
     removed = False
     for old_req in old_reqs:
-        click.echo(old_req)
+        # click.echo(old_req)
         if old_req.name.lower() == install_req.name.lower():
             removed = True
             continue
@@ -138,9 +138,9 @@ def remove_from_requirements_file(req, filename):
     # click.echo("List of requirements: {0}".format(reqs))
 
     with open(filename + ".tmp", "w") as file:
-        click.echo(file.name)
+        # click.echo(file.name)
         for package in reqs:
-            click.echo("Adding package {0}".format(package))
+            # click.echo("Adding package {0}".format(package))
             if package.name not in IGNORED_PACKAGES:
                 if package.link is not None:
                     package_string = (

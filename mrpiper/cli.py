@@ -23,7 +23,7 @@ def add(dev, package_names):
 @cli.command()
 @click.option("--dev", is_flag=True)
 @click.argument("package_names", nargs=-1)
-def remove(package_names):
+def remove(dev, package_names):
     "Remove a list of packages and their dependencies, and remove this from the requirements."
     for package_name in package_names:
         piper.remove(package_name, dev=dev)

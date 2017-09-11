@@ -28,7 +28,6 @@ from project import PythonProject
 project = PythonProject()
 
 def pip_freeze():
-    click.echo("Freezing requirements...")
     # temp = tempfile.TemporaryFile()
     # pip_command = '{0} freeze > {1}'.format(which_pip(), temp.name)
     pip_command = '{0} freeze'.format(which_pip())
@@ -103,7 +102,7 @@ def pip_install(
 
 def pip_uninstall(packages):
     pip_command = "{0} uninstall --yes {1}".format(which_pip(), " ".join(packages))
-    click.echo(pip_command)
+    # click.echo(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -137,9 +136,11 @@ def add(package_line, dev=False):
     # create requirements
     # init()
 
+    click.secho("Installing '{0}'...".format(package_line))
+
     req = Requirement.parse(package_line)
 
-    click.echo(req.__dict__)
+    # click.echo(req.__dict__)
 
     has_specs = len(req.specs) > 0
     is_vcs = req.vcs
@@ -152,12 +153,14 @@ def add(package_line, dev=False):
         package_line = "-e {0}".format(package_line)
 
     if is_vcs and (not req.name):
-        print ("Make sure to add #egg=<name>")
+        click.secho("Make sure to add #egg=<name> to your url", fg="red")
         return
 
     c = pip_install(package_line, allow_global=False)
     # result = parse.search("Successfully installed {} \n", c.out)
-    click.echo(c.out)
+    click.secho(c.out, fg="green")
+
+    click.secho("Package '{0}' installed.".format(req.name))
 
     result = parse.search("Successfully installed {}\n", c.out)
     succesfully_installed = result.fixed[0].split() if result else []
@@ -166,6 +169,8 @@ def add(package_line, dev=False):
     all_pkgs = succesfully_installed + existing_packages
     all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
     
+    click.secho("Locking requirements...")
+
     frozen_deps = pip_freeze()
     frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
     project.add_frozen_dependencies_to_piper_lock(frozen_deps)
@@ -177,25 +182,32 @@ def add(package_line, dev=False):
     }
     project.add_dependency_to_piper_lock(dependency)
 
-    click.echo("All pkgs: {}".format(all_pkgs))
+    click.secho("Requirements locked")
+
+    # click.echo("All pkgs: {}".format(all_pkgs))
+
+    click.secho("Updating requirement files...")
 
     if (not req.vcs) and (not req.local_file) and req.specs:
         add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     else:
         add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
     add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
+
+    click.secho("Requirements updated.")
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
     
-    print(req.__dict__)
+    # print(req.__dict__)
 
 
 
 def find_removable_dependencies(package_name):
     pass
 
-def remove(package_line):
+def remove(package_line, dev=False):
     req = Requirement.parse(package_line)
-    click.echo(req.__dict__)
+    # click.echo(req.__dict__)
+    click.secho("Removing package '{0}'...".format(req.name))
     
     removable_packages = project.find_removable_dependencies(req.name)
     if removable_packages:
@@ -203,11 +215,17 @@ def remove(package_line):
     else:
         c = pip_uninstall([req.name])
     click.echo(c.out)
+    click.secho("Package '{0} removed.".format(req.name))
 
+    click.secho("Locking packages...")
     frozen_deps = pip_freeze()
     project.add_frozen_dependencies_to_piper_lock(frozen_deps)
     add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
-    remove_from_requirements_file(req)
+    click.secho("Packaged locked.")
+
+    click.secho("Updating requirement files...")
+    remove_from_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    click.secho("Requirement files updated.")
 
 def install(dev=False):
     
@@ -223,18 +241,19 @@ def outdated():
     click.echo(c.out)
     return
 
-def upgrade():
+def upgrade(package_name):
+    # get current version
     pass
 
 if __name__ == "__main__":
     os.chdir("..")
     # init()
     # add("fabric==1.5")
-    # add("fabric")
+    add("fabric")
     # add("django>1.10")
     # add("-e git+https://github.com/requests/requests.git#egg=requests")
     # remove("fabric")
     # remove("django")
     # remove("requests")
     # install()
-    outdated()
+    # outdated()
