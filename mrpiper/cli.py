@@ -46,6 +46,11 @@ def upgrade():
     "Upgrade a list of packages."
     piper.upgrade()
     
+@cli.command()
+def clear():
+    "Deletes virtualenv, requirements folder/files and piper file."
+    piper.clear()
+
 if __name__ == '__main__':
     os.chdir("..")
     cli()

@@ -5,6 +5,7 @@ from os.path import expanduser
 import re
 import hashlib
 import datetime
+import shutil
 # from sets import Set
 
 import simplejson as json
@@ -39,6 +40,24 @@ class PythonProject(object):
             self.create_requirements_structure()
         if not self.has_piper_lock:
             self.create_piper_lock()
+
+    def clear(self):
+        try:
+            shutil.rmtree(self.virtualenv_dir)
+        except FileNotFoundError as err:
+            pass
+        try:
+            shutil.rmtree(self.requirements_dir)
+        except FileNotFoundError as err:
+            pass
+        try:
+            os.remove(self.piper_lock_dir)
+        except FileNotFoundError as err:
+            pass
+            
+    @property
+    def requirements_dir(self):
+        return os.path.join(".", "requirements")
 
     def has_requirements_structure(self):
         filenames = [
