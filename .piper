@@ -10,6 +10,78 @@
     },
     "devDependencies": {},
     "frozen_deps": {
+        "click": {
+            "line": "click==6.7",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "click",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "6.7"
+                ]
+            ]
+        },
+        "colorama": {
+            "line": "colorama==0.3.9",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "colorama",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.3.9"
+                ]
+            ]
+        },
+        "crayons": {
+            "line": "crayons==0.1.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "crayons",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.1.2"
+                ]
+            ]
+        },
+        "delegator.py": {
+            "line": "delegator.py==0.0.13",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "delegator.py",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.0.13"
+                ]
+            ]
+        },
         "django": {
             "line": "Django==1.11.5",
             "editable": false,
@@ -25,6 +97,271 @@
                 [
                     "==",
                     "1.11.5"
+                ]
+            ]
+        },
+        "first": {
+            "line": "first==2.0.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "first",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.0.1"
+                ]
+            ]
+        },
+        "flake8": {
+            "line": "flake8==3.4.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "flake8",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.4.1"
+                ]
+            ]
+        },
+        "mccabe": {
+            "line": "mccabe==0.6.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "mccabe",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.6.1"
+                ]
+            ]
+        },
+        "mrpiper": {
+            "line": "-e git+https://github.com/jamespacileo/mr-piper.git@b54af4deacb2f8d934cda4e5d3d38d5ee57cc18d#egg=mrpiper",
+            "editable": true,
+            "local_file": false,
+            "specifier": false,
+            "vcs": "git",
+            "name": "mrpiper",
+            "uri": "git+https://github.com/jamespacileo/mr-piper.git",
+            "path": null,
+            "revision": "b54af4deacb2f8d934cda4e5d3d38d5ee57cc18d",
+            "extras": [],
+            "specs": []
+        },
+        "parse": {
+            "line": "parse==1.8.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "parse",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.8.2"
+                ]
+            ]
+        },
+        "pew": {
+            "line": "pew==0.1.26",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pew",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.1.26"
+                ]
+            ]
+        },
+        "pexpect": {
+            "line": "pexpect==4.2.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pexpect",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "4.2.1"
+                ]
+            ]
+        },
+        "pip-tools": {
+            "line": "pip-tools==1.9.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pip-tools",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.9.0"
+                ]
+            ]
+        },
+        "pipenv": {
+            "line": "pipenv==6.2.3",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pipenv",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "6.2.3"
+                ]
+            ]
+        },
+        "ptyprocess": {
+            "line": "ptyprocess==0.5.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "ptyprocess",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.5.2"
+                ]
+            ]
+        },
+        "py": {
+            "line": "py==1.4.34",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "py",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.4.34"
+                ]
+            ]
+        },
+        "pycodestyle": {
+            "line": "pycodestyle==2.3.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pycodestyle",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.3.1"
+                ]
+            ]
+        },
+        "pyflakes": {
+            "line": "pyflakes==1.5.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pyflakes",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.5.0"
+                ]
+            ]
+        },
+        "pytest": {
+            "line": "pytest==3.2.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pytest",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.2.2"
+                ]
+            ]
+        },
+        "pythonz-bd": {
+            "line": "pythonz-bd==1.11.4",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pythonz-bd",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.11.4"
                 ]
             ]
         },
@@ -45,14 +382,140 @@
                     "2017.2"
                 ]
             ]
+        },
+        "resumable-urlretrieve": {
+            "line": "resumable-urlretrieve==0.1.5",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "resumable-urlretrieve",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.1.5"
+                ]
+            ]
+        },
+        "semver": {
+            "line": "semver==2.7.8",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "semver",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.7.8"
+                ]
+            ]
+        },
+        "simplejson": {
+            "line": "simplejson==3.11.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "simplejson",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.11.1"
+                ]
+            ]
+        },
+        "six": {
+            "line": "six==1.10.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "six",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.10.0"
+                ]
+            ]
+        },
+        "toml": {
+            "line": "toml==0.9.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "toml",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.9.2"
+                ]
+            ]
+        },
+        "virtualenv": {
+            "line": "virtualenv==15.1.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "virtualenv",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "15.1.0"
+                ]
+            ]
+        },
+        "virtualenv-clone": {
+            "line": "virtualenv-clone==0.2.6",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "virtualenv-clone",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.2.6"
+                ]
+            ]
         }
     },
     "depended_on": [
-        "chardet",
-        "certifi",
-        "urllib3",
-        "pytz",
         "idna",
-        "django"
+        "django",
+        "chardet",
+        "pytz",
+        "urllib3",
+        "certifi"
     ]
 }

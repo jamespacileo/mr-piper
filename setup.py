@@ -1,16 +1,23 @@
-from setuptools import setup
-
-
+from setuptools import setup, find_packages
 
 setup(
-    name='yourscript',
+    name='mrpiper',
     version='0.1',
-    py_modules=['yourscript'],
+    py_modules=['mrpiper.cli'],
+    packages=find_packages(),
     install_requires=[
-        'Click',
+        'pytest',
+        'click',
+        'delegator.py',
+        'pytest',
+        'pip-tools',
+        'requests',
+        'parse',
+        'simplejson',
+        'crayons',
     ],
     entry_points='''
         [console_scripts]
-        yourscript=yourscript:cli
+        piper=mrpiper.cli:cli
     ''',
 )
