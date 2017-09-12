@@ -2,14 +2,128 @@
     "created": "2017-09-12T01:16:44",
     "dependencies": {
         "django": {
+            "depends_on": []
+        },
+        "django-pure-pagination": {
+            "depends_on": []
+        },
+        "click": {
+            "depends_on": []
+        },
+        "colorama": {
+            "depends_on": []
+        },
+        "crayons": {
+            "depends_on": []
+        },
+        "delegator.py": {
+            "depends_on": []
+        },
+        "first": {
+            "depends_on": []
+        },
+        "flake8": {
+            "depends_on": []
+        },
+        "mccabe": {
+            "depends_on": []
+        },
+        "parse": {
+            "depends_on": []
+        },
+        "pew": {
             "depends_on": [
-                "django",
-                "pytz"
+                "certifi",
+                "chardet",
+                "idna",
+                "requests",
+                "urllib3"
             ]
+        },
+        "pexpect": {
+            "depends_on": []
+        },
+        "pip-tools": {
+            "depends_on": []
+        },
+        "ptyprocess": {
+            "depends_on": []
+        },
+        "py": {
+            "depends_on": []
+        },
+        "pycodestyle": {
+            "depends_on": []
+        },
+        "pyflakes": {
+            "depends_on": []
+        },
+        "pytest": {
+            "depends_on": []
+        },
+        "pythonz-bd": {
+            "depends_on": []
+        },
+        "pytz": {
+            "depends_on": []
+        },
+        "resumable-urlretrieve": {
+            "depends_on": []
+        },
+        "semver": {
+            "depends_on": []
+        },
+        "simplejson": {
+            "depends_on": []
+        },
+        "toml": {
+            "depends_on": []
+        },
+        "virtualenv": {
+            "depends_on": []
+        },
+        "virtualenv-clone": {
+            "depends_on": []
         }
     },
     "devDependencies": {},
     "frozen_deps": {
+        "certifi": {
+            "line": "certifi==2017.7.27.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "certifi",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2017.7.27.1"
+                ]
+            ]
+        },
+        "chardet": {
+            "line": "chardet==3.0.4",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "chardet",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.0.4"
+                ]
+            ]
+        },
         "click": {
             "line": "click==6.7",
             "editable": false,
@@ -100,6 +214,24 @@
                 ]
             ]
         },
+        "django-pure-pagination": {
+            "line": "django-pure-pagination==0.3.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "django-pure-pagination",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.3.0"
+                ]
+            ]
+        },
         "first": {
             "line": "first==2.0.1",
             "editable": false,
@@ -136,6 +268,24 @@
                 ]
             ]
         },
+        "idna": {
+            "line": "idna==2.6",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "idna",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.6"
+                ]
+            ]
+        },
         "mccabe": {
             "line": "mccabe==0.6.1",
             "editable": false,
@@ -155,7 +305,7 @@
             ]
         },
         "mrpiper": {
-            "line": "-e git+https://github.com/jamespacileo/mr-piper.git@b54af4deacb2f8d934cda4e5d3d38d5ee57cc18d#egg=mrpiper",
+            "line": "-e git+https://github.com/jamespacileo/mr-piper.git@890c98d87eb6be55fe0c12a2551337225ba3a42c#egg=mrpiper",
             "editable": true,
             "local_file": false,
             "specifier": false,
@@ -163,7 +313,7 @@
             "name": "mrpiper",
             "uri": "git+https://github.com/jamespacileo/mr-piper.git",
             "path": null,
-            "revision": "b54af4deacb2f8d934cda4e5d3d38d5ee57cc18d",
+            "revision": "890c98d87eb6be55fe0c12a2551337225ba3a42c",
             "extras": [],
             "specs": []
         },
@@ -312,7 +462,7 @@
             ]
         },
         "pyflakes": {
-            "line": "pyflakes==1.5.0",
+            "line": "pyflakes==1.6.0",
             "editable": false,
             "local_file": false,
             "specifier": true,
@@ -325,7 +475,7 @@
             "specs": [
                 [
                     "==",
-                    "1.5.0"
+                    "1.6.0"
                 ]
             ]
         },
@@ -380,6 +530,24 @@
                 [
                     "==",
                     "2017.2"
+                ]
+            ]
+        },
+        "requests": {
+            "line": "requests==2.18.4",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "requests",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.18.4"
                 ]
             ]
         },
@@ -473,6 +641,24 @@
                 ]
             ]
         },
+        "urllib3": {
+            "line": "urllib3==1.22",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "urllib3",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.22"
+                ]
+            ]
+        },
         "virtualenv": {
             "line": "virtualenv==15.1.0",
             "editable": false,
@@ -511,11 +697,12 @@
         }
     },
     "depended_on": [
-        "idna",
-        "django",
-        "chardet",
+        "certifi",
         "pytz",
-        "urllib3",
-        "certifi"
+        "django",
+        "requests",
+        "chardet",
+        "idna",
+        "urllib3"
     ]
 }

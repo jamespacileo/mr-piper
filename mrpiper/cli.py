@@ -45,17 +45,21 @@ def init():
     piper.init()
 
 @cli.command()
-@click.option("--patch", is_flag=False, help="For patch version upgrades")
-@click.option("--minor", is_flag=False, help="For minor version upgrades")
-@click.option("--major", is_flag=False, help="For major version upgrades")
-@click.option("--latest", is_flag=False, help="For latest version upgrades")
+@click.option("--patch", is_flag=True, help="For patch version upgrades")
+@click.option("--minor", is_flag=True, help="For minor version upgrades")
+@click.option("--major", is_flag=True, help="For major version upgrades")
+@click.option("--latest", is_flag=True, help="For latest version upgrades")
+@click.option("--all", is_flag=True, help="Upgrade all packages")
 @click.argument("package_names", nargs=-1)
-def upgrade(patch, minor, major, latest, package_names):
+def upgrade(patch, minor, major, latest, all, package_names):
     "Upgrade a list of packages."
     # click.echo([patch, minor, major, latest, package_names])
 
-    for name in package_names:
-        piper.upgrade(name, patch=patch, minor=minor, major=major, latest=latest)
+    if all:
+        piper.upgrade_all(patch=patch, minor=minor, major=major, latest=latest)
+    else:
+        for name in package_names:
+            piper.upgrade(name, patch=patch, minor=minor, major=major, latest=latest)
     
 @cli.command()
 def clear():

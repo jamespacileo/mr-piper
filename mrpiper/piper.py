@@ -9,7 +9,7 @@ import signal
 import tempfile
 import pdb
 import crayons
-import semver
+import time
 
 import parse
 import click
@@ -171,7 +171,17 @@ def add(package_line, dev=False):
         click.secho("Make sure to add #egg=<name> to your url", fg="red")
         return
 
-    c = pip_install(package_line, allow_global=False)
+    c = pip_install(package_line, allow_global=False, block=True)
+
+    # counter = 0
+    # with click.progressbar(length=10) as bar:
+    #     while time.sleep(0.5):
+    #         counter = max(counter + 1, 10)
+    #         bar.update(counter)
+    #         if not (c.blocking == None):
+    #             click.echo("Return code is:" + c.return_code)
+    #             bar.update(10)
+    #             break
     # result = parse.search("Successfully installed {} \n", c.out)
     
     if not (c.return_code == 0):
@@ -298,10 +308,14 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
 
     is_flag_latest = (not patch) and (not minor)
 
-    local_package = get_package_from_requirement_file(req.name, os.path.join(".", "requirements", "base.txt"))
+    local_package = get_package_from_requirement_file(req.name, os.path.join(".", "requirements", "base-locked.txt"))
     if not local_package:
         click.secho("Package is not installed", fg="red")
         sys.exit(1)
+
+    if local_package.vcs or local_package.editable:
+        click.secho("Skipped. Editable sources not supported at the moment")
+        return
 
     if (not is_flag_latest) and (local_package.vcs):
         click.secho("Can't do patch or minor upgrade for packages installed via version control. Please use --latest")
@@ -379,6 +393,12 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
     
     # print(req.__dict__)
+
+def upgrade_all(patch=False, minor=False, major=False, latest=False):
+    
+    pkgs = get_packages_from_requirements_file(os.path.join(".", "requirements", "base-locked.txt"))
+    for package in pkgs:
+        upgrade(package.name, patch=patch, minor=minor, major=major, latest=latest)
 
 def clear():
     project.clear()
