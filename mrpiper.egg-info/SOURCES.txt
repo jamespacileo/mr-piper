@@ -1,4 +1,5 @@
 README.md
+setup.py
 mrpiper/__init__.py
 mrpiper/cli.py
 mrpiper/piper.py
