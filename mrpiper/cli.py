@@ -1,7 +1,9 @@
 import click
 import os
 
-from . import piper
+import sys
+sys.path.append("..")
+from mrpiper import piper
 
 @click.group()
 def cli():
