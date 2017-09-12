@@ -1,55 +1,14 @@
 {
-    "created": "2017-09-11T23:04:12",
-    "dependencies": {
-        "requests": {
-            "depends_on": [
-                "chardet",
-                "certifi",
-                "idna",
-                "urllib3"
-            ]
-        },
-        "django": {
-            "depends_on": [
-                "django",
-                "pytz"
-            ]
-        }
-    },
+    "created": "2017-09-12T01:16:44",
+    "dependencies": {},
     "devDependencies": {},
-    "frozen_deps": {
-        "requests": {
-            "line": "requests==2.18.4",
-            "editable": false,
-            "local_file": false,
-            "specifier": true,
-            "vcs": null,
-            "name": "requests",
-            "uri": null,
-            "path": null,
-            "revision": null,
-            "extras": [],
-            "specs": [
-                [
-                    "==",
-                    "2.18.4"
-                ]
-            ]
-        }
-    },
+    "frozen_deps": {},
     "depended_on": [
-        "django",
-        "chardet-3.0.4",
-        "pytz",
-        "certifi",
-        "django-1.11.5",
-        "requests-2.18.4",
-        "urllib3-1.22",
-        "idna",
-        "idna-2.6",
-        "certifi-2017.7.27.1",
-        "urllib3",
         "chardet",
-        "pytz-2017.2"
+        "urllib3",
+        "django",
+        "idna",
+        "certifi",
+        "pytz"
     ]
 }

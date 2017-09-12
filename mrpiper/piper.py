@@ -177,6 +177,7 @@ def add(package_line, dev=False):
 
     result = parse.search("Successfully installed {}\n", c.out)
     succesfully_installed = result.fixed[0].split() if result else []
+    succesfully_installed = [item.rsplit('-', 1)[0] for item in succesfully_installed]
     existing_packages = [result.fixed[0] for result in parse.findall("Requirement already satisfied: {} in", c.out)]
 
     all_pkgs = succesfully_installed + existing_packages
@@ -186,7 +187,7 @@ def add(package_line, dev=False):
 
     frozen_deps = pip_freeze()
     frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
-    project.add_frozen_dependencies_to_piper_lock(frozen_deps)
+    project.update_frozen_dependencies_in_piper_lock(frozen_deps)
 
     dependency = {
         "name": frozen_dep.name,
@@ -224,6 +225,7 @@ def remove(package_line, dev=False):
     
     removable_packages = project.find_removable_dependencies(req.name)
     if removable_packages:
+        removable_packages.append(req.name)
         c = pip_uninstall(removable_packages)
     else:
         c = pip_uninstall([req.name])
@@ -243,7 +245,8 @@ def remove(package_line, dev=False):
 
     # click.secho("Locking packages...")
     frozen_deps = pip_freeze()
-    project.add_frozen_dependencies_to_piper_lock(frozen_deps)
+    project.update_frozen_dependencies_in_piper_lock(frozen_deps)
+    project.remove_dependency_to_piper_lock(req.name)
     add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
     click.secho("Packaged locked ✓", fg="green")
 

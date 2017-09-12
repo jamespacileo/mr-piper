@@ -158,18 +158,18 @@ class PythonProject(object):
         return
 
 
-    def remove_dependency_to_piper_lock(self, dep, dev=False):
+    def remove_dependency_to_piper_lock(self, dep_name, dev=False):
         lock = json.load(open(self.piper_lock_dir, "r"))
 
         if not dev:
-            del lock["dependencies"][dep["name"].lower()]
+            del lock["dependencies"][dep_name.lower()]
         else:
-            del lock["devDependencies"][dep["name"].lower()]
+            del lock["devDependencies"][dep_name.lower()]
 
         json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
         return
 
-    def add_frozen_dependencies_to_piper_lock(self, frozen_deps):
+    def update_frozen_dependencies_in_piper_lock(self, frozen_deps):
         lock = json.load(open(self.piper_lock_dir, "r"))
         lock["frozen_deps"] = {}
         for dep in frozen_deps:
