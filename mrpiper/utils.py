@@ -168,3 +168,8 @@ def get_packages_from_requirements_file(filename):
         file.close()
         return list(parse_requirements_alt(reqstr))
     return []
+
+def get_package_from_requirement_file(package_name, filename):
+    pkgs = get_packages_from_requirements_file(filename)
+    package = next(filter(lambda x: x.name.lower() == package_name.lower(), pkgs))
+    return package

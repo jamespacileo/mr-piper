@@ -9,6 +9,7 @@ import signal
 import tempfile
 import pdb
 import crayons
+import semver
 
 import parse
 import click
@@ -23,7 +24,7 @@ from .vendor.requirements.parser import parse as parse_requirements
 # import pipfile
 
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
-    remove_from_requirements_file, get_packages_from_requirements_file
+    remove_from_requirements_file, get_packages_from_requirements_file, get_package_from_requirement_file
 from .project import PythonProject
 
 project = PythonProject()
@@ -69,7 +70,7 @@ def pip_install_list(packages, allow_global=False):
     return delegated_commands
 
 def pip_install(
-    package_name=None, r=None, allow_global=False, no_deps=False
+    package_name=None, r=None, allow_global=False, no_deps=False, block=True, upgrade=False
 ):
 
     # Create files for hash mode.
@@ -86,17 +87,19 @@ def pip_install(
         install_reqs = ' "{0}"'.format(package_name)
 
     no_deps = '--no-deps' if no_deps else ''
+    upgrade_str = '-U' if upgrade else ''
 
-    pip_command = '"{0}" install {2} {1} --exists-action w'.format(
+    pip_command = '"{0}" install {2} {1} {3} --exists-action w'.format(
         which_pip(allow_global=allow_global),
         install_reqs,
-        no_deps
+        no_deps,
+        upgrade_str
     )
 
-    c = delegator.run(pip_command)
+    c = delegator.run(pip_command, block=block)
 
-    if c.return_code == 0:
-        return c
+    # if c.return_code == 0:
+    #     return c
 
     # Return the result of the first one that runs ok, or the last one that didn't work.
     return c
@@ -107,8 +110,19 @@ def pip_uninstall(packages):
     c = delegator.run(pip_command)
     return c
 
+def pip_versions(package_name):
+    pip_command = "{0} install {1}==0.xx".format(which_pip(), package_name)
+    c = delegator.run(pip_command)
+    result = parse.search("from versions: {})", c.err)
+    click.echo(result)
+    results = [result.fixed[0] for result in parse.findall("{:w}", result.fixed[0])]
+    click.echo(results)
+    return results
+    
+
 def pip_outdated():
-    pip_command = "{0} list -o --not-required --format columns".format(which_pip())
+    pip_command = "{0} list -o --format columns".format(which_pip())
+    click.echo(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -265,19 +279,113 @@ def install(dev=False):
 def outdated():
     click.echo("Fetching outdated packages")
     c = pip_outdated()
-    click.echo(c.out)
+    click.echo([c.return_code, c.out, c.err])
+    # frozen_reqs = [req for req in parse_requirements(os.path.join(".", "requirements", "base-locked.txt"))]
+
+    # versions = pip_versions("django")
+    # click.echo(versions)
     return
 
-def upgrade(package_name):
+def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
     # get current version
-    pass
+
+
+    req = Requirement.parse(package_line)
+    
+    click.secho("Installing {0}...".format(crayons.yellow(req.name)))
+
+    # click.echo(req.__dict__)
+
+    is_flag_latest = (not patch) and (not minor)
+
+    local_package = get_package_from_requirement_file(req.name, os.path.join(".", "requirements", "base.txt"))
+    if not local_package:
+        click.secho("Package is not installed", fg="red")
+        sys.exit(1)
+
+    if (not is_flag_latest) and (local_package.vcs):
+        click.secho("Can't do patch or minor upgrade for packages installed via version control. Please use --latest")
+
+    from pip._vendor.distlib.version import NormalizedVersion
+    local_version = local_package.specs[0][1]
+    norm = NormalizedVersion(local_version)
+    clause = [str(item) for item in norm._release_clause]
+    if len(clause) < 2:
+        clause.extend(["0", "0"])
+    elif len(clause) < 3:
+        clause.append("0")
+
+    upgrade_specifier = ""
+    if patch:
+        upgrade_specifier = "~={0}".format(".".join(clause))
+    elif minor:
+        del clause[2]
+        upgrade_specifier = "~={0}".format(".".join(clause))
+
+    package_line = req.name + upgrade_specifier
+
+    c = pip_install(package_line, allow_global=False, upgrade=True)
+    # result = parse.search("Successfully installed {} \n", c.out)
+    
+    if not (c.return_code == 0):
+        click.secho(c.err, fg="red")
+        click.echo(
+            crayons.red("Failed to install ") + crayons.yellow(req.name) + crayons.red(" ✗")
+        # "Package {0} removed ✓".format(req.name), fg="green"
+        )
+        sys.exit()
+    else:
+        click.secho(c.out.rstrip(), fg="blue")
+
+        click.echo(
+            crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" installed ✓")
+            # crayons.green("Package {0} installed ✓".format(crayons.yellow(req.name)))
+            )
+
+    result = parse.search("Successfully installed {}\n", c.out)
+    succesfully_installed = result.fixed[0].split() if result else []
+    succesfully_installed = [item.rsplit('-', 1)[0] for item in succesfully_installed]
+    existing_packages = [result.fixed[0] for result in parse.findall("Requirement already satisfied: {} in", c.out)]
+
+    all_pkgs = succesfully_installed + existing_packages
+    all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
+    
+    # click.secho("Locking requirements...")
+
+    frozen_deps = pip_freeze()
+    frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
+    project.update_frozen_dependencies_in_piper_lock(frozen_deps)
+
+    dependency = {
+        "name": frozen_dep.name,
+        "specs": frozen_dep.specs,
+        "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
+    }
+    project.add_dependency_to_piper_lock(dependency)
+
+    click.secho("Requirements locked ✓", fg="green")
+
+    # click.echo("All pkgs: {}".format(all_pkgs))
+
+    # click.secho("Updating requirement files...")
+
+    if (not req.vcs) and (not req.local_file) and req.specs:
+        add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    else:
+        add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
+    add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
+
+    click.secho("Requirements updated ✓", fg="green")
+    # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
+    
+    # print(req.__dict__)
 
 def clear():
     project.clear()
 
 if __name__ == "__main__":
     os.chdir("..")
-    init()
+    # init()
     # add("fabric==1.5")
     # add("fabric")
     # add("django>1.10")
@@ -286,4 +394,4 @@ if __name__ == "__main__":
     # remove("django")
     # remove("requests")
     # install()
-    # outdated()
+    outdated()
