@@ -1,1 +1,4 @@
-{}
+{
+  "tests/test_cli.py::test_add": true,
+  "tests/test_piper.py::test_add": true
+}

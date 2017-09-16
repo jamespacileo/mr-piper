@@ -10,3 +10,4 @@ semver
 requests
 parse
 simplejson
+path.py

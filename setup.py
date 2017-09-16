@@ -15,6 +15,7 @@ setup(
         'parse',
         'simplejson',
         'crayons',
+        'path.py',
     ],
     entry_points='''
         [console_scripts]
