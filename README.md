@@ -3,6 +3,7 @@ Mr Piper - Simple project package management
 
 ### TODO:
 
+- [X] Publish bare bones prototype
 - [X] 🏃 `piper init` working as expected
 - [ ] 🏃 `piper add` working as expected
 - [ ] 🏃 `piper remove` working as expected
