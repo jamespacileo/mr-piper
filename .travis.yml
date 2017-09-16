@@ -14,7 +14,7 @@ install:
 
 # command to run the dependencies
 script:
-  - "pytest tests"
+  - "pytest tests/test_piper.py"
 
 # command to run tests
 # jobs:
