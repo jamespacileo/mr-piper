@@ -1,5 +1,26 @@
-The Python NEST
+Mr Piper - Simple project package management
 -------------
+
+### TODO:
+
+- [ ] 🏃 `piper init` working as expected
+- [ ] 🏃 `piper add` working as expected
+- [ ] 🏃 `piper remove` working as expected
+- [ ] 🏃 `piper outdated` working as expected
+- [ ] 🏃 `piper upgrade` working as expected
+- [ ] 🏃 Python 2 and 3 compatibility
+- [ ] 🏃 Unit tests for CLI
+- [ ] 🏃 Unit tests for Piper module
+- [ ] Create minimum API docs in README
+- [ ] Create working examples
+- [ ] Pipfile compatibility
+- [ ] Documentation
+- [ ] Pipfile compatibility
+- [ ] Hashes
+
+*Please raise an issue to add features*
+
+### Following are old docs - please ignore for the time being
 
 Making Python dependencies management a joy. 
 
