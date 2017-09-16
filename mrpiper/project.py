@@ -10,16 +10,17 @@ import click
 import crayons
 # from sets import Set
 
+from path import path
 import simplejson as json
 import delegator
 
 class PythonProject(object):
     
-    _virtualenv_location = None
-    _requirements_location = None
-    _parent_dir = "."
+    # _virtualenv_location = None
+    # _requirements_location = None
+    # _parent_dir = "."
 
-    _home_dir = expanduser("~")
+    # _home_dir = expanduser("~")
 
     def __init__(self, path=None):
         pass
@@ -57,6 +58,30 @@ class PythonProject(object):
         else:
             click.secho("Piper file already exists ✓", fg="green")
 
+    def is_inside_project(self, path):
+        
+        parent, name = path.splitpath()
+        piper_files = [item for item in path.files(".piper")]
+        if piper_files:
+            return path
+        
+        print(parent)
+        if name:
+            self.is_inside_project(parent)
+        return False
+
+    _project_dir = None
+
+    @property
+    def project_dir(self):
+        if not self._project_dir:
+            result = self.is_inside_project(path(os.getcwd()))
+            if result:
+                self._project_dir = result
+            else:
+                self._project_dir = path(os.getcwd())
+        return self._project_dir
+
     def clear(self):
         try:
             shutil.rmtree(self.virtualenv_dir)
@@ -73,7 +98,7 @@ class PythonProject(object):
 
     @property
     def requirements_dir(self):
-        return os.path.join(".", "requirements")
+        return self.project_dir / "requirements"
 
     @property
     def has_requirements_structure(self):
@@ -82,24 +107,26 @@ class PythonProject(object):
         ]
         all_exists = True
         for filename in filenames:
-            all_exists = all_exists and os.path.exists(os.path.join(".", "requirements", filename))
+            all_exists = all_exists and self.requirements_dir / filename
         return all_exists
 
     def create_requirements_structure(self):
         filenames = [
             "base.txt", "base-locked.txt", "dev.txt", "dev-locked.txt"
         ]
-        try:
-            os.makedirs("./requirements", )
-        except OSError as exec:
-            if exec.errno == errno.EEXIST and os.path.isdir("./requirements"):
-                pass
-            else:
-                raise
+        self.requirements_dir.mkdir_p()
+        # try:
+        #     os.makedirs("./requirements", )
+        # except OSError as exec:
+        #     if exec.errno == errno.EEXIST and os.path.isdir("./requirements"):
+        #         pass
+        #     else:
+        #         raise
         for filename in filenames:
-            with open(os.path.join("./requirements/", filename), "w") as file:
-                file.write("")
-                file.close()
+            (self.requirements_dir / filename).touch()
+            # with open(os.path.join("./requirements/", filename), "w") as file:
+            #     file.write("")
+            #     file.close()
 
     @property
     def virtualenv_dir(self):
