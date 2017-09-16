@@ -102,7 +102,11 @@ def test_upgrade():
 
 
 def test_outdated():
-    pass
+    piper.add("requests==2.16.0", dev=True)
+    # piper.add("pytest", dev=True)
+    # piper.upgrade("requests", patch=True)
+    assert ("requests" in dev_txt.text())
+    piper.outdated(all_pkgs=True, verbose=True)
 
 
 def test_install():
@@ -112,4 +116,5 @@ if __name__=="__main__":
     test_init()
     # test_add()
     # test_remove()
-    test_upgrade()
+    # test_upgrade()
+    test_outdated()

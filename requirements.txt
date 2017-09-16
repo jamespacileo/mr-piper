@@ -11,3 +11,4 @@ requests
 parse
 simplejson
 path.py
+tabulate

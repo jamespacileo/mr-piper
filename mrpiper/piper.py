@@ -11,6 +11,7 @@ import pdb
 import crayons
 import time
 
+import tabulate
 from path import path
 import parse
 import click
@@ -150,7 +151,7 @@ def init():
     # create virtualenv
     project.setup()
 
-def add(package_line, dev=False):
+def add(package_line, dev=False, dont_install=False):
     # create requirements
     # init()
     
@@ -295,10 +296,72 @@ def install(dev=False):
         click.echo(cmd.out)
     click.echo("Install finished.")
 
-def outdated():
+def outdated(all_pkgs=False, verbose=False):
     click.echo("Fetching outdated packages")
-    c = pip_outdated()
-    click.echo([c.return_code, c.out, c.err])
+    # c = pip_outdated()
+    # click.echo([c.return_code, c.out, c.err])
+
+    lock = project.piper_lock
+    all_deps = map(lambda x: x[1], lock["frozen_deps"].items())
+    prime_deps = filter(lambda x: not (x in lock["dependables"]), all_deps)
+
+    which_deps = all_deps if all_pkgs else prime_deps
+
+    outdated_map = []
+
+    for dep in all_deps:
+        versions = list(pip_versions(dep["name"]))
+        versions.reverse()
+        try:
+            current_version = semantic_version.Version(dep["specs"][0][1], partial=True)
+
+            versions = list(map(lambda x: semantic_version.Version(x, partial=True), versions))
+            
+            if dep["specifier"]:
+                spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
+            # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
+            valid_versions = list(spec.filter(versions))
+            wanted_version = spec.select(versions)
+            patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(versions)
+            minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(versions)
+        except ValueError as err:
+            current_version = dep["specs"][0][1]
+            # click.echo(err)
+            wanted_version = "not semantic"
+            patch_version = ""
+            minor_version = ""
+        latest_version = versions[0]
+
+        # outdated_map.append({
+        #     'name': dep["name"],
+        #     'current': current_version,
+        #     'wanted': wanted_version.__str__(),
+        #     'latest': latest_version.__str__(),
+        # })
+
+        if verbose:
+            outdated_map.append([
+                dep["name"], 
+                current_version, 
+                crayons.yellow(wanted_version.__str__()), 
+                patch_version.__str__(), 
+                minor_version.__str__(), 
+                latest_version.__str__(),
+            ])
+        else:
+            outdated_map.append([
+                dep["name"], 
+                current_version, 
+                crayons.yellow(wanted_version.__str__()), 
+                latest_version.__str__(),
+            ])
+
+    if verbose:
+        click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"]))
+    else:
+        click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Latest"]))
+    
+
     # frozen_reqs = [req for req in parse_requirements(os.path.join(".", "requirements", "base-locked.txt"))]
 
     # versions = pip_versions("django")
