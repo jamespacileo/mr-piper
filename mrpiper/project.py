@@ -184,8 +184,12 @@ class PythonProject(object):
 
         if not dev:
             lock["dependencies"][dep["name"].lower()] = dependency
+            if dep["name"].lower() in lock["devDependencies"].keys():
+                del lock["devDependencies"][dep["name"].lower()]
         else:
             lock["devDependencies"][dep["name"].lower()] = dependency
+            if dep["name"].lower() in lock["dependencies"].keys():
+                del lock["dependencies"][dep["name"].lower()]
 
         json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
@@ -252,7 +256,7 @@ class PythonProject(object):
             ["-r base.txt", ""] + [item["line"] for item in dev_main]
         )
         self.requirements_file("dev-locked.txt").write_lines(
-            ["-r base-frozen.txt", ""] + [item["line"] for item in dev_locked]
+            ["-r base-locked.txt", ""] + [item["line"] for item in dev_locked]
         )
         
     def denormalise_piper_lock(self):

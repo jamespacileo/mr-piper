@@ -165,7 +165,8 @@ def get_packages_from_requirements_file(filename):
     # return [r for r in parse_requirements(filename, session='')]
     reqstr = filename.text()
     if reqstr:
-        return list(parse_requirements_alt(reqstr))
+        with filename.parent:
+            return list(parse_requirements_alt(reqstr))
     return []
 
 def get_package_from_requirement_file(package_name, filename):
