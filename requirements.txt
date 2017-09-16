@@ -6,7 +6,7 @@ pytest
 flake8
 toml
 pip-tools
-semver
+semantic_version
 requests
 parse
 simplejson

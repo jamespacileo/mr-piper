@@ -7,7 +7,7 @@ Mr Piper - Simple project package management
 - [X] 🏃 `piper init` working as expected
 - [X] 🏃 `piper add` working as expected
 - [X] 🏃 `piper remove` working as expected
-- [ ] 🏃 `piper outdated` working as expected
+- [X] 🏃 `piper outdated` working as expected
 - [ ] 🏃 Enable both `--no-input` and `version selection` for `piper upgrade`
 - [ ] 🏃 `piper upgrade` working as expected
 - [ ] 🏃 Python 2 and 3 compatibility

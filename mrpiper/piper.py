@@ -15,6 +15,7 @@ from path import path
 import parse
 import click
 import delegator
+import semantic_version
 
 from pkg_resources import Requirement as Req
 from pip.req.req_file import parse_requirements, process_line
@@ -115,9 +116,10 @@ def pip_versions(package_name):
     pip_command = "{0} install {1}==0.xx".format(which_pip(), package_name)
     c = delegator.run(pip_command)
     result = parse.search("from versions: {})", c.err)
-    click.echo(result)
-    results = [result.fixed[0] for result in parse.findall("{:w}", result.fixed[0])]
-    click.echo(results)
+    # click.echo(result.fixed[0])
+    results = [result.fixed[0] for result in parse.findall(" {:S},", result.fixed[0] + ",")]
+    # last_result = [result.fixed[0] for result in parse.findall(" {:w})", result.fixed[0])]
+    # click.echo(results)
     return results
     
 
@@ -303,7 +305,7 @@ def outdated():
     # click.echo(versions)
     return
 
-def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
+def upgrade(package_line, patch=False, minor=False, major=False, latest=False, noinput=False):
     # get current version
 
     req = Requirement.parse(package_line)
@@ -347,7 +349,29 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
         del clause[2]
         upgrade_specifier = "~={0}".format(".".join(clause))
 
-    package_line = req.name + upgrade_specifier
+    if not noinput:
+        versions = pip_versions(local_package.name)
+        versions = list(map(lambda x: semantic_version.Version(x, partial=True), versions))
+        versions.reverse()
+        if upgrade_specifier:
+            spec = semantic_version.Spec(upgrade_specifier)
+        else:
+            spec = map(lambda x: semantic_version.Spec("".join(x) ), req.specs)
+        # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
+        valid_versions = list(spec.filter(versions))
+        wanted_version = spec.select(versions)
+
+        echo_list = crayons.white("")
+        for index, version in enumerate(valid_versions):
+            echo_list = echo_list + crayons.yellow("[{}] ".format(index+1)) + crayons.white("{} ".format(version))
+
+
+        chosen_index = click.prompt("Select one of the following versions: {}".format(echo_list), default=1)
+        chosen_version = valid_versions[chosen_index-1]
+
+        package_line = req.name + "==" + chosen_version.__str__()
+    else:
+        package_line = req.name + upgrade_specifier
 
     c = pip_install(package_line, allow_global=False, upgrade=True)
     # result = parse.search("Successfully installed {} \n", c.out)
@@ -366,6 +390,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
             crayons.green("Package ") + crayons.yellow(req.name) + crayons.green(" installed ✓")
             # crayons.green("Package {0} installed ✓".format(crayons.yellow(req.name)))
             )
+
 
     result = parse.search("Successfully installed {}\n", c.out)
     succesfully_installed = result.fixed[0].split() if result else []

@@ -13,8 +13,8 @@ from mrpiper import piper
 
 
 TESTS_LOCATION = os.getcwd()
-TEMP_LOCATION = tempfile.mkdtemp()
-# TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp7dn77d9k"
+# TEMP_LOCATION = tempfile.mkdtemp()
+TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
 project_dir = path(TEMP_LOCATION)
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
@@ -92,6 +92,13 @@ def test_upgrade():
     assert ("requests==1.2.3" in dev_txt.text())
     piper.upgrade("requests", major=True)
     assert ("requests==2." in dev_txt.text())
+    piper.upgrade("requests<2.0.0", major=True)
+    assert ("requests==1.2.3" in dev_txt.text())
+
+    # Check warning for editables
+
+    # Version selection
+
 
 
 def test_outdated():
