@@ -5,8 +5,8 @@ Mr Piper - Simple project package management
 
 - [X] Publish bare bones prototype
 - [X] 🏃 `piper init` working as expected
-- [ ] 🏃 `piper add` working as expected
-- [ ] 🏃 `piper remove` working as expected
+- [X] 🏃 `piper add` working as expected
+- [X] 🏃 `piper remove` working as expected
 - [ ] 🏃 `piper outdated` working as expected
 - [ ] 🏃 `piper upgrade` working as expected
 - [ ] 🏃 Python 2 and 3 compatibility

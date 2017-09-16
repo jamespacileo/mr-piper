@@ -13,8 +13,8 @@ from mrpiper import piper
 
 
 TESTS_LOCATION = os.getcwd()
-# TEMP_LOCATION = tempfile.mkdtemp()
-TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmpce_5o0qz"
+TEMP_LOCATION = tempfile.mkdtemp()
+# TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmpce_5o0qz"
 project_dir = path(TEMP_LOCATION)
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
@@ -49,6 +49,10 @@ def test_add():
     piper.add("requests")
     assert base_txt.isfile()
     assert "requests" in base_txt.text()
+    
+    piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
+    assert base_txt.isfile()
+    assert "scrapy" in base_txt.text()
 
     piper.add("path.py", dev=True)
     assert dev_txt.isfile()
@@ -59,10 +63,25 @@ def test_remove():
     assert base_txt.isfile()
     assert not ("requests" in base_txt.text())
     
-    piper.remove("path.py")
+    piper.remove("scrapy")
     assert base_txt.isfile()
+    assert not ("scrapy" in base_txt.text())
+
+    piper.remove("path.py")
+    assert dev_txt.isfile()
     assert not ("requests" in dev_txt.text())
 
+    lock = piper.project.piper_lock
+    assert not lock["dependencies"].keys()
+    assert not lock["devDependencies"].keys()
+    assert not lock["dependables"]
+    assert not lock["frozen_deps"].keys()
+
+def test_outdated():
+    pass
+
+def test_upgrade():
+    pass
 
 def test_install():
     pass
