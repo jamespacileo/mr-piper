@@ -3,7 +3,7 @@ import sys
 import tempfile
 import delegator
 
-from path import path
+from path import Path
 
 # sys.path.append(os.path.join(os.path.abspath(__file__), ".."))
 # print(os.path.join(os.path.realpath(__file__), ".."))
@@ -15,7 +15,7 @@ from mrpiper import piper
 TESTS_LOCATION = os.getcwd()
 # TEMP_LOCATION = tempfile.mkdtemp()
 TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
-project_dir = path(TEMP_LOCATION)
+project_dir = Path(TEMP_LOCATION)
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
 

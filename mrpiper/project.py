@@ -12,7 +12,7 @@ import click
 import crayons
 # from sets import Set
 
-from path import path
+from path import Path
 import simplejson as json
 import delegator
 
@@ -77,11 +77,11 @@ class PythonProject(object):
     @property
     def project_dir(self):
         if not self._project_dir:
-            result = self.is_inside_project(path(os.getcwd()))
+            result = self.is_inside_project(Path(os.getcwd()))
             if result:
                 self._project_dir = result
             else:
-                self._project_dir = path(os.getcwd())
+                self._project_dir = Path(os.getcwd())
         return self._project_dir
 
     def clear(self):
