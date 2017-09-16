@@ -11,6 +11,9 @@ Mr Piper - Simple project package management
 - [ ] 🏃 Python 2 and 3 compatibility
 - [ ] 🏃 Unit tests for CLI
 - [ ] 🏃 Unit tests for Piper module
+- [ ] Integrate with Travis CI
+- [ ] Integrate with AppVeyor
+- [ ] Deploy working module to PyPI
 - [ ] Create minimum API docs in README
 - [ ] Create working examples
 - [ ] Pipfile compatibility
