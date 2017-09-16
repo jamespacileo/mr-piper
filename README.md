@@ -3,7 +3,7 @@ Mr Piper - Simple project package management
 
 ### TODO:
 
-- [ ] 🏃 `piper init` working as expected
+- [X] 🏃 `piper init` working as expected
 - [ ] 🏃 `piper add` working as expected
 - [ ] 🏃 `piper remove` working as expected
 - [ ] 🏃 `piper outdated` working as expected
@@ -11,7 +11,9 @@ Mr Piper - Simple project package management
 - [ ] 🏃 Python 2 and 3 compatibility
 - [ ] 🏃 Unit tests for CLI
 - [ ] 🏃 Unit tests for Piper module
+- [ ] Refine `piper.json` file
 - [ ] Solidify module's setup.py
+- [ ] Linting and PEP8
 - [ ] Integrate with Travis CI
 - [ ] Integrate with AppVeyor
 - [ ] Add build + other live chips on README

@@ -61,11 +61,11 @@ class PythonProject(object):
     def is_inside_project(self, path):
         
         parent, name = path.splitpath()
-        piper_files = [item for item in path.files(".piper")]
+        piper_files = [item for item in path.files("piper.json")]
         if piper_files:
             return path
         
-        print(parent)
+        # print(parent)
         if name:
             self.is_inside_project(parent)
         return False
@@ -107,7 +107,7 @@ class PythonProject(object):
         ]
         all_exists = True
         for filename in filenames:
-            all_exists = all_exists and self.requirements_dir / filename
+            all_exists = all_exists and (self.requirements_dir / filename).exists()
         return all_exists
 
     def create_requirements_structure(self):
@@ -132,11 +132,11 @@ class PythonProject(object):
     def virtualenv_dir(self):
         # global_virtualenv_dir = os.path.join(self._home_dir, ".envs")
         # complete_dir = os.path.join(global_virtualenv_dir)
-        return os.path.join(self._parent_dir, ".virtualenvs", "project_virtualenv")
+        return self.project_dir / ".virtualenvs" / "project_virtualenv"
 
     @property
     def has_virtualenv(self):
-        return os.path.isdir(self.virtualenv_dir)
+        return self.virtualenv_dir.isdir()
 
     def create_virtualenv(self):
 
@@ -146,11 +146,11 @@ class PythonProject(object):
 
     @property
     def piper_lock_dir(self):
-        return os.path.join(".", ".piper")
+        return self.project_dir / "piper.json"
 
     @property
     def has_piper_lock(self):
-        return os.path.exists(self.piper_lock_dir)
+        return self.piper_lock_dir.exists()
 
     def create_piper_lock(self):
         tpl = {
@@ -164,10 +164,10 @@ class PythonProject(object):
 
             }
         }
-        json.dump(tpl, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        json.dump(tpl, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
     def add_dependency_to_piper_lock(self, dep, dev=False):
-        lock = json.load(open(self.piper_lock_dir, "r"))
+        lock = json.load(self.piper_lock_dir.open("r"))
 
         dependency = {
             "depends_on": dep["dependencies"]
@@ -181,33 +181,38 @@ class PythonProject(object):
         else:
             lock["devDependencies"][dep["name"].lower()] = dependency
 
-        json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
 
     def remove_dependency_to_piper_lock(self, dep_name, dev=False):
-        lock = json.load(open(self.piper_lock_dir, "r"))
+        lock = json.load(self.piper_lock_dir.open("r"))
 
         if not dev:
             del lock["dependencies"][dep_name.lower()]
         else:
             del lock["devDependencies"][dep_name.lower()]
 
-        json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
+    def update_requirement_files_from_piper_lock(self, frozen=[]):
+        lock = json.load(self.piper_lock_dir.open("r"))
+
+        
+
     def update_frozen_dependencies_in_piper_lock(self, frozen_deps):
-        lock = json.load(open(self.piper_lock_dir, "r"))
+        lock = json.load(self.piper_lock_dir.open("r"))
         lock["frozen_deps"] = {}
         for dep in frozen_deps:
             lock["frozen_deps"][dep.name.lower()] = dep.__dict__
 
-        json.dump(lock, open(self.piper_lock_dir, "w"), indent=4 * ' ')
+        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
     @property
     def piper_lock(self):
-        return json.load(open(self.piper_lock_dir, "r"))
+        return json.load(self.piper_lock_dir.open("r"))
 
 
     def find_removable_dependencies(self, package_name):

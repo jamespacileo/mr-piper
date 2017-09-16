@@ -219,7 +219,7 @@ def add(package_line, dev=False):
         "specs": frozen_dep.specs,
         "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
     }
-    project.add_dependency_to_piper_lock(dependency)
+    project.add_dependency_to_piper_lock(dependency, dev=dev)
 
     click.secho("Requirements locked ✓", fg="green")
 
@@ -228,9 +228,9 @@ def add(package_line, dev=False):
     # click.secho("Updating requirement files...")
 
     if (not req.vcs) and (not req.local_file) and req.specs:
-        add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+        add_to_requirements_file(req, os.path.join(".", "requirements", "dev.txt"))
     else:
-        add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
+        add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "dev.txt"))
     add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
 
     click.secho("Requirements updated ✓", fg="green")
