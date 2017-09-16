@@ -12,7 +12,7 @@ import crayons
 import time
 
 import tabulate
-from path import path
+from path import Path
 import parse
 import click
 import delegator
