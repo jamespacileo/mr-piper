@@ -163,9 +163,8 @@ def remove_from_requirements_file(req, filename):
 
 def get_packages_from_requirements_file(filename):
     # return [r for r in parse_requirements(filename, session='')]
-    with open(filename, "r") as file:
-        reqstr = file.read()
-        file.close()
+    reqstr = filename.text()
+    if reqstr:
         return list(parse_requirements_alt(reqstr))
     return []
 

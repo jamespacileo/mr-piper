@@ -285,6 +285,19 @@ class PythonProject(object):
     def piper_lock(self):
         return json.load(self.piper_lock_dir.open("r"))
 
+    def detect_type_of_dependency(self, package_name):
+        lock = self.piper_lock
+        if package_name in lock["dependencies"].keys():
+            return "base"
+        base_dependables = map(lambda x: x[1]["depends_on"], lock["dependencies"].items())
+        if package_name in itertools.chain.from_iterable(base_dependables):
+            return "base"
+        if package_name in lock["devDependencies"].keys():
+            return "dev"
+        dev_dependables = map(lambda x: x[1]["depends_on"], lock["devDependencies"].items())
+        if package_name in itertools.chain.from_iterable(dev_dependables):
+            return "dev"
+        return None
 
     def find_removable_dependencies(self, package_name):
         lock = self.piper_lock

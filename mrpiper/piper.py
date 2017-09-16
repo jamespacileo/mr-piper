@@ -313,7 +313,12 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
 
     is_flag_latest = (not patch) and (not minor)
 
-    local_package = get_package_from_requirement_file(req.name, project.requirements_file("dev-locked.txt"))
+    dep_type = project.detect_type_of_dependency(req.name)
+    if dep_type == "dev":
+        local_package = get_package_from_requirement_file(req.name, project.requirements_file("dev-locked.txt"))
+    else:
+        local_package = get_package_from_requirement_file(req.name, project.requirements_file("base-locked.txt"))
+    
     if not local_package: 
         click.secho("Package is not installed", fg="red")
         sys.exit(1)
@@ -380,7 +385,8 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
         "specs": frozen_dep.specs,
         "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
     }
-    project.add_dependency_to_piper_lock(dependency)
+    project.add_dependency_to_piper_lock(dependency, dev=dev)
+    project.update_requirement_files_from_piper_lock()
 
     click.secho("Requirements locked ✓", fg="green")
 
@@ -388,11 +394,11 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
 
     # click.secho("Updating requirement files...")
 
-    if (not req.vcs) and (not req.local_file) and req.specs:
-        add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
-    else:
-        add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
-    add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
+    # if (not req.vcs) and (not req.local_file) and req.specs:
+    #     add_to_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    # else:
+    #     add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "base.txt"))
+    # add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
 
     click.secho("Requirements updated ✓", fg="green")
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
