@@ -18,6 +18,8 @@ base_txt = (req_folder / "base.txt")
 base_locked_txt = (req_folder / "base-locked.txt")
 dev_txt = (req_folder / "dev.txt")
 dev_locked_txt = (req_folder / "dev-locked.txt")
+piper_file = (project_dir / ".piper")
+virtualenv_dir = (project_dir / ".virtualenvs" / "project_env")
 
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
@@ -30,6 +32,8 @@ def test_init():
     assert base_locked_txt.exists()
     assert dev_txt.exists()
     assert dev_locked_txt.exists()
+    assert piper_file.exists()
+    assert virtualenv_dir.exists()
 
 def test_add():
     piper.add("requests")
@@ -41,7 +45,14 @@ def test_add():
     assert "path.py" in dev_txt.text()
 
 def test_remove():
-    pass
+    piper.remove("requests")
+    assert base_txt.isfile()
+    assert not ("requests" in base_txt.text())
+    
+    piper.remove("path")
+    assert base_txt.isfile()
+    assert not ("requests" in dev_txt.text())
+
 
 def test_install():
     pass
