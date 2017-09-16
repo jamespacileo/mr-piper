@@ -313,7 +313,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
 
     is_flag_latest = (not patch) and (not minor)
 
-    local_package = get_package_from_requirement_file(req.name, os.path.join(".", "requirements", "base-locked.txt"))
+    local_package = get_package_from_requirement_file(req.name, project.requirements_file("dev-locked.txt"))
     if not local_package: 
         click.secho("Package is not installed", fg="red")
         sys.exit(1)
