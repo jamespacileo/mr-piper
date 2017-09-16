@@ -107,7 +107,7 @@ def pip_install(
 
 def pip_uninstall(packages):
     pip_command = "{0} uninstall --yes {1}".format(which_pip(), " ".join(packages))
-    # click.echo(pip_command)
+    click.echo(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -216,10 +216,12 @@ def add(package_line, dev=False):
 
     dependency = {
         "name": frozen_dep.name,
+        "line": req.line if ((not req.vcs) and (not req.local_file) and req.specs) else frozen_dep.line,
         "specs": frozen_dep.specs,
         "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
     }
     project.add_dependency_to_piper_lock(dependency, dev=dev)
+    project.update_requirement_files_from_piper_lock()
 
     click.secho("Requirements locked ✓", fg="green")
 
@@ -227,11 +229,11 @@ def add(package_line, dev=False):
 
     # click.secho("Updating requirement files...")
 
-    if (not req.vcs) and (not req.local_file) and req.specs:
-        add_to_requirements_file(req, os.path.join(".", "requirements", "dev.txt"))
-    else:
-        add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "dev.txt"))
-    add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
+    # if (not req.vcs) and (not req.local_file) and req.specs:
+    #     add_to_requirements_file(req, os.path.join(".", "requirements", "dev.txt"))
+    # else:
+    #     add_to_requirements_file(frozen_dep, os.path.join(".", "requirements", "dev.txt"))
+    # add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
 
     click.secho("Requirements updated ✓", fg="green")
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
@@ -245,7 +247,8 @@ def find_removable_dependencies(package_name):
 
 def remove(package_line, dev=False):
     req = Requirement.parse(package_line)
-    # click.echo(req.__dict__)
+    click.echo(req.__dict__)
+    click.echo(package_line)
     click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
     
     removable_packages = project.find_removable_dependencies(req.name)
@@ -272,11 +275,14 @@ def remove(package_line, dev=False):
     frozen_deps = pip_freeze()
     project.update_frozen_dependencies_in_piper_lock(frozen_deps)
     project.remove_dependency_to_piper_lock(req.name)
-    add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
     click.secho("Packaged locked ✓", fg="green")
 
+    project.update_requirement_files_from_piper_lock()
+
+    # add_to_requirements_lockfile(frozen_deps, os.path.join(".", "requirements", "base-locked.txt"))
+
     # click.secho("Updating requirement files...")
-    remove_from_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
+    # remove_from_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     click.secho("Requirement files updated ✓", fg="green")
 
 def install(dev=False):

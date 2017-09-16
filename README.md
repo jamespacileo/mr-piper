@@ -25,6 +25,7 @@ Mr Piper - Simple project package management
 - [ ] Pipfile compatibility
 - [ ] Documentation
 - [ ] Pipfile compatibility
+- [ ] Add additional dependency types
 - [ ] Hashes
 
 *Please raise an issue to add features*

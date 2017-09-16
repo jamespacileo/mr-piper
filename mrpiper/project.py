@@ -6,6 +6,8 @@ import re
 import hashlib
 import datetime
 import shutil
+import itertools
+
 import click
 import crayons
 # from sets import Set
@@ -100,6 +102,9 @@ class PythonProject(object):
     def requirements_dir(self):
         return self.project_dir / "requirements"
 
+    def requirements_file(self, name):
+        return self.requirements_dir / name
+
     @property
     def has_requirements_structure(self):
         filenames = [
@@ -170,11 +175,12 @@ class PythonProject(object):
         lock = json.load(self.piper_lock_dir.open("r"))
 
         dependency = {
-            "depends_on": dep["dependencies"]
+            "depends_on": dep["dependencies"],
+            "line": dep["line"]
         }
 
-        lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
-        lock["depended_on"] = list(lock["depended_on"])
+        # lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
+        # lock["depended_on"] = list(lock["depended_on"])
 
         if not dev:
             lock["dependencies"][dep["name"].lower()] = dependency
@@ -182,24 +188,89 @@ class PythonProject(object):
             lock["devDependencies"][dep["name"].lower()] = dependency
 
         json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+
+        self.denormalise_piper_lock()
         return
 
 
-    def remove_dependency_to_piper_lock(self, dep_name, dev=False):
+    def remove_dependency_to_piper_lock(self, dep_name):
         lock = json.load(self.piper_lock_dir.open("r"))
 
-        if not dev:
+        if dep_name.lower() in lock["dependencies"].keys():
             del lock["dependencies"][dep_name.lower()]
-        else:
+
+        if dep_name.lower() in lock["devDependencies"].keys():
             del lock["devDependencies"][dep_name.lower()]
 
         json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+
+        self.denormalise_piper_lock()
         return
 
-    def update_requirement_files_from_piper_lock(self, frozen=[]):
+    def update_requirement_files_from_piper_lock(self):
         lock = json.load(self.piper_lock_dir.open("r"))
 
+        frozen = lock["frozen_deps"]
+
+        dependencies = lock["dependencies"]
+        devDependencies = lock["devDependencies"]
+
+        base_main = []
+        base_locked = []
+        dev_main = []
+        dev_locked = []
+
+        # iterate frozen and detect if needs to be in base.txt or dev.txt
+        for key, item in frozen.items():
+            if key.lower() in dependencies.keys():
+                base_main.append(item)
+                base_locked.append(item)
+                continue
+            list_of_dependables = map(lambda x: x[1]["depends_on"], dependencies.items())
+            if key.lower() in itertools.chain.from_iterable(list_of_dependables):
+                base_locked.append(item)
+                continue
+            
+            if key.lower() in devDependencies.keys():
+                dev_main.append(item)
+                dev_locked.append(item)
+                continue
+            list_of_dev_dependables = map(lambda x: x[1]["depends_on"], devDependencies.items())
+            if key.lower() in itertools.chain.from_iterable(list_of_dev_dependables):
+                dev_locked.append(item)
+                continue
+
+        click.echo([base_main, base_locked, dev_main, dev_locked])
+
+        self.requirements_file("base.txt").write_lines(
+            [item["line"] for item in base_main]
+        )
+        self.requirements_file("base-locked.txt").write_lines(
+            [item["line"] for item in base_locked]
+        )
+        self.requirements_file("dev.txt").write_lines(
+            ["-r base.txt", ""] + [item["line"] for item in dev_main]
+        )
+        self.requirements_file("dev-locked.txt").write_lines(
+            ["-r base-frozen.txt", ""] + [item["line"] for item in dev_locked]
+        )
         
+    def denormalise_piper_lock(self):
+        lock = json.load(self.piper_lock_dir.open("r"))
+
+        dependencies = lock["dependencies"].items()
+        devDependencies = lock["devDependencies"].items()
+        allDeps = itertools.chain(dependencies, devDependencies)
+
+        allDependendables = map(lambda x: x[1]["depends_on"], allDeps)
+        allChainedDependables = itertools.chain.from_iterable(allDependendables)
+        lock["dependables"] = list(set(allChainedDependables))
+
+        # lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
+        # lock["depended_on"] = list(lock["depended_on"])
+
+        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+        return
 
     def update_frozen_dependencies_in_piper_lock(self, frozen_deps):
         lock = json.load(self.piper_lock_dir.open("r"))

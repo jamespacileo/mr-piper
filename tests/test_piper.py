@@ -8,11 +8,13 @@ from path import path
 # sys.path.append(os.path.join(os.path.abspath(__file__), ".."))
 # print(os.path.join(os.path.realpath(__file__), ".."))
 sys.path.append(".")
+sys.path.append("..")
 from mrpiper import piper
 
 
 TESTS_LOCATION = os.getcwd()
-TEMP_LOCATION = tempfile.mkdtemp()
+# TEMP_LOCATION = tempfile.mkdtemp()
+TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmpce_5o0qz"
 project_dir = path(TEMP_LOCATION)
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
@@ -23,7 +25,10 @@ dev_txt = (req_folder / "dev.txt")
 dev_locked_txt = (req_folder / "dev-locked.txt")
 piper_file = (project_dir / "piper.json")
 virtualenv_dir = (project_dir / ".virtualenvs" / "project_virtualenv")
-delegator.run('explorer /select,"{}"'.format(project_dir), block=False)
+
+command = 'code-insiders.cmd "{}"'.format(project_dir)
+print(command)
+delegator.run(command, block=False)
 
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
@@ -54,7 +59,7 @@ def test_remove():
     assert base_txt.isfile()
     assert not ("requests" in base_txt.text())
     
-    piper.remove("path")
+    piper.remove("path.py")
     assert base_txt.isfile()
     assert not ("requests" in dev_txt.text())
 
