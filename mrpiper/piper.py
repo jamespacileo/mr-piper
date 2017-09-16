@@ -314,6 +314,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
     is_flag_latest = (not patch) and (not minor)
 
     dep_type = project.detect_type_of_dependency(req.name)
+    dev = dep_type == "dev"
     if dep_type == "dev":
         local_package = get_package_from_requirement_file(req.name, project.requirements_file("dev-locked.txt"))
     else:
@@ -382,6 +383,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False):
 
     dependency = {
         "name": frozen_dep.name,
+        "line": frozen_dep.line,
         "specs": frozen_dep.specs,
         "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
     }

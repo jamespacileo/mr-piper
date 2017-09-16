@@ -8,10 +8,12 @@ Mr Piper - Simple project package management
 - [X] 🏃 `piper add` working as expected
 - [X] 🏃 `piper remove` working as expected
 - [ ] 🏃 `piper outdated` working as expected
+- [ ] 🏃 Enable both `--no-input` and `version selection` for `piper upgrade`
 - [ ] 🏃 `piper upgrade` working as expected
 - [ ] 🏃 Python 2 and 3 compatibility
 - [ ] 🏃 Unit tests for CLI
 - [ ] 🏃 Unit tests for Piper module
+- [ ] 🏃 Friendly Github installs eg `piper add django/django`
 - [ ] Refine `piper.json` file
 - [ ] Solidify module's setup.py
 - [ ] Linting and PEP8

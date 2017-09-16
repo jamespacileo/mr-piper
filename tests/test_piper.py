@@ -13,8 +13,8 @@ from mrpiper import piper
 
 
 TESTS_LOCATION = os.getcwd()
-TEMP_LOCATION = tempfile.mkdtemp()
-# TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmpce_5o0qz"
+# TEMP_LOCATION = tempfile.mkdtemp()
+TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp7dn77d9k"
 project_dir = path(TEMP_LOCATION)
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
@@ -27,7 +27,7 @@ piper_file = (project_dir / "piper.json")
 virtualenv_dir = (project_dir / ".virtualenvs" / "project_virtualenv")
 
 command = 'code-insiders.cmd "{}"'.format(project_dir)
-print(command)
+# print(command)
 delegator.run(command, block=False)
 
 def create_test_project():
@@ -58,6 +58,8 @@ def test_add():
     assert dev_txt.isfile()
     assert "path.py" in dev_txt.text()
 
+
+
 def test_remove():
     piper.remove("requests")
     assert base_txt.isfile()
@@ -77,16 +79,30 @@ def test_remove():
     assert not lock["dependables"]
     assert not lock["frozen_deps"].keys()
 
+
+def test_upgrade():
+    piper.add("requests==2.0.0", dev=True)
+    piper.upgrade("requests", patch=True)
+    assert ("requests==2.0.1" in dev_txt.text())
+
+    piper.add("requests==1.0.0", dev=True)
+    piper.upgrade("requests", patch=True)
+    assert ("requests==1.0.3" in dev_txt.text())
+    piper.upgrade("requests", minor=True)
+    assert ("requests==1.2.3" in dev_txt.text())
+    piper.upgrade("requests", major=True)
+    assert ("requests==2." in dev_txt.text())
+
+
 def test_outdated():
     pass
 
-def test_upgrade():
-    pass
 
 def test_install():
     pass
 
 if __name__=="__main__":
     test_init()
-    test_add()
-    test_remove()
+    # test_add()
+    # test_remove()
+    test_upgrade()
