@@ -1,23 +1,18 @@
 Mr Piper - Simple project package management
 -------------
 
-.. image:: https://img.shields.io/pypi/v/mrpiper.svg
-    :target: https://pypi.python.org/pypi/mrpiper
 
-.. image:: https://img.shields.io/pypi/l/mrpiper.svg
-    :target: https://pypi.python.org/pypi/mrpiper
+[![](https://img.shields.io/pypi/v/mrpiper.svg)](https://pypi.python.org/pypi/mrpiper)
 
-.. image:: https://img.shields.io/pypi/wheel/mrpiper.svg
-    :target: https://pypi.python.org/pypi/mrpiper
+[![](https://img.shields.io/pypi/l/mrpiper.svg)](https://pypi.python.org/pypi/mrpiper)
 
-.. image:: https://img.shields.io/pypi/pyversions/mrpiper.svg
-    :target: https://pypi.python.org/pypi/mrpiper
+[![](https://img.shields.io/pypi/wheel/mrpiper.svg)](https://pypi.python.org/pypi/mrpiper)
 
-.. image:: https://travis-ci.org/jamespacileo/mr-piper.svg?branch=master
-    :target: https://travis-ci.org/jamespacileo/mr-piper
+[![](https://img.shields.io/pypi/pyversions/mrpiper.svg)](https://pypi.python.org/pypi/mrpiper)
 
-.. image:: https://img.shields.io/appveyor/ci/jamespacileo/mr-piper.svg
-    :target: https://ci.appveyor.com/project/jamespacileo/mr-piper/branch/master
+[![](https://img.shields.io/appveyor/ci/jamespacileo/mr-piper.svg)](https://ci.appveyor.com/project/jamespacileo/mr-piper/branch/master)
+
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/jamespacileo/mr-piper)
 
 ### TODO:
 
