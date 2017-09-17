@@ -22,6 +22,8 @@ from path import Path
 import simplejson as json
 import delegator
 
+from . import utils
+
 CORE_PACKAGES = ["pip", "setuptools", "piper"]
 
 class PythonProject(object):
@@ -67,6 +69,10 @@ class PythonProject(object):
             click.secho("Piper file created ✓", fg="green")
         else:
             click.secho("Piper file already exists ✓", fg="green")
+
+    def validate(self):
+        lock = self.piper_lock
+
 
     def is_inside_project(self, path):
 
@@ -171,14 +177,10 @@ class PythonProject(object):
     def create_piper_lock(self):
         tpl = {
             "created": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
-
-            "dependencies": {
-
-            },
-
-            "devDependencies": {
-
-            }
+            "dependencies": {},
+            "devDependencies": {},
+            "dependables": [],
+            "frozen_deps": {},
         }
         self.save_to_piper_lock(json.dumps(tpl, indent=4 * ' '))
 

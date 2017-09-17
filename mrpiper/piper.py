@@ -59,23 +59,31 @@ def pip_freeze():
     # return c
 
 def pip_install_list(packages, allow_global=False):
-    pip_commands = []
-    for package in packages:
-        pip_command = "{0} install --no-deps {1}".format(
-            which_pip(),
-            package
-        )
-        pip_commands.append(pip_command)
+
+    pip_command = "{0} install --no-deps {1}".format(
+        which_pip(),
+        " ".join(packages)
+    )
+    c = delegator.run(pip_command)
+    return c
+
+    # pip_commands = []
+    # for package in packages:
+    #     pip_command = "{0} install --no-deps {1}".format(
+    #         which_pip(),
+    #         package
+    #     )
+    #     pip_commands.append(pip_command)
 
 
-    delegated_commands = []
-    for cmd in pip_commands:
-        click.echo(cmd)
-        c = delegator.run(cmd, block=True)
-        delegated_commands.append(c)
+    # delegated_commands = []
+    # for cmd in pip_commands:
+    #     click.echo(cmd)
+    #     c = delegator.run(cmd, block=True)
+    #     delegated_commands.append(c)
 
-    map(lambda x: x.block(), delegated_commands)
-    return delegated_commands
+    # map(lambda x: x.block(), delegated_commands)
+    # return delegated_commands
 
 def pip_install(
     package_name=None, r=None, allow_global=False, no_deps=False, block=True, upgrade=False
@@ -296,17 +304,42 @@ def remove(package_line, dev=False):
 def install(dev=False):
     # should run project setup
 
+    lock_exists = project.piper_lock_dir.exists()
+    dev_txt_exists = project.requirements_file("dev-locked.txt").exists()
+    base_txt_exists = project.requirements_file("base-locked.txt").exists()
+
     project.setup()
 
-    if dev:
-        packages = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
-    else:
-        packages = get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))
+    # first choice piper.json
+    # second choice requirements
 
-    cmds = pip_install_list([item.name for item in packages])
-    for cmd in cmds:
-        click.echo(cmd.out)
-    click.echo("Install finished.")
+    if lock_exists:
+        click.echo("Installing from the piper lock file piper.json")
+        packages = [item["line"] for item in project.piper_lock["frozen_deps"]]
+
+    elif dev and dev_txt_exists:
+        click.echo("Installing from requirements/dev-locked.txt")
+        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
+
+    elif base_txt_exists:
+        click.echo("Installing from requirements/base-locked.txt")
+        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
+    else:
+        click.secho("No available packages to install from")
+        sys.exit()
+
+    # if dev:
+    #     packages = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
+    # else:
+    #     packages = get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))
+
+    c = pip_install_list(packages)
+    click.secho(c.out, fg="blue")
+
+    # cmds = pip_install_list(packages)
+    # for cmd in cmds:
+    #     click.echo(cmd.out + cmd.err)
+    click.secho("Install completed ✓", fg="green")
 
 def outdated(all_pkgs=False, verbose=False, format="table"):
     # format can be table, json
@@ -385,7 +418,7 @@ def outdated(all_pkgs=False, verbose=False, format="table"):
     # click.echo(versions)
     return
 
-def upgrade(package_line, patch=False, minor=False, major=False, latest=False, noinput=False):
+def upgrade(package_line, upgrade_level="latest", noinput=False):
     # get current version
 
     req = Requirement.parse(package_line)
@@ -393,7 +426,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
 
     # click.echo(req.__dict__)
 
-    is_flag_latest = (not patch) and (not minor)
+    is_flag_latest = upgrade_level in ["major", "latest"]
 
     dep_type = project.detect_type_of_dependency(req.name)
     dev = dep_type == "dev"
@@ -423,9 +456,9 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
         clause.append("0")
 
     upgrade_specifier = ""
-    if patch:
+    if upgrade_level == "patch":
         upgrade_specifier = "~={0}".format(".".join(clause))
-    elif minor:
+    elif upgrade_level == "minor":
         del clause[2]
         upgrade_specifier = "~={0}".format(".".join(clause))
 
@@ -512,11 +545,11 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
 
     # print(req.__dict__)
 
-def upgrade_all(patch=False, minor=False, major=False, latest=False):
+def upgrade_all(upgrade_level="latest"):
 
-    pkgs = get_packages_from_requirements_file(os.path.join(".", "requirements", "base-locked.txt"))
+    pkgs = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
     for package in pkgs:
-        upgrade(package.name, patch=patch, minor=minor, major=major, latest=latest)
+        upgrade(upgrade_level)
 
 def clear():
     project.clear()

@@ -12,3 +12,4 @@ nest.lock
 .virtualenvs
 src
 .piper
+mrpiper.egg-info
