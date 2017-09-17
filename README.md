@@ -14,6 +14,10 @@ Mr Piper - Simple project package management
 
 - [X] Publish bare bones prototype
 - [X] 🏃 `piper init` working as expected
+    - [ ] 🏃 add specific python version option eg `--py2`, `--py3`, `--py3.4`
+    - [ ] 🏃 add `--global` option, for skipping virtualenv
+    - [ ] 🏃 add `--inside` and `--outside` for defining where you want the virtualenv to be (inside or outside the project folder)
+    - [ ] 🏃 custom virtualenv location
 - [X] 🏃 `piper add` working as expected
 - [X] 🏃 `piper remove` working as expected
 - [X] 🏃 `piper outdated` working as expected
@@ -21,10 +25,6 @@ Mr Piper - Simple project package management
 - [X] 🏃 `piper upgrade` working as expected
 - [ ] 🏃 `piper install` working as expected
     - [ ] 🏃 import from existing requirements file
-    - [ ] 🏃 add specific python version option eg `--py2`, `--py3`, `--py3.4`
-    - [ ] 🏃 add `--global` option, for skipping virtualenv
-    - [ ] 🏃 add `--inside` and `--outside` for defining where you want the virtualenv to be (inside or outside the project folder)
-    - [ ] 🏃 custom virtualenv location
 - [ ] 🏃 Adjust module requirements
 - [ ] 🏃 CLI autocomplete
 - [X] 🏃 Python 2 and 3 compatibility
