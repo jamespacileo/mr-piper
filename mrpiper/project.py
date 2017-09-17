@@ -16,6 +16,8 @@ from path import Path
 import simplejson as json
 import delegator
 
+CORE_PACKAGES = ["pip", "setuptools", "piper"]
+
 class PythonProject(object):
     
     # _virtualenv_location = None
@@ -175,7 +177,7 @@ class PythonProject(object):
         lock = json.load(self.piper_lock_dir.open("r"))
 
         dependency = {
-            "depends_on": dep["dependencies"],
+            "depends_on": list(filter(lambda x: not (x in CORE_PACKAGES), dep["dependencies"])),
             "line": dep["line"]
         }
 
@@ -280,7 +282,8 @@ class PythonProject(object):
         lock = json.load(self.piper_lock_dir.open("r"))
         lock["frozen_deps"] = {}
         for dep in frozen_deps:
-            lock["frozen_deps"][dep.name.lower()] = dep.__dict__
+            if not (dep.name.lower() in CORE_PACKAGES):
+                lock["frozen_deps"][dep.name.lower()] = dep.__dict__
 
         json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return

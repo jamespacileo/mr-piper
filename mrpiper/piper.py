@@ -98,7 +98,7 @@ def pip_install(
         no_deps,
         upgrade_str
     )
-
+    click.echo(pip_command)
     c = delegator.run(pip_command, block=block)
 
     # if c.return_code == 0:

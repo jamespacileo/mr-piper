@@ -95,8 +95,8 @@ def test_upgrade():
     assert ("requests==1.2.3" in dev_txt.text())
     piper.upgrade("requests", major=True, noinput=True)
     assert ("requests==2." in dev_txt.text())
-    piper.upgrade("requests<2.0.0", major=True, noinput=True)
-    assert ("requests==1.2.3" in dev_txt.text())
+    # piper.upgrade("requests<2.0.0", major=True, noinput=True)
+    # assert ("requests==1.2.3" in dev_txt.text())
 
     # Check warning for editables
 
@@ -117,7 +117,7 @@ def test_install():
 
 if __name__=="__main__":
     test_init()
-    # test_add()
+    test_add()
     # test_remove()
     # test_upgrade()
-    test_outdated()
+    # test_outdated()
