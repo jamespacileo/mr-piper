@@ -1,7 +1,7 @@
 # encoding: utf-8
 from __future__ import unicode_literals
 from __future__ import absolute_import
-from builtins import map, filter
+from builtins import map, filter, zip
 
 import contextlib
 import codecs
@@ -308,7 +308,9 @@ def install(dev=False):
         click.echo(cmd.out)
     click.echo("Install finished.")
 
-def outdated(all_pkgs=False, verbose=False):
+def outdated(all_pkgs=False, verbose=False, format="table"):
+    # format can be table, json
+
     click.echo("Fetching outdated packages")
     # c = pip_outdated()
     # click.echo([c.return_code, c.out, c.err])
@@ -368,12 +370,15 @@ def outdated(all_pkgs=False, verbose=False):
                 latest_version.__str__(),
             ])
 
-    if verbose:
-        click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"]))
+    if format == "table":
+        if verbose:
+            click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"]))
+        else:
+            click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Latest"]))
     else:
-        click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Latest"]))
-
-
+        headers = headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"] if verbose else ["Name", "Current", "Wanted", "Latest"]
+        output = [dict(zip(headers,item)) for item in outdated_map]
+        click.echo(json.dumps(output, indent="    "))
     # frozen_reqs = [req for req in parse_requirements(os.path.join(".", "requirements", "base-locked.txt"))]
 
     # versions = pip_versions("django")

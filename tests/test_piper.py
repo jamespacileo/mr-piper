@@ -113,6 +113,7 @@ def test_upgrade():
 
 
 def test_outdated():
+    piper.outdated(all_pkgs=True)
     piper.add("requests==2.16.0", dev=True)
     # piper.add("pytest", dev=True)
     # piper.upgrade("requests", patch=True)
