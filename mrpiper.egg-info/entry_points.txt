@@ -1,4 +1,0 @@
-
-        [console_scripts]
-        piper=mrpiper.cli:cli
-    

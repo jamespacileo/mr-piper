@@ -1,9 +1,0 @@
-pytest
-click
-delegator.py
-pytest
-pip-tools
-requests
-parse
-simplejson
-crayons
