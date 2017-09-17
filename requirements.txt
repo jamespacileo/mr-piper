@@ -12,3 +12,4 @@ parse
 simplejson
 path.py
 tabulate
+crayons
