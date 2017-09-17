@@ -8,6 +8,7 @@ import datetime
 import shutil
 import itertools
 from __future__ import unicode_literals
+from __future__ import absolute_import
 
 import click
 import crayons
@@ -187,11 +188,11 @@ class PythonProject(object):
 
         if not dev:
             lock["dependencies"][dep["name"].lower()] = dependency
-            if dep["name"].lower() in lock["devDependencies"].keys():
+            if dep["name"].lower() in lock["devDependencies"]: #.keys():
                 del lock["devDependencies"][dep["name"].lower()]
         else:
             lock["devDependencies"][dep["name"].lower()] = dependency
-            if dep["name"].lower() in lock["dependencies"].keys():
+            if dep["name"].lower() in lock["dependencies"]: #.keys():
                 del lock["dependencies"][dep["name"].lower()]
 
         json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
@@ -203,10 +204,10 @@ class PythonProject(object):
     def remove_dependency_to_piper_lock(self, dep_name):
         lock = json.load(self.piper_lock_dir.open("r"))
 
-        if dep_name.lower() in lock["dependencies"].keys():
+        if dep_name.lower() in lock["dependencies"]: #.keys():
             del lock["dependencies"][dep_name.lower()]
 
-        if dep_name.lower() in lock["devDependencies"].keys():
+        if dep_name.lower() in lock["devDependencies"]: #.keys():
             del lock["devDependencies"][dep_name.lower()]
 
         json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
@@ -229,7 +230,7 @@ class PythonProject(object):
 
         # iterate frozen and detect if needs to be in base.txt or dev.txt
         for key, item in frozen.items():
-            if key.lower() in dependencies.keys():
+            if key.lower() in dependencies: #.keys():
                 base_main.append(item)
                 base_locked.append(item)
                 continue
@@ -238,7 +239,7 @@ class PythonProject(object):
                 base_locked.append(item)
                 continue
             
-            if key.lower() in devDependencies.keys():
+            if key.lower() in devDependencies: #.keys():
                 dev_main.append(item)
                 dev_locked.append(item)
                 continue
@@ -295,12 +296,12 @@ class PythonProject(object):
 
     def detect_type_of_dependency(self, package_name):
         lock = self.piper_lock
-        if package_name in lock["dependencies"].keys():
+        if package_name in lock["dependencies"]: #.keys():
             return "base"
         base_dependables = map(lambda x: x[1]["depends_on"], lock["dependencies"].items())
         if package_name in itertools.chain.from_iterable(base_dependables):
             return "base"
-        if package_name in lock["devDependencies"].keys():
+        if package_name in lock["devDependencies"]: #.keys():
             return "dev"
         dev_dependables = map(lambda x: x[1]["depends_on"], lock["devDependencies"].items())
         if package_name in itertools.chain.from_iterable(dev_dependables):
@@ -310,8 +311,8 @@ class PythonProject(object):
     def find_removable_dependencies(self, package_name):
         lock = self.piper_lock
         
-        regular = package_name.lower() in lock["dependencies"].keys()
-        dev = package_name.lower() in lock["devDependencies"].keys()
+        regular = package_name.lower() in lock["dependencies"]#.keys()
+        dev = package_name.lower() in lock["devDependencies"]#.keys()
 
         if (not regular) and (not dev):
             # click.echo("No")
