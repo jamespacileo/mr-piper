@@ -21,9 +21,10 @@ Mr Piper - Simple project package management
 - [X] 🏃 `piper upgrade` working as expected
 - [ ] 🏃 Adjust module requirements
 - [ ] 🏃 CLI autocomplete
-- [ ] 🏃 Python 2 and 3 compatibility
+- [X] 🏃 Python 2 and 3 compatibility
 - [ ] 🏃 Unit tests for CLI
-- [ ] 🏃 Unit tests for Piper module
+- [X] 🏃 Unit tests for Piper module
+- [ ] 🏃 Test coverage calculation and Coveralls integration
 - [ ] 🏃 Friendly Github installs eg `piper add django/django`
 - [ ] Refine `piper.json` file
 - [ ] Solidify module's setup.py
