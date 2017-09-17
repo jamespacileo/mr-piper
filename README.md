@@ -1,6 +1,24 @@
 Mr Piper - Simple project package management
 -------------
 
+.. image:: https://img.shields.io/pypi/v/mrpiper.svg
+    :target: https://pypi.python.org/pypi/mrpiper
+
+.. image:: https://img.shields.io/pypi/l/mrpiper.svg
+    :target: https://pypi.python.org/pypi/mrpiper
+
+.. image:: https://img.shields.io/pypi/wheel/mrpiper.svg
+    :target: https://pypi.python.org/pypi/mrpiper
+
+.. image:: https://img.shields.io/pypi/pyversions/mrpiper.svg
+    :target: https://pypi.python.org/pypi/mrpiper
+
+.. image:: https://travis-ci.org/jamespacileo/mr-piper.svg?branch=master
+    :target: https://travis-ci.org/jamespacileo/mr-piper
+
+.. image:: https://img.shields.io/appveyor/ci/jamespacileo/mr-piper.svg
+    :target: https://ci.appveyor.com/project/jamespacileo/mr-piper/branch/master
+
 ### TODO:
 
 - [X] Publish bare bones prototype
