@@ -20,10 +20,12 @@ Mr Piper - Simple project package management
     - [ ] 🏃 custom virtualenv location
 - [X] 🏃 `piper add` working as expected
 - [X] 🏃 `piper remove` working as expected
+    - [ ] add confirmation prompt
 - [X] 🏃 `piper outdated` working as expected
+    - [ ] add `--format json` option
 - [X] 🏃 Enable both `--no-input` and `version selection` for `piper upgrade`
 - [X] 🏃 `piper upgrade` working as expected
-- [ ] 🏃 `piper install` working as expected
+- [X] 🏃 `piper install` working as expected
     - [ ] 🏃 import from existing requirements file
 - [ ] 🏃 Adjust module requirements
 - [ ] 🏃 CLI autocomplete

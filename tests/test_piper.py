@@ -128,6 +128,11 @@ def test_install():
     piper.project.virtualenv_dir.rmtree_p()
     piper.project.piper_lock_dir.remove_p()
     piper.install()
+    frozen_deps = [item.name for item in piper.pip_freeze()]
+    assert "requests" in frozen_deps
+    assert "pytest" in frozen_deps
+    assert "six" in frozen_deps
+    assert "coverage" in frozen_deps
     # assert ("requests" in dev_txt.text())
 
 if __name__=="__main__":
