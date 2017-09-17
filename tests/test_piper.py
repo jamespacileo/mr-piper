@@ -13,8 +13,8 @@ from mrpiper import piper
 
 
 TESTS_LOCATION = os.getcwd()
-# TEMP_LOCATION = tempfile.mkdtemp()
-TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
+TEMP_LOCATION = tempfile.mkdtemp()
+# TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
 project_dir = Path(TEMP_LOCATION)
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
@@ -26,9 +26,12 @@ dev_locked_txt = (req_folder / "dev-locked.txt")
 piper_file = (project_dir / "piper.json")
 virtualenv_dir = (project_dir / ".virtualenvs" / "project_virtualenv")
 
-command = 'code-insiders.cmd "{}"'.format(project_dir)
-# print(command)
-delegator.run(command, block=False)
+try:
+    command = 'code-insiders.cmd "{}"'.format(project_dir)
+    # print(command)
+    delegator.run(command, block=False)
+except:
+    pass
 
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()

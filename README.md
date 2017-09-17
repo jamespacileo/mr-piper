@@ -11,6 +11,7 @@ Mr Piper - Simple project package management
 - [X] 🏃 Enable both `--no-input` and `version selection` for `piper upgrade`
 - [X] 🏃 `piper upgrade` working as expected
 - [ ] 🏃 Adjust module requirements
+- [ ] 🏃 CLI autocomplete
 - [ ] 🏃 Python 2 and 3 compatibility
 - [ ] 🏃 Unit tests for CLI
 - [ ] 🏃 Unit tests for Piper module
@@ -18,6 +19,7 @@ Mr Piper - Simple project package management
 - [ ] Refine `piper.json` file
 - [ ] Solidify module's setup.py
 - [ ] Linting and PEP8
+- [ ] Check if PIP, Virtualenv need to be installed/updated and warn user
 - [ ] Integrate with Travis CI
 - [ ] Integrate with AppVeyor
 - [ ] Add build + other live chips on README

@@ -144,9 +144,9 @@ class PythonProject(object):
         return self.virtualenv_dir.isdir()
 
     def create_virtualenv(self):
-
-        c = delegator.run("virtualenv {0}".format(self.virtualenv_dir))
-        c.block()
+        command = "virtualenv {0}".format(self.virtualenv_dir)
+        # click.echo(command)
+        c = delegator.run(command)
         return c.return_code == 0
 
     @property

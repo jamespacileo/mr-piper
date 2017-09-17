@@ -2,5 +2,7 @@
   "tests/test_cli.py::test_add": true,
   "tests/test_piper.py::test_add": true,
   "tests/test_piper.py::test_init": true,
-  "tests/test_piper.py::test_remove": true
+  "tests/test_piper.py::test_outdated": true,
+  "tests/test_piper.py::test_remove": true,
+  "tests/test_piper.py::test_upgrade": true
 }
