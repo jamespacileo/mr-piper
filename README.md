@@ -10,6 +10,7 @@ Mr Piper - Simple project package management
 - [X] 🏃 `piper outdated` working as expected
 - [X] 🏃 Enable both `--no-input` and `version selection` for `piper upgrade`
 - [X] 🏃 `piper upgrade` working as expected
+- [ ] 🏃 Adjust module requirements
 - [ ] 🏃 Python 2 and 3 compatibility
 - [ ] 🏃 Unit tests for CLI
 - [ ] 🏃 Unit tests for Piper module
