@@ -14,3 +14,5 @@ path.py
 tabulate
 crayons
 future
+coverage
+coveralls
