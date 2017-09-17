@@ -1,3 +1,9 @@
+# encoding: utf-8
+from __future__ import unicode_literals
+from __future__ import absolute_import
+from builtins import str as text
+from builtins import map, filter
+
 import os
 import sys
 import errno
@@ -7,8 +13,6 @@ import hashlib
 import datetime
 import shutil
 import itertools
-from __future__ import unicode_literals
-from __future__ import absolute_import
 
 import click
 import crayons
@@ -161,6 +165,9 @@ class PythonProject(object):
     def has_piper_lock(self):
         return self.piper_lock_dir.exists()
 
+    def save_to_piper_lock(self, data):
+        self.piper_lock_dir.write_text(text(data))
+
     def create_piper_lock(self):
         tpl = {
             "created": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
@@ -173,7 +180,7 @@ class PythonProject(object):
 
             }
         }
-        json.dump(tpl, self.piper_lock_dir.open("w"), indent=4 * ' ')
+        self.save_to_piper_lock(json.dumps(tpl, indent=4 * ' '))
 
     def add_dependency_to_piper_lock(self, dep, dev=False):
         lock = json.load(self.piper_lock_dir.open("r"))
@@ -195,7 +202,8 @@ class PythonProject(object):
             if dep["name"].lower() in lock["dependencies"]: #.keys():
                 del lock["dependencies"][dep["name"].lower()]
 
-        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
         self.denormalise_piper_lock()
         return
@@ -210,7 +218,9 @@ class PythonProject(object):
         if dep_name.lower() in lock["devDependencies"]: #.keys():
             del lock["devDependencies"][dep_name.lower()]
 
-        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+
+        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
         self.denormalise_piper_lock()
         return
@@ -277,7 +287,8 @@ class PythonProject(object):
         # lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
         # lock["depended_on"] = list(lock["depended_on"])
 
-        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
     def update_frozen_dependencies_in_piper_lock(self, frozen_deps):
@@ -287,7 +298,8 @@ class PythonProject(object):
             if not (dep.name.lower() in CORE_PACKAGES):
                 lock["frozen_deps"][dep.name.lower()] = dep.__dict__
 
-        json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
+        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
     @property

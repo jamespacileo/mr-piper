@@ -1,3 +1,8 @@
+# encoding: utf-8
+from __future__ import unicode_literals
+from __future__ import absolute_import
+from builtins import map, filter
+
 import contextlib
 import codecs
 import json
@@ -10,8 +15,6 @@ import tempfile
 import pdb
 import crayons
 import time
-from __future__ import unicode_literals
-from __future__ import absolute_import
 
 import tabulate
 from path import Path

@@ -1,8 +1,11 @@
+# encoding: utf-8
+from __future__ import unicode_literals
+from __future__ import absolute_import
+from builtins import map,filter
+
 import os
 import hashlib
 import tempfile
-from __future__ import unicode_literals
-from __future__ import absolute_import
 
 import click
 import delegator
@@ -45,6 +48,9 @@ def add_to_requirements_file(req, filename):
         else:
             reqs.append(old_req)
             # click.echo(old_req)
+
+    if not replaced:
+        reqs.append(install_req)
 
     if not replaced:
         reqs.append(install_req)

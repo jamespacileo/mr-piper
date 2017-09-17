@@ -1,5 +1,7 @@
-from path import path
+
 from __future__ import absolute_import
+
+from path import Path
 
 class PiperJSON(object):
 

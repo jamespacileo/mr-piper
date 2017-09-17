@@ -1,4 +1,17 @@
-src
-node_modules
+*.pyc
+.ipynb_checkpoints
+.temp_env
+temp_env
+python_env
+.nest.lock
+nest.lock
+.cache
+
+# temporary
+/requirements**
 .virtualenvs
-.git
+src
+.piper
+build
+.vscode
+dist

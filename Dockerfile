@@ -7,4 +7,4 @@ COPY ./requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
-RUN pytest tests/test_piper.py
+RUN python tests/test_piper.py

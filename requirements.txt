@@ -13,3 +13,4 @@ simplejson
 path.py
 tabulate
 crayons
+future
