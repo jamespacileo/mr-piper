@@ -14,4 +14,4 @@ class PiperJSON(object):
     def removeDependency(line):
         pass
 
-    
+

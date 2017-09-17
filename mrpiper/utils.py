@@ -78,7 +78,7 @@ def add_to_requirements_file(req, filename):
                     # requirements.append(packa)
         file.close()
         # project.recase_pipfile()
-    
+
     os.remove(filename)
     os.rename(filename+".tmp", filename)
     return
@@ -113,7 +113,7 @@ def add_to_requirements_lockfile(reqs, filename):
                     # requirements.append(packa)
         file.close()
         # project.recase_pipfile()
-    
+
     os.remove(filename)
     os.rename(filename+".tmp", filename)
     return
@@ -140,7 +140,7 @@ def remove_from_requirements_file(req, filename):
             continue
         else:
             reqs.append(old_req)
-    
+
     # requirements = []
 
     # click.echo("List of requirements: {0}".format(reqs))
@@ -164,7 +164,7 @@ def remove_from_requirements_file(req, filename):
                     # requirements.append(packa)
         file.close()
         # project.recase_pipfile()
-    
+
     os.remove(filename)
     os.rename(filename+".tmp", filename)
     return

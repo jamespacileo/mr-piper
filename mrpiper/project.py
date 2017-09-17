@@ -25,7 +25,7 @@ import delegator
 CORE_PACKAGES = ["pip", "setuptools", "piper"]
 
 class PythonProject(object):
-    
+
     # _virtualenv_location = None
     # _requirements_location = None
     # _parent_dir = "."
@@ -69,12 +69,12 @@ class PythonProject(object):
             click.secho("Piper file already exists ✓", fg="green")
 
     def is_inside_project(self, path):
-        
+
         parent, name = path.splitpath()
         piper_files = [item for item in path.files("piper.json")]
         if piper_files:
             return path
-        
+
         # print(parent)
         if name:
             self.is_inside_project(parent)
@@ -248,7 +248,7 @@ class PythonProject(object):
             if key.lower() in itertools.chain.from_iterable(list_of_dependables):
                 base_locked.append(item)
                 continue
-            
+
             if key.lower() in devDependencies: #.keys():
                 dev_main.append(item)
                 dev_locked.append(item)
@@ -272,7 +272,7 @@ class PythonProject(object):
         self.requirements_file("dev-locked.txt").write_lines(
             ["-r base-locked.txt", ""] + [item["line"] for item in dev_locked]
         )
-        
+
     def denormalise_piper_lock(self):
         lock = json.load(self.piper_lock_dir.open("r"))
 
@@ -322,7 +322,7 @@ class PythonProject(object):
 
     def find_removable_dependencies(self, package_name):
         lock = self.piper_lock
-        
+
         regular = package_name.lower() in lock["dependencies"]#.keys()
         dev = package_name.lower() in lock["devDependencies"]#.keys()
 
@@ -344,4 +344,3 @@ class PythonProject(object):
 
         removable = [item for item in to_remove if not (item in locked_dependencies)]
         return removable
-            

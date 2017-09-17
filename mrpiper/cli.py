@@ -64,7 +64,7 @@ def upgrade(patch, minor, major, latest, all, package_names):
     else:
         for name in package_names:
             piper.upgrade(name, patch=patch, minor=minor, major=major, latest=latest)
-    
+
 @cli.command()
 def clear():
     "Deletes virtualenv, requirements folder/files and piper file."

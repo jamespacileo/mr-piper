@@ -73,7 +73,7 @@ def pip_install_list(packages, allow_global=False):
         click.echo(cmd)
         c = delegator.run(cmd, block=True)
         delegated_commands.append(c)
-    
+
     map(lambda x: x.block(), delegated_commands)
     return delegated_commands
 
@@ -127,7 +127,7 @@ def pip_versions(package_name):
     # last_result = [result.fixed[0] for result in parse.findall(" {:w})", result.fixed[0])]
     # click.echo(results)
     return results
-    
+
 
 def pip_outdated():
     pip_command = "{0} list -o --format columns".format(which_pip())
@@ -159,7 +159,7 @@ def init():
 def add(package_line, dev=False, dont_install=False):
     # create requirements
     # init()
-    
+
     click.secho("Installing {0}...".format(crayons.yellow(package_line)))
 
     req = Requirement.parse(package_line)
@@ -192,7 +192,7 @@ def add(package_line, dev=False, dont_install=False):
     #             bar.update(10)
     #             break
     # result = parse.search("Successfully installed {} \n", c.out)
-    
+
     if not (c.return_code == 0):
         click.secho(c.err, fg="red")
         click.echo(
@@ -215,7 +215,7 @@ def add(package_line, dev=False, dont_install=False):
 
     all_pkgs = succesfully_installed + existing_packages
     all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
-    
+
     # click.secho("Locking requirements...")
 
     frozen_deps = pip_freeze()
@@ -245,7 +245,7 @@ def add(package_line, dev=False, dont_install=False):
 
     click.secho("Requirements updated ✓", fg="green")
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
-    
+
     # print(req.__dict__)
 
 
@@ -258,7 +258,7 @@ def remove(package_line, dev=False):
     click.echo(req.__dict__)
     click.echo(package_line)
     click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
-    
+
     removable_packages = project.find_removable_dependencies(req.name)
     if removable_packages:
         removable_packages.append(req.name)
@@ -294,7 +294,7 @@ def remove(package_line, dev=False):
     click.secho("Requirement files updated ✓", fg="green")
 
 def install(dev=False):
-    
+
     packages = get_packages_from_requirements_file(os.path.join(".", "requirements", "base-locked.txt"))
     cmds = pip_install_list([item.name for item in packages])
     for cmd in cmds:
@@ -321,7 +321,7 @@ def outdated(all_pkgs=False, verbose=False):
             current_version = semantic_version.Version(dep["specs"][0][1], partial=True)
 
             versions = list(map(lambda x: semantic_version.Version(x, partial=True), versions))
-            
+
             if dep["specifier"]:
                 spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
             # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
@@ -346,18 +346,18 @@ def outdated(all_pkgs=False, verbose=False):
 
         if verbose:
             outdated_map.append([
-                dep["name"], 
-                current_version, 
-                crayons.yellow(wanted_version.__str__()), 
-                patch_version.__str__(), 
-                minor_version.__str__(), 
+                dep["name"],
+                current_version,
+                crayons.yellow(wanted_version.__str__()),
+                patch_version.__str__(),
+                minor_version.__str__(),
                 latest_version.__str__(),
             ])
         else:
             outdated_map.append([
-                dep["name"], 
-                current_version, 
-                crayons.yellow(wanted_version.__str__()), 
+                dep["name"],
+                current_version,
+                crayons.yellow(wanted_version.__str__()),
                 latest_version.__str__(),
             ])
 
@@ -365,7 +365,7 @@ def outdated(all_pkgs=False, verbose=False):
         click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"]))
     else:
         click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Latest"]))
-    
+
 
     # frozen_reqs = [req for req in parse_requirements(os.path.join(".", "requirements", "base-locked.txt"))]
 
@@ -389,8 +389,8 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
         local_package = get_package_from_requirement_file(req.name, project.requirements_file("dev-locked.txt"))
     else:
         local_package = get_package_from_requirement_file(req.name, project.requirements_file("base-locked.txt"))
-    
-    if not local_package: 
+
+    if not local_package:
         click.secho("Package is not installed", fg="red")
         sys.exit(1)
 
@@ -443,7 +443,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
 
     c = pip_install(package_line, allow_global=False, upgrade=True)
     # result = parse.search("Successfully installed {} \n", c.out)
-    
+
     if not (c.return_code == 0):
         click.secho(c.err, fg="red")
         click.echo(
@@ -467,7 +467,7 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
 
     all_pkgs = succesfully_installed + existing_packages
     all_pkgs = [Req.parse(pkg).unsafe_name for pkg in all_pkgs]
-    
+
     # click.secho("Locking requirements...")
 
     frozen_deps = pip_freeze()
@@ -497,11 +497,11 @@ def upgrade(package_line, patch=False, minor=False, major=False, latest=False, n
 
     click.secho("Requirements updated ✓", fg="green")
     # compile_requirements(os.path.join(".", "requirements", "base.txt"), os.path.join(".", "requirements", "base-locked.txt"))
-    
+
     # print(req.__dict__)
 
 def upgrade_all(patch=False, minor=False, major=False, latest=False):
-    
+
     pkgs = get_packages_from_requirements_file(os.path.join(".", "requirements", "base-locked.txt"))
     for package in pkgs:
         upgrade(package.name, patch=patch, minor=minor, major=major, latest=latest)
