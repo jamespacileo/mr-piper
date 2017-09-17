@@ -42,7 +42,7 @@ except:
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
 
-    
+
 
 def test_init():
     piper.init()
@@ -58,7 +58,7 @@ def test_add():
     piper.add("requests")
     assert base_txt.isfile()
     assert "requests" in base_txt.text()
-    
+
     if not (platform.system() == "Windows"):
         piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
         assert base_txt.isfile()
@@ -74,7 +74,7 @@ def test_remove():
     piper.remove("requests")
     assert base_txt.isfile()
     assert not ("requests" in base_txt.text())
-    
+
     if not (platform.system() == "Windows"):
         piper.remove("scrapy")
         assert base_txt.isfile()
@@ -126,6 +126,6 @@ def test_install():
 if __name__=="__main__":
     test_init()
     test_add()
-    # test_remove()
-    # test_upgrade()
-    # test_outdated()
+    test_remove()
+    test_upgrade()
+    test_outdated()
