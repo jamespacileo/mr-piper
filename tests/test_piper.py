@@ -121,7 +121,14 @@ def test_outdated():
 
 
 def test_install():
-    pass
+    piper.add("requests")
+    piper.add("pytest", dev=True)
+    piper.add("six")
+    piper.add("coverage", dev=True)
+    piper.project.virtualenv_dir.rmtree_p()
+    piper.project.piper_lock_dir.remove_p()
+    piper.install()
+    # assert ("requests" in dev_txt.text())
 
 if __name__=="__main__":
     test_init()
@@ -129,3 +136,4 @@ if __name__=="__main__":
     test_remove()
     test_upgrade()
     test_outdated()
+    test_install()

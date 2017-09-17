@@ -294,8 +294,15 @@ def remove(package_line, dev=False):
     click.secho("Requirement files updated ✓", fg="green")
 
 def install(dev=False):
+    # should run project setup
 
-    packages = get_packages_from_requirements_file(os.path.join(".", "requirements", "base-locked.txt"))
+    project.setup()
+
+    if dev:
+        packages = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
+    else:
+        packages = get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))
+
     cmds = pip_install_list([item.name for item in packages])
     for cmd in cmds:
         click.echo(cmd.out)

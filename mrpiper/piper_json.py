@@ -1,17 +1,17 @@
 
-from __future__ import absolute_import
+# from __future__ import absolute_import
 
-from path import Path
+# from path import Path
 
-class PiperJSON(object):
+# class PiperJSON(object):
 
-    def __init__(self):
-        pass
+#     def __init__(self):
+#         pass
 
-    def addDependency(line, depends_on, dev=False):
-        pass
+#     def addDependency(line, depends_on, dev=False):
+#         pass
 
-    def removeDependency(line):
-        pass
+#     def removeDependency(line):
+#         pass
 
 

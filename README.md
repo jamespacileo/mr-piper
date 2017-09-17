@@ -36,9 +36,9 @@ Mr Piper - Simple project package management
 - [ ] Solidify module's setup.py
 - [ ] Linting and PEP8
 - [ ] Check if PIP, Virtualenv need to be installed/updated and warn user
-- [ ] Integrate with Travis CI
-- [ ] Integrate with AppVeyor
-- [ ] Add build + other live chips on README
+- [X] Integrate with Travis CI
+- [X] Integrate with AppVeyor
+- [X] Add build + other live chips on README
 - [ ] Deploy working module to PyPI
 - [ ] Use MrPiper with MrPiper
 - [ ] Create minimum API docs in README
