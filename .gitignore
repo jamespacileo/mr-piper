@@ -1,5 +1,4 @@
 *.pyc
-requirements
 .ipynb_checkpoints
 .temp_env
 temp_env
@@ -9,7 +8,7 @@ nest.lock
 
 
 # temporary
-requirements
+requirements**
 .virtualenvs
 src
 .piper
