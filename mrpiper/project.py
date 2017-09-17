@@ -7,6 +7,7 @@ import hashlib
 import datetime
 import shutil
 import itertools
+from __future__ import unicode_literals
 
 import click
 import crayons

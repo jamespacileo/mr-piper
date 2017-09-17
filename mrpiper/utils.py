@@ -1,6 +1,7 @@
 import os
 import hashlib
 import tempfile
+from __future__ import unicode_literals
 
 import click
 import delegator

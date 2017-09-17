@@ -10,6 +10,7 @@ import tempfile
 import pdb
 import crayons
 import time
+from __future__ import unicode_literals
 
 import tabulate
 from path import Path
