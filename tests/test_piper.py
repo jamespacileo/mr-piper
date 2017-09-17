@@ -1,5 +1,7 @@
 import os
 import sys
+import platform
+
 import tempfile
 import delegator
 
@@ -53,9 +55,10 @@ def test_add():
     assert base_txt.isfile()
     assert "requests" in base_txt.text()
     
-    piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
-    assert base_txt.isfile()
-    assert "scrapy" in base_txt.text()
+    if not (platform.system() == "Windows"):
+        piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
+        assert base_txt.isfile()
+        assert "scrapy" in base_txt.text()
 
     piper.add("path.py", dev=True)
     assert dev_txt.isfile()
@@ -68,9 +71,10 @@ def test_remove():
     assert base_txt.isfile()
     assert not ("requests" in base_txt.text())
     
-    piper.remove("scrapy")
-    assert base_txt.isfile()
-    assert not ("scrapy" in base_txt.text())
+    if not (platform.system() == "Windows"):
+        piper.remove("scrapy")
+        assert base_txt.isfile()
+        assert not ("scrapy" in base_txt.text())
 
     piper.remove("path.py")
     assert dev_txt.isfile()
