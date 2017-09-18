@@ -30,7 +30,6 @@ import click_spinner
 from pkg_resources import Requirement as Req
 from pip.req.req_file import parse_requirements, process_line
 
-# from .cli import logger
 from .vendor.requirements.requirement import Requirement
 from .vendor.requirements.parser import parse as parse_requirements
 
