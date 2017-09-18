@@ -1,3 +1,8 @@
+# encoding: utf-8
+from __future__ import unicode_literals
+from __future__ import absolute_import
+from builtins import map,filter
+
 import os
 import hashlib
 import tempfile
@@ -47,6 +52,9 @@ def add_to_requirements_file(req, filename):
     if not replaced:
         reqs.append(install_req)
 
+    if not replaced:
+        reqs.append(install_req)
+
     # requirements = []
 
     # click.echo("List of requirements: {0}".format(reqs))
@@ -70,7 +78,7 @@ def add_to_requirements_file(req, filename):
                     # requirements.append(packa)
         file.close()
         # project.recase_pipfile()
-    
+
     os.remove(filename)
     os.rename(filename+".tmp", filename)
     return
@@ -105,7 +113,7 @@ def add_to_requirements_lockfile(reqs, filename):
                     # requirements.append(packa)
         file.close()
         # project.recase_pipfile()
-    
+
     os.remove(filename)
     os.rename(filename+".tmp", filename)
     return
@@ -132,7 +140,7 @@ def remove_from_requirements_file(req, filename):
             continue
         else:
             reqs.append(old_req)
-    
+
     # requirements = []
 
     # click.echo("List of requirements: {0}".format(reqs))
@@ -156,20 +164,23 @@ def remove_from_requirements_file(req, filename):
                     # requirements.append(packa)
         file.close()
         # project.recase_pipfile()
-    
+
     os.remove(filename)
     os.rename(filename+".tmp", filename)
     return
 
 def get_packages_from_requirements_file(filename):
     # return [r for r in parse_requirements(filename, session='')]
-    with open(filename, "r") as file:
-        reqstr = file.read()
-        file.close()
-        return list(parse_requirements_alt(reqstr))
+    reqstr = filename.text()
+    if reqstr:
+        with filename.parent:
+            return list(parse_requirements_alt(reqstr))
     return []
 
 def get_package_from_requirement_file(package_name, filename):
     pkgs = get_packages_from_requirements_file(filename)
     package = next(filter(lambda x: x.name.lower() == package_name.lower(), pkgs))
     return package
+
+def map_piper_json_to_requirements():
+    pass
