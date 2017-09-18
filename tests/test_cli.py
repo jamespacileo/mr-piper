@@ -27,9 +27,9 @@ def test_init():
 
 def test_add():
     delegator.run("piper add requests git+https://github.com/django/django.git@1.11.5#egg=django").return_code == 0
-    delegator.run("piper add Werkzeug").return_code == 0
-    delegator.run("piper add pytest --dev")
-    delegator.run("piper add coverage pytest --dev")
+    delegator.run("piper add Werkzeug~=0.11.0").return_code == 0
+    delegator.run("piper add pytest --dev").return_code == 0
+    delegator.run("piper add coverage pytest --dev").return_code == 0
 
     # result = runner.invoke(cli.add, ["requests", "git+https://github.com/django/django.git@1.11.5#egg=django"])
     # print(result.output)
@@ -39,7 +39,7 @@ def test_add():
 
 def test_remove():
     c = delegator.run("piper remove requests")
-    print(c.out + c.err)
+    # print(c.out + c.err)
     assert c.return_code == 0
     delegator.run("piper remove django").return_code == 0
     delegator.run("piper remove coverage pytest").return_code == 0
@@ -50,7 +50,7 @@ def test_remove():
     # assert result.exit_code == 0
 
 def test_install():
-    pass
+    delegator.run("piper install").return_code == 0
 
 def test_outdated():
     delegator.run("piper outdated").return_code == 0
@@ -60,7 +60,7 @@ def test_outdated():
     # assert result.exit_code == 0
 
 def test_upgrade():
-    pass
+    delegator.run("piper upgrade --noinput Werkzeug").return_code == 0
 
 
 if __name__=="__main__":
