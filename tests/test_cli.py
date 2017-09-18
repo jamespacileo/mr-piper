@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 import click
 from click.testing import CliRunner
+import delegator
 
 import sys
 sys.path.append(".")
@@ -18,32 +19,45 @@ os.chdir(TEMP_LOCATION)
 runner = CliRunner()
 
 def test_init():
-    result = runner.invoke(cli.init, [])
-    print(result.output)
-    print("exit_code:{}".format(result.exit_code))
-    assert result.exit_code == 0
+    delegator.run("piper init").return_code == 0
+    # result = runner.invoke(cli.init, [])
+    # print(result.output)
+    # print("exit_code:{}".format(result.exit_code))
+    # assert result.exit_code == 0
 
 def test_add():
-    result = runner.invoke(cli.add, ["requests", "git+https://github.com/django/django.git@1.11.5#egg=django"])
-    print(result.output)
-    print("exit_code:{}".format(result.exit_code))
-    assert result.exit_code == 0
-    assert "Package django installed" in result.output
+    delegator.run("piper add requests git+https://github.com/django/django.git@1.11.5#egg=django").return_code == 0
+    delegator.run("piper add Werkzeug").return_code == 0
+    delegator.run("piper add pytest --dev")
+    delegator.run("piper add coverage pytest --dev")
+
+    # result = runner.invoke(cli.add, ["requests", "git+https://github.com/django/django.git@1.11.5#egg=django"])
+    # print(result.output)
+    # print("exit_code:{}".format(result.exit_code))
+    # assert result.exit_code == 0
+    # assert "Package django installed" in result.output
 
 def test_remove():
-    result = runner.invoke(cli.remove, ["requests"])
-    print(result.output)
-    print("exit_code:{}".format(result.exit_code))
-    assert result.exit_code == 0
+    c = delegator.run("piper remove requests")
+    print(c.out + c.err)
+    assert c.return_code == 0
+    delegator.run("piper remove django").return_code == 0
+    delegator.run("piper remove coverage pytest").return_code == 0
+    # result = runner.invoke(cli.remove, ["requests"])
+    # print(result.output)
+    # print(result.exception)
+    # print("exit_code:{}".format(result.exit_code))
+    # assert result.exit_code == 0
 
 def test_install():
     pass
 
 def test_outdated():
-    result = runner.invoke(cli.outdated, [])
-    print(result.output)
-    print("exit_code:{}".format(result.exit_code))
-    assert result.exit_code == 0
+    delegator.run("piper outdated").return_code == 0
+    # result = runner.invoke(cli.outdated, [])
+    # print(result.output)
+    # print("exit_code:{}".format(result.exit_code))
+    # assert result.exit_code == 0
 
 def test_upgrade():
     pass

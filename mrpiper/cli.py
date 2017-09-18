@@ -34,7 +34,7 @@ def add(dev, package_names):
 def remove(noinput, package_names):
     "Remove a list of packages and their dependencies, and remove this from the requirements."
     for package_name in package_names:
-        piper.remove(package_name, dev=dev)
+        piper.remove(package_name)
         click.echo("")
 
 @cli.command()
