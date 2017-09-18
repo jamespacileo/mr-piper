@@ -16,3 +16,5 @@ crayons
 future
 coverage
 coveralls
+click-log
+click-spinner

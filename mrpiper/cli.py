@@ -2,6 +2,12 @@
 from __future__ import unicode_literals
 from __future__ import absolute_import
 
+import logging
+logger = logging.getLogger(__name__)
+
+import click_log
+click_log.basic_config(logger)
+
 import click
 import os
 
@@ -67,11 +73,14 @@ def upgrade(upgrade_level, all, noinput, package_names):
             piper.upgrade(name, upgrade_level)
 
 @cli.command()
-@click.option("--format", default="table", help="Output format")
-@click.option("--verbose", is_flag=True)
-def outdated(format, verbose):
+@click.option("--format", "output_format", default="table", help="Output format")
+@click.option("--all", "all_pkgs", is_flag=True, help="Show all dependencies, not just the top level ones.")
+@click.option("--verbose", is_flag=True, help="Show some extra columns")
+@click_log.simple_verbosity_option(logger)
+def outdated(output_format, all_pkgs, verbose):
     "Deletes virtualenv, requirements folder/files and piper file."
-    piper.outdated()
+    # logger.error("Test message")
+    piper.outdated(format=output_format, all_pkgs=all_pkgs, verbose=verbose)
 
 @cli.command()
 @click.option("--noinput", is_flag=True)

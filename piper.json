@@ -1,7 +1,584 @@
 {
     "devDependencies": {},
     "dependables": [],
-    "dependencies": {},
-    "frozen_deps": {},
+    "dependencies": {
+        "requests": {
+            "depends_on": [],
+            "line": "requests==2.0.0"
+        }
+    },
+    "frozen_deps": {
+        "semver": {
+            "specifier": true,
+            "local_file": false,
+            "name": "semver",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "semver==2.7.8",
+            "specs": [
+                [
+                    "==",
+                    "2.7.8"
+                ]
+            ],
+            "revision": null
+        },
+        "py": {
+            "specifier": true,
+            "local_file": false,
+            "name": "py",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "py==1.4.34",
+            "specs": [
+                [
+                    "==",
+                    "1.4.34"
+                ]
+            ],
+            "revision": null
+        },
+        "parse": {
+            "specifier": true,
+            "local_file": false,
+            "name": "parse",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "parse==1.8.2",
+            "specs": [
+                [
+                    "==",
+                    "1.8.2"
+                ]
+            ],
+            "revision": null
+        },
+        "click": {
+            "specifier": true,
+            "local_file": false,
+            "name": "click",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "click==6.7",
+            "specs": [
+                [
+                    "==",
+                    "6.7"
+                ]
+            ],
+            "revision": null
+        },
+        "virtualenv": {
+            "specifier": true,
+            "local_file": false,
+            "name": "virtualenv",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "virtualenv==15.1.0",
+            "specs": [
+                [
+                    "==",
+                    "15.1.0"
+                ]
+            ],
+            "revision": null
+        },
+        "pexpect": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pexpect",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pexpect==4.2.1",
+            "specs": [
+                [
+                    "==",
+                    "4.2.1"
+                ]
+            ],
+            "revision": null
+        },
+        "pythonz-bd": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pythonz-bd",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pythonz-bd==1.11.4",
+            "specs": [
+                [
+                    "==",
+                    "1.11.4"
+                ]
+            ],
+            "revision": null
+        },
+        "pew": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pew",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pew==0.1.26",
+            "specs": [
+                [
+                    "==",
+                    "0.1.26"
+                ]
+            ],
+            "revision": null
+        },
+        "ptyprocess": {
+            "specifier": true,
+            "local_file": false,
+            "name": "ptyprocess",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "ptyprocess==0.5.2",
+            "specs": [
+                [
+                    "==",
+                    "0.5.2"
+                ]
+            ],
+            "revision": null
+        },
+        "pytest": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pytest",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pytest==3.2.2",
+            "specs": [
+                [
+                    "==",
+                    "3.2.2"
+                ]
+            ],
+            "revision": null
+        },
+        "toml": {
+            "specifier": true,
+            "local_file": false,
+            "name": "toml",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "toml==0.9.2",
+            "specs": [
+                [
+                    "==",
+                    "0.9.2"
+                ]
+            ],
+            "revision": null
+        },
+        "django-pure-pagination": {
+            "specifier": true,
+            "local_file": false,
+            "name": "django-pure-pagination",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "django-pure-pagination==0.3.0",
+            "specs": [
+                [
+                    "==",
+                    "0.3.0"
+                ]
+            ],
+            "revision": null
+        },
+        "flake8": {
+            "specifier": true,
+            "local_file": false,
+            "name": "flake8",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "flake8==3.4.1",
+            "specs": [
+                [
+                    "==",
+                    "3.4.1"
+                ]
+            ],
+            "revision": null
+        },
+        "crayons": {
+            "specifier": true,
+            "local_file": false,
+            "name": "crayons",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "crayons==0.1.2",
+            "specs": [
+                [
+                    "==",
+                    "0.1.2"
+                ]
+            ],
+            "revision": null
+        },
+        "simplejson": {
+            "specifier": true,
+            "local_file": false,
+            "name": "simplejson",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "simplejson==3.11.1",
+            "specs": [
+                [
+                    "==",
+                    "3.11.1"
+                ]
+            ],
+            "revision": null
+        },
+        "urllib3": {
+            "specifier": true,
+            "local_file": false,
+            "name": "urllib3",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "urllib3==1.22",
+            "specs": [
+                [
+                    "==",
+                    "1.22"
+                ]
+            ],
+            "revision": null
+        },
+        "pytz": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pytz",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pytz==2017.2",
+            "specs": [
+                [
+                    "==",
+                    "2017.2"
+                ]
+            ],
+            "revision": null
+        },
+        "colorama": {
+            "specifier": true,
+            "local_file": false,
+            "name": "colorama",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "colorama==0.3.9",
+            "specs": [
+                [
+                    "==",
+                    "0.3.9"
+                ]
+            ],
+            "revision": null
+        },
+        "certifi": {
+            "specifier": true,
+            "local_file": false,
+            "name": "certifi",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "certifi==2017.7.27.1",
+            "specs": [
+                [
+                    "==",
+                    "2017.7.27.1"
+                ]
+            ],
+            "revision": null
+        },
+        "pip-tools": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pip-tools",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pip-tools==1.9.0",
+            "specs": [
+                [
+                    "==",
+                    "1.9.0"
+                ]
+            ],
+            "revision": null
+        },
+        "resumable-urlretrieve": {
+            "specifier": true,
+            "local_file": false,
+            "name": "resumable-urlretrieve",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "resumable-urlretrieve==0.1.5",
+            "specs": [
+                [
+                    "==",
+                    "0.1.5"
+                ]
+            ],
+            "revision": null
+        },
+        "delegator.py": {
+            "specifier": true,
+            "local_file": false,
+            "name": "delegator.py",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "delegator.py==0.0.13",
+            "specs": [
+                [
+                    "==",
+                    "0.0.13"
+                ]
+            ],
+            "revision": null
+        },
+        "pyflakes": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pyflakes",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pyflakes==1.6.0",
+            "specs": [
+                [
+                    "==",
+                    "1.6.0"
+                ]
+            ],
+            "revision": null
+        },
+        "virtualenv-clone": {
+            "specifier": true,
+            "local_file": false,
+            "name": "virtualenv-clone",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "virtualenv-clone==0.2.6",
+            "specs": [
+                [
+                    "==",
+                    "0.2.6"
+                ]
+            ],
+            "revision": null
+        },
+        "mrpiper": {
+            "specifier": false,
+            "local_file": false,
+            "name": "mrpiper",
+            "editable": true,
+            "uri": "git+https://github.com/jamespacileo/mr-piper.git",
+            "extras": [],
+            "vcs": "git",
+            "path": null,
+            "line": "-e git+https://github.com/jamespacileo/mr-piper.git@890c98d87eb6be55fe0c12a2551337225ba3a42c#egg=mrpiper",
+            "specs": [],
+            "revision": "890c98d87eb6be55fe0c12a2551337225ba3a42c"
+        },
+        "django": {
+            "specifier": true,
+            "local_file": false,
+            "name": "Django",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "Django==1.11.5",
+            "specs": [
+                [
+                    "==",
+                    "1.11.5"
+                ]
+            ],
+            "revision": null
+        },
+        "mccabe": {
+            "specifier": true,
+            "local_file": false,
+            "name": "mccabe",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "mccabe==0.6.1",
+            "specs": [
+                [
+                    "==",
+                    "0.6.1"
+                ]
+            ],
+            "revision": null
+        },
+        "chardet": {
+            "specifier": true,
+            "local_file": false,
+            "name": "chardet",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "chardet==3.0.4",
+            "specs": [
+                [
+                    "==",
+                    "3.0.4"
+                ]
+            ],
+            "revision": null
+        },
+        "pycodestyle": {
+            "specifier": true,
+            "local_file": false,
+            "name": "pycodestyle",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "pycodestyle==2.3.1",
+            "specs": [
+                [
+                    "==",
+                    "2.3.1"
+                ]
+            ],
+            "revision": null
+        },
+        "requests": {
+            "specifier": true,
+            "local_file": false,
+            "name": "requests",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "requests==2.0.0",
+            "specs": [
+                [
+                    "==",
+                    "2.0.0"
+                ]
+            ],
+            "revision": null
+        },
+        "idna": {
+            "specifier": true,
+            "local_file": false,
+            "name": "idna",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "idna==2.6",
+            "specs": [
+                [
+                    "==",
+                    "2.6"
+                ]
+            ],
+            "revision": null
+        },
+        "first": {
+            "specifier": true,
+            "local_file": false,
+            "name": "first",
+            "editable": false,
+            "uri": null,
+            "extras": [],
+            "vcs": null,
+            "path": null,
+            "line": "first==2.0.1",
+            "specs": [
+                [
+                    "==",
+                    "2.0.1"
+                ]
+            ],
+            "revision": null
+        }
+    },
     "created": "2017-09-17T23:09:30"
 }

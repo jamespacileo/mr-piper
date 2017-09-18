@@ -15,6 +15,9 @@ import tempfile
 import pdb
 import crayons
 import time
+# import logging
+# logger = logging.getLogger(__name__)
+
 
 import tabulate
 from path import Path
@@ -22,10 +25,12 @@ import parse
 import click
 import delegator
 import semantic_version
+import click_spinner
 
 from pkg_resources import Requirement as Req
 from pip.req.req_file import parse_requirements, process_line
 
+from .cli import logger
 from .vendor.requirements.requirement import Requirement
 from .vendor.requirements.parser import parse as parse_requirements
 
@@ -34,6 +39,7 @@ from .vendor.requirements.parser import parse as parse_requirements
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
     remove_from_requirements_file, get_packages_from_requirements_file, get_package_from_requirement_file
 from .project import PythonProject
+from . import overrides
 
 project = PythonProject()
 
@@ -129,8 +135,13 @@ def pip_uninstall(packages):
 def pip_versions(package_name):
     pip_command = "{0} install {1}==0.xx".format(which_pip(), package_name)
     c = delegator.run(pip_command)
+    no_matching = "No matching distribution found for mrpiper" in c.err
+    if no_matching:
+        return False
+
     result = parse.search("from versions: {})", c.err)
-    # click.echo(result.fixed[0])
+    # click.echo([package_name, c.err])
+    # click.echo([package_name, result.fixed[0], [item for item in parse.findall(" {:S},", result.fixed[0] + ",")]])
     results = [result.fixed[0] for result in parse.findall(" {:S},", result.fixed[0] + ",")]
     # last_result = [result.fixed[0] for result in parse.findall(" {:w})", result.fixed[0])]
     # click.echo(results)
@@ -344,6 +355,8 @@ def install(dev=False):
 def outdated(all_pkgs=False, verbose=False, format="table"):
     # format can be table, json
 
+    # logger.error("test error 2")
+
     click.echo("Fetching outdated packages")
     # c = pip_outdated()
     # click.echo([c.return_code, c.out, c.err])
@@ -356,52 +369,62 @@ def outdated(all_pkgs=False, verbose=False, format="table"):
 
     outdated_map = []
 
-    for dep in all_deps:
-        versions = list(pip_versions(dep["name"]))
-        versions.reverse()
-        try:
-            current_version = semantic_version.Version(dep["specs"][0][1], partial=True)
+    with click_spinner.spinner():
+        for dep in all_deps:
+            logger.debug("checking versions for {}".format(dep["name"]))
+            found_versions = pip_versions(dep["name"])
+            if found_versions == False:
+                # TODO: Address failure to find versions for package
+                logger.debug("Couldn't find versions for {}".format(dep["name"]))
+                continue
+            versions = list(found_versions)
+            versions.reverse()
+            try:
+                current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
 
-            versions = list(map(lambda x: semantic_version.Version(x, partial=True), versions))
+                coerced_versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), versions))
+                version_mapping = map(lambda index, x: (x.__str__(), versions[index] ), enumerate(coerced_versions))
 
-            if dep["specifier"]:
-                spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
-            # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
-            valid_versions = list(spec.filter(versions))
-            wanted_version = spec.select(versions)
-            patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(versions)
-            minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(versions)
-        except ValueError as err:
-            current_version = dep["specs"][0][1]
-            # click.echo(err)
-            wanted_version = "not semantic"
-            patch_version = ""
-            minor_version = ""
-        latest_version = versions[0]
+                if dep["specifier"]:
+                    spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
+                # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
+                valid_versions = list(spec.filter(coerced_versions))
+                wanted_version = spec.select(valid_versions).original_version
+                patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
+                minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
 
-        # outdated_map.append({
-        #     'name': dep["name"],
-        #     'current': current_version,
-        #     'wanted': wanted_version.__str__(),
-        #     'latest': latest_version.__str__(),
-        # })
+            except ValueError as err:
+                logger.debug("ValueError for {0} with {1}".format(dep["name"], err))
+                current_version = dep["specs"][0][1]
+                # click.echo(err)
+                wanted_version = "not semantic"
+                patch_version = ""
+                minor_version = ""
+            latest_version = versions[0]
 
-        if verbose:
-            outdated_map.append([
-                dep["name"],
-                current_version,
-                crayons.yellow(wanted_version.__str__()),
-                patch_version.__str__(),
-                minor_version.__str__(),
-                latest_version.__str__(),
-            ])
-        else:
-            outdated_map.append([
-                dep["name"],
-                current_version,
-                crayons.yellow(wanted_version.__str__()),
-                latest_version.__str__(),
-            ])
+            # outdated_map.append({
+            #     'name': dep["name"],
+            #     'current': current_version,
+            #     'wanted': wanted_version.__str__(),
+            #     'latest': latest_version.__str__(),
+            # })
+
+            if verbose:
+                outdated_map.append([
+                    dep["name"],
+                    current_version,
+                    crayons.yellow(wanted_version.__str__()),
+                    patch_version.__str__(),
+                    minor_version.__str__(),
+                    latest_version.__str__(),
+                ])
+            else:
+                outdated_map.append([
+                    dep["name"],
+                    current_version,
+                    crayons.yellow(wanted_version.__str__()),
+                    latest_version.__str__(),
+                ])
 
     if format == "table":
         if verbose:
