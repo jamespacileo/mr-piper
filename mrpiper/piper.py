@@ -15,8 +15,8 @@ import tempfile
 import pdb
 import crayons
 import time
-# import logging
-# logger = logging.getLogger(__name__)
+import logging
+logger = logging.getLogger(__name__)
 
 
 import tabulate
@@ -30,7 +30,7 @@ import click_spinner
 from pkg_resources import Requirement as Req
 from pip.req.req_file import parse_requirements, process_line
 
-from .cli import logger
+# from .cli import logger
 from .vendor.requirements.requirement import Requirement
 from .vendor.requirements.parser import parse as parse_requirements
 
@@ -117,7 +117,7 @@ def pip_install(
         no_deps,
         upgrade_str
     )
-    click.echo(pip_command)
+    logger.debug(pip_command)
     c = delegator.run(pip_command, block=block)
 
     # if c.return_code == 0:
@@ -128,7 +128,7 @@ def pip_install(
 
 def pip_uninstall(packages):
     pip_command = "{0} uninstall --yes {1}".format(which_pip(), " ".join(packages))
-    click.echo(pip_command)
+    logger.debug(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -150,7 +150,7 @@ def pip_versions(package_name):
 
 def pip_outdated():
     pip_command = "{0} list -o --format columns".format(which_pip())
-    click.echo(pip_command)
+    logger.debug(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -274,8 +274,8 @@ def find_removable_dependencies(package_name):
 
 def remove(package_line, dev=False):
     req = Requirement.parse(package_line)
-    click.echo(req.__dict__)
-    click.echo(package_line)
+    logger.debug(req.__dict__)
+    logger.debug(package_line)
     click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
 
     removable_packages = project.find_removable_dependencies(req.name)
@@ -447,7 +447,7 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
     req = Requirement.parse(package_line)
     click.secho("Installing {0}...".format(crayons.yellow(req.name)))
 
-    # click.echo(req.__dict__)
+    logger.debug(req.__dict__)
 
     is_flag_latest = upgrade_level in ["major", "latest"]
 

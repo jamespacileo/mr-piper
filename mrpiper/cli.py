@@ -11,9 +11,9 @@ click_log.basic_config(logger)
 import click
 import os
 
-import sys
-sys.path.append("..")
-from mrpiper import piper
+# import sys
+# sys.path.append("..")
+from . import piper
 
 @click.group()
 def cli():

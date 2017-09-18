@@ -93,15 +93,15 @@ def test_remove():
 
 def test_upgrade():
     piper.add("requests==2.0.0", dev=True)
-    piper.upgrade("requests", patch=True, noinput=True)
+    piper.upgrade("requests", upgrade_level="patch", noinput=True)
     assert ("requests==2.0.1" in dev_txt.text())
 
     piper.add("requests==1.0.0", dev=True)
-    piper.upgrade("requests", patch=True, noinput=True)
+    piper.upgrade("requests", upgrade_level="patch", noinput=True)
     assert ("requests==1.0.4" in dev_txt.text())
-    piper.upgrade("requests", minor=True, noinput=True)
+    piper.upgrade("requests", upgrade_level="minor", noinput=True)
     assert ("requests==1.2.3" in dev_txt.text())
-    piper.upgrade("requests", major=True, noinput=True)
+    piper.upgrade("requests", upgrade_level="major", noinput=True)
     assert ("requests==2." in dev_txt.text())
     # piper.upgrade("requests<2.0.0", major=True, noinput=True)
     # assert ("requests==1.2.3" in dev_txt.text())

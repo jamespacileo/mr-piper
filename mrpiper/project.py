@@ -13,6 +13,8 @@ import hashlib
 import datetime
 import shutil
 import itertools
+import logging
+logger = logging.getLogger(__name__)
 
 import click
 import crayons
@@ -23,6 +25,7 @@ import simplejson as json
 import delegator
 
 from . import utils
+
 
 CORE_PACKAGES = ["pip", "setuptools", "piper"]
 
@@ -43,7 +46,6 @@ class PythonProject(object):
 
     def pip(self):
         pass
-
 
     def has_pipfile(self):
         pass
@@ -72,7 +74,6 @@ class PythonProject(object):
 
     def validate(self):
         lock = self.piper_lock
-
 
     def is_inside_project(self, path):
 
@@ -260,7 +261,7 @@ class PythonProject(object):
                 dev_locked.append(item)
                 continue
 
-        click.echo([base_main, base_locked, dev_main, dev_locked])
+        logger.debug([base_main, base_locked, dev_main, dev_locked])
 
         self.requirements_file("base.txt").write_lines(
             [item["line"] for item in base_main]
