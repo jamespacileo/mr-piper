@@ -1,4 +1,4 @@
-Mr Piper - Simple project package management
+Mr Piper (alpha) - Simple project package management
 -------------
 
 
