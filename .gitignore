@@ -17,3 +17,6 @@ build**
 .vscode**
 dist**
 temp**
+node_modules
+package.json
+yarn.lock

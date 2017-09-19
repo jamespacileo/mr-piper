@@ -36,7 +36,8 @@ virtualenv_dir = (project_dir / ".virtualenvs" / "project_virtualenv")
 try:
     command = 'code-insiders.cmd "{}"'.format(project_dir)
     # print(command)
-    delegator.run(command, block=False)
+    if (platform.system() == "Windows"):
+        delegator.run(command, block=False)
 except:
     pass
 
@@ -64,9 +65,18 @@ def test_add():
     assert base_txt.isfile()
     assert "requests" in base_txt.text()
 
+    piper.add("Werkzeug")
+    assert "Werkzeug" in base_txt.text()
+
+    piper.add("regex")
+    assert "regex" in base_txt.text()
+
+    piper.remove("requests")
+    piper.add("git+https://github.com/requests/requests.git@v2.18.4#egg=requests")
+    assert "requests" in base_txt.text()
+
     if not (platform.system() == "Windows"):
         piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
-        assert base_txt.isfile()
         assert "scrapy" in base_txt.text()
 
     piper.add("path.py", dev=True)

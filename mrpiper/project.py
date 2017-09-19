@@ -176,6 +176,10 @@ class PythonProject(object):
         return self.project_dir / "piper.json"
 
     @property
+    def piper_file(self):
+        return json.loads(self.piper_file_dir.text())
+
+    @property
     def has_piper_file(self):
         return self.piper_file_dir.exists()
 
@@ -238,6 +242,7 @@ class PythonProject(object):
 
     def add_dependency_to_piper_lock(self, dep, dev=False):
         lock = json.load(self.piper_lock_dir.open("r"))
+        piper_file = self.piper_file
 
         dependency = {
             "depends_on": list(filter(lambda x: not (x in CORE_PACKAGES), dep["dependencies"])),
@@ -248,15 +253,22 @@ class PythonProject(object):
         # lock["depended_on"] = list(lock["depended_on"])
 
         if not dev:
+            piper_file["dependencies"][dep["name"].lower()] = dep["line"]
+
             lock["dependencies"][dep["name"].lower()] = dependency
             if dep["name"].lower() in lock["devDependencies"]: #.keys():
                 del lock["devDependencies"][dep["name"].lower()]
+                del piper_file["devDependencies"][dep["name"].lower()]
         else:
+            piper_file["devDependencies"][dep["name"].lower()] = dep["line"]
+
             lock["devDependencies"][dep["name"].lower()] = dependency
             if dep["name"].lower() in lock["dependencies"]: #.keys():
                 del lock["dependencies"][dep["name"].lower()]
+                del piper_file["dependencies"][dep["name"].lower()]
 
         self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        self.save_to_piper_file(piper_file)
         # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
         self.denormalise_piper_lock()

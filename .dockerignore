@@ -15,3 +15,4 @@ src
 build
 .vscode
 dist
+node_modules
