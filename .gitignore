@@ -14,3 +14,5 @@ src
 .piper
 mrpiper.egg-info
 build**
+.vscode**
+dist**
