@@ -19,18 +19,30 @@ from . import piper
 def cli():
     pass
 
+# @cli.command()
+# @click.option("--dev", is_flag=True)
+# @click.argument("package_names", nargs=-1)
+# def add(dev, package_names):
+#     "Install and add a package to requirements"
+#     for package_name in package_names:
+#         piper.add(package_name, dev=dev)
+#         click.echo("")
+
 @cli.command()
 @click.option("--dev", is_flag=True)
+@click.option("--editable", "-e", is_flag=True)
 @click.argument("package_names", nargs=-1)
-def add(dev, package_names):
+@click_log.simple_verbosity_option(logger)
+def add(dev, editable, package_names):
     "Install and add a package to requirements"
     for package_name in package_names:
-        piper.add(package_name, dev=dev)
-        click.echo("")
+        piper.add(package_name, editable=editable, dev=dev)
+        # click.echo("")
 
 @cli.command()
 @click.option("--noinput", is_flag=True)
 @click.argument("package_names", nargs=-1)
+@click_log.simple_verbosity_option(logger)
 def remove(noinput, package_names):
     "Remove a list of packages and their dependencies, and remove this from the requirements."
     for package_name in package_names:
@@ -39,6 +51,7 @@ def remove(noinput, package_names):
 
 @cli.command()
 @click.option("--dev", is_flag=True, help="If to install dev packages")
+@click_log.simple_verbosity_option(logger)
 def install(dev):
     "Install all packages in requirement files."
     piper.install(dev=dev)
@@ -49,6 +62,7 @@ def install(dev):
 @click.option("--outside", "virtualenv_location", flag_value="outside")
 @click.option("--py", type=click.Choice(["2", "2.7", "3", "3.3", "3.4", "3.5", "3.6"]))
 @click.option("--global", "is_global", is_flag=True)
+@click_log.simple_verbosity_option(logger)
 def init(file_to_import, virtualenv_location, py, is_global):
     "Initialise project with virtual environment, requirements structure and package lock."
     click.echo("Initializing project")
@@ -62,6 +76,7 @@ def init(file_to_import, virtualenv_location, py, is_global):
 @click.option("--all", is_flag=True, help="Upgrade all packages")
 @click.option("--noinput", is_flag=True)
 @click.argument("package_names", nargs=-1)
+@click_log.simple_verbosity_option(logger)
 def upgrade(upgrade_level, all, noinput, package_names):
     "Upgrade a list of packages."
     # click.echo([patch, minor, major, latest, package_names])

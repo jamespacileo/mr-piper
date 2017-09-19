@@ -9,7 +9,7 @@ nest.lock
 
 # temporary
 /requirements**
-.virtualenvs
+.virtualenvs**
 src
 .piper
 build

@@ -28,6 +28,7 @@ import semantic_version
 import click_spinner
 
 from pkg_resources import Requirement as Req
+from pkg_resources import RequirementParseError
 from pip.req.req_file import parse_requirements, process_line
 
 from .vendor.requirements.requirement import Requirement
@@ -174,15 +175,25 @@ def init():
     # create virtualenv
     project.setup()
 
-def add(package_line, dev=False, dont_install=False):
+def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements
     # init()
+    if editable:
+        click.secho("Installing {0} in editable mode...".format(crayons.yellow(package_line)))
+    else:
+        click.secho("Installing {0}...".format(crayons.yellow(package_line)))
 
-    click.secho("Installing {0}...".format(crayons.yellow(package_line)))
+    req = Req.parse(package_line)
+    logger.debug("{}".format(req.__dict__))
 
-    req = Requirement.parse(package_line)
+    if editable:
+        req = Requirement.parse_editable(package_line)
+    else:
+        req = Requirement.parse_line(package_line)
 
     # click.echo(req.__dict__)
+
+    logger.debug("Requirement parsed: {}".format(req.__dict__))
 
     has_specs = len(req.specs) > 0
     is_vcs = req.vcs

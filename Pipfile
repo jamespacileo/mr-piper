@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+[packages]
+
+pytest = "*"
+click = "*"
+"delegator.py" = "*"
+flake8 = "*"
+toml = "*"
+pip-tools = "*"
+semantic-version = "*"
+requests = "*"
+parse = "*"
+simplejson = "*"
+"path.py" = "*"
+tabulate = "*"
+crayons = "*"
+future = "*"
+coverage = "*"
+coveralls = "*"
+click-log = "*"
+click-spinner = "*"
+ipaddress = "*"
+"-e ." = "*"
+
+

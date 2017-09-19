@@ -1,5 +1,4 @@
 pytest
-pipenv
 click
 delegator.py
 pytest
@@ -18,3 +17,4 @@ coverage
 coveralls
 click-log
 click-spinner
+ipaddress

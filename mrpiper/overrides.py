@@ -13,3 +13,9 @@ class Version(semantic_version.Version):
 
 class Spec(semantic_version.Spec):
     pass
+
+
+from pip.req.req_install import InstallRequirement
+from pip.req.req_file import parse_requirements, process_line
+
+
