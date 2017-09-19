@@ -17,5 +17,41 @@ class Spec(semantic_version.Spec):
 
 from pip.req.req_install import InstallRequirement
 from pip.req.req_file import parse_requirements, process_line
+from .vendor.requirements.requirement import Requirement
 
+class SmartRequirement(InstallRequirement):
 
+    original_line = None
+    line = None
+    vcs = None
+    specs = None
+
+    helper_req = None
+
+    @classmethod
+    def from_line(cls, line):
+        req = super(SmartRequirement, cls).from_line(line)
+        req.original_line = line
+        req.helper_req = Requirement.parse_line(line)
+        req.specs = req.helper_req.specs
+        req.vcs = req.helper_req.vcs
+        req.local_file = req.helper_req.local_file
+        if req.req:
+            req.line = req.req.__str__()
+        else:
+            req.line = req.link.__str__()
+        return req
+
+    @classmethod
+    def from_editable(cls, line):
+        req = super(SmartRequirement, cls).from_editable(line)
+        req.original_line = line
+        req.helper_req = Requirement.parse_editable(line)
+        req.specs = req.helper_req.specs
+        req.vcs = req.helper_req.vcs
+        req.local_file = req.helper_req.local_file
+        if req.req:
+            req.line = req.req.__str__()
+        else:
+            req.line = req.link.__str__()
+        return req

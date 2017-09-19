@@ -50,7 +50,7 @@ def test_installing_itself():
         assert c.return_code == 0
 
 def test_init():
-    piper.init()
+    piper.init(noinput=True, private=True)
     assert req_folder.exists()
     assert base_txt.exists()
     assert base_locked_txt.exists()

@@ -170,10 +170,14 @@ def which_pip(allow_global=False):
     return which('pip')
 
 
-def init():
+def init(noinput=False, private=False):
     # create requirements structure
     # create virtualenv
-    project.setup()
+    if noinput:
+        init_data = {
+            "private": private
+        }
+    project.setup(noinput=noinput, init_data=init_data)
 
 def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements
@@ -183,13 +187,18 @@ def add(package_line, editable=False, dev=False, dont_install=False):
     else:
         click.secho("Installing {0}...".format(crayons.yellow(package_line)))
 
-    req = Req.parse(package_line)
-    logger.debug("{}".format(req.__dict__))
+    # req = Req.parse(package_line)
+    # logger.debug("{}".format(req.__dict__))
+
+    # if editable:
+    #     req = Requirement.parse_editable(package_line)
+    # else:
+    #     req = Requirement.parse_line(package_line)
 
     if editable:
-        req = Requirement.parse_editable(package_line)
+        req = overrides.SmartRequirement.from_editable(package_line)
     else:
-        req = Requirement.parse_line(package_line)
+        req = overrides.SmartRequirement.from_line(package_line)
 
     # click.echo(req.__dict__)
 
@@ -200,10 +209,10 @@ def add(package_line, editable=False, dev=False, dont_install=False):
     is_local_file = req.local_file
     is_editable = req.editable
 
-    if is_vcs and (not is_editable):
-        # print("Make sure ")
-        req.editable = True
-        package_line = "-e {0}".format(package_line)
+    # if is_vcs and (not is_editable):
+    #     # print("Make sure ")
+    #     req.editable = True
+    #     package_line = "-e {0}".format(package_line)
 
     if is_vcs and (not req.name):
         click.secho("Make sure to add #egg=<name> to your url", fg="red")

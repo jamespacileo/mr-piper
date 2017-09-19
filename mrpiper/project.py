@@ -50,7 +50,7 @@ class PythonProject(object):
     def has_pipfile(self):
         pass
 
-    def setup(self):
+    def setup(self, noinput=False, init_data={}):
         click.secho("Creating virtualenv...")
         if not self.has_virtualenv:
             self.create_virtualenv()
@@ -66,11 +66,18 @@ class PythonProject(object):
             click.secho("Requirement files already exists ✓", fg="green")
 
         click.secho("Creating piper file...")
-        if not self.has_piper_lock:
-            self.create_piper_lock()
+        if not self.has_piper_file:
+            self.create_piper_file(noinput=noinput, init_data=init_data)
             click.secho("Piper file created ✓", fg="green")
         else:
             click.secho("Piper file already exists ✓", fg="green")
+
+        click.secho("Creating piper lock...")
+        if not self.has_piper_lock:
+            self.create_piper_lock()
+            click.secho("Piper lock created ✓", fg="green")
+        else:
+            click.secho("Piper lock already exists ✓", fg="green")
 
     def validate(self):
         lock = self.piper_lock
@@ -165,8 +172,16 @@ class PythonProject(object):
         return c.return_code == 0
 
     @property
-    def piper_lock_dir(self):
+    def piper_file_dir(self):
         return self.project_dir / "piper.json"
+
+    @property
+    def has_piper_file(self):
+        return self.piper_file_dir.exists()
+
+    @property
+    def piper_lock_dir(self):
+        return self.project_dir / "piper.lock"
 
     @property
     def has_piper_lock(self):
@@ -174,6 +189,42 @@ class PythonProject(object):
 
     def save_to_piper_lock(self, data):
         self.piper_lock_dir.write_text(text(data))
+
+    def save_to_piper_file(self, data):
+        self.piper_file_dir.write_text(text(json.dumps(data, indent=4 * ' ')))
+
+    def create_piper_file(self, noinput=False, init_data={}):
+        package_name = init_data.get("package_name", self.project_dir.name)
+        author = init_data.get("author", "")
+        src = init_data.get("src", "src")
+        version = init_data.get("version", "0.0.1")
+        description = init_data.get("description", "")
+        repository = init_data.get("repository", "")
+        licence = init_data.get("licence", "")
+        private = init_data.get("private", False)
+        if not noinput:
+            package_name = click.prompt("Project name", default=package_name)
+            author = click.prompt("Author", default=author)
+            src = click.prompt("Source directory", default=src)
+            version = click.prompt("Version", default=version)
+            description = click.prompt("Description", default=description)
+            repository = click.prompt("Repository", default=repository)
+            licence = click.prompt("Licence", default=licence)
+            private = click.prompt("Is it a private project?", default=private, type=bool)
+
+        tpl = {
+            "created": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+            "name": package_name,
+            "version": version,
+            "description": description,
+            "source_dir": src,
+            "repository": description,
+            "author": author,
+            "license": licence,
+            "dependencies": {},
+            "devDependencies": {},
+        }
+        self.save_to_piper_file(tpl)
 
     def create_piper_lock(self):
         tpl = {
