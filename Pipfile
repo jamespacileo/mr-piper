@@ -10,7 +10,6 @@ flake8 = "*"
 toml = "*"
 pip-tools = "*"
 semantic-version = "*"
-requests = "*"
 parse = "*"
 simplejson = "*"
 "path.py" = "*"
@@ -23,5 +22,6 @@ click-log = "*"
 click-spinner = "*"
 ipaddress = "*"
 "-e ." = "*"
+requests = {git = "https://github.com/requests/requests"}
 
 

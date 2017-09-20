@@ -5,7 +5,7 @@ sys.path.append(".")
 
 from mrpiper.vendor.requirements.parser import parse as parse_requirements
 
-dependencies = list(parse_requirements("-r requirements.txt"))
+# dependencies = list(parse_requirements("-r requirements.txt"))
 
 setup(
     name='mrpiper',
@@ -14,7 +14,7 @@ setup(
     py_modules=['mrpiper.cli'],
     author='James Pacileo',
     packages=find_packages(),
-    install_requires=[item.line for item in dependencies],
+    # install_requires=[item.line for item in dependencies],
     # install_requires=[
     #     'pytest',
     #     'click',

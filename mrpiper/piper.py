@@ -410,6 +410,9 @@ def install(dev=False, force_lockfile=False):
         pass
     elif piper_file_exists:
         project.update_piper_lock_from_piper_file_and_tree(tree)
+        frozen_deps = pip_freeze()
+        frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
+        project.update_frozen_dependencies_in_piper_lock(frozen_deps)
     else:
         # for node in tree:
         #     if node["package"]["package_name"].lower() in packages:
@@ -417,7 +420,28 @@ def install(dev=False, force_lockfile=False):
         #             "dependencies": [dep["package_name"] for dep in node["dependencies"]],
         #             "line":
         #         })
-        pass
+        for package_line in packages:
+            editable = False
+            if package_line.startswith("-e "):
+                editable = True
+                package_line.replace("-e ","")
+
+            if editable:
+                req = overrides.SmartRequirement.from_editable(package_line)
+            else:
+                req = overrides.SmartRequirement.from_line(package_line)
+
+            found = [node["dependencies"] for node in tree if (node["package"]["package_name"].lower() == req.name.lower())]
+            if not found:
+                continue
+
+            found = found[0]
+            dependency = {
+                "name": req.name,
+                "line": req.line,
+                "dependencies": [item["package_name"].lower() for item in found]
+            }
+            project.add_dependency_to_piper_lock(dependency, dev=False)
 
 
 
@@ -431,7 +455,8 @@ def outdated(all_pkgs=False, verbose=False, format="table"):
 
     # logger.error("test error 2")
 
-    click.echo("Fetching outdated packages")
+    if not (format == "json"):
+        click.echo("Fetching outdated packages...")
     # c = pip_outdated()
     # click.echo([c.return_code, c.out, c.err])
 
@@ -665,6 +690,9 @@ def why(package_name):
             parents.append(node["package"])
     for parent in parents:
         click.echo('The module "{0}" depends on "{1}'.format(parent["package_name"], package_name))
+
+def list(depth=None):
+    pass
 
 def clear():
     project.clear()

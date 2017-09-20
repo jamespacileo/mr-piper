@@ -219,28 +219,28 @@ class PythonProject(object):
             licence = click.prompt("Licence", default=licence)
             private = click.prompt("Is it a private project?", default=private, type=bool)
 
-        tpl = {
-            "created": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
-            "name": package_name,
-            "version": version,
-            "description": description,
-            "source_dir": src,
-            "repository": description,
-            "author": author,
-            "license": licence,
-            "dependencies": {},
-            "devDependencies": {},
-        }
+        tpl = collections.OrderedDict([
+            ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
+            ("name", package_name),
+            ("version", version),
+            ("description", description),
+            ("source_dir", src),
+            ("repository", description),
+            ("author", author),
+            ("license", licence),
+            ("dependencies", {}),
+            ("devDependencies", {}),
+        ])
         self.save_to_piper_file(tpl)
 
     def create_piper_lock(self):
-        tpl = {
-            "created": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
-            "dependencies": {},
-            "devDependencies": {},
-            "dependables": [],
-            "frozen_deps": {},
-        }
+        tpl = collections.OrderedDict([
+            ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
+            ("dependencies", {}),
+            ("devDependencies", {}),
+            ("dependables", []),
+            ("frozen_deps", {}),
+        ])
         self.save_to_piper_lock(tpl)
 
     def add_dependency_to_piper_lock(self, dep, dev=False):
@@ -404,6 +404,7 @@ class PythonProject(object):
         lock["dependencies"] = base_dependencies
         lock["devDependencies"] = dev_dependencies
         self.save_to_piper_lock(lock)
+        self.denormalise_piper_lock()
 
 
     def update_frozen_dependencies_in_piper_lock(self, frozen_deps):

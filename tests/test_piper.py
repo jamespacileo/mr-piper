@@ -156,6 +156,7 @@ def test_install():
     piper.add("coverage", dev=True)
     piper.project.virtualenv_dir.rmtree_p()
     piper.project.piper_lock_dir.remove_p()
+    piper.project.piper_file_dir.remove_p()
     piper.install(dev=True)
     frozen_deps = [item.name for item in piper.pip_freeze()]
     assert "requests" in frozen_deps
