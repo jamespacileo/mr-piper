@@ -109,18 +109,22 @@ class PythonProject(object):
                 self._project_dir = Path(os.getcwd())
         return self._project_dir
 
-    def clear(self):
+    def wipe(self):
         try:
             shutil.rmtree(self.virtualenv_dir)
-        except FileNotFoundError as err:
+        except OSError as err:
             pass
         try:
             shutil.rmtree(self.requirements_dir)
-        except FileNotFoundError as err:
+        except OSError as err:
             pass
         try:
             os.remove(self.piper_lock_dir)
-        except FileNotFoundError as err:
+        except OSError as err:
+            pass
+        try:
+            os.remove(self.piper_file_dir)
+        except OSError as err:
             pass
 
     @property

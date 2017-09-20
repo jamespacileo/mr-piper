@@ -76,7 +76,7 @@ def init(file_to_import, virtualenv_location, noinput, private, py, is_global):
 @click.option("--major", "upgrade_level", flag_value="major", help="For major version upgrades")
 @click.option("--latest", "upgrade_level", flag_value="latest", help="For latest version upgrades")
 @click.option("--all", is_flag=True, help="Upgrade all packages")
-@click.option("--noinput", is_flag=True)
+@click.option("--yes", "-y", "noinput", is_flag=True)
 @click.argument("package_names", nargs=-1)
 @click_log.simple_verbosity_option(logger)
 def upgrade(upgrade_level, all, noinput, package_names):
@@ -84,10 +84,10 @@ def upgrade(upgrade_level, all, noinput, package_names):
     # click.echo([patch, minor, major, latest, package_names])
 
     if all:
-        piper.upgrade_all(upgrade_level)
+        piper.upgrade_all(upgrade_level, noinput=noinput)
     else:
         for name in package_names:
-            piper.upgrade(name, upgrade_level)
+            piper.upgrade(name, upgrade_level, noinput=noinput)
 
 @cli.command()
 # @click.option("--format", "output_format", default="table", type=click.Choice(["table", "json"]), help="Output format")
@@ -104,9 +104,9 @@ def outdated(output_format, all_pkgs, verbose):
 
 @cli.command()
 @click.option("--noinput", is_flag=True)
-def clear(noinput):
-    "Deletes virtualenv, requirements folder/files and piper file."
-    piper.clear()
+def wipe(noinput):
+    "Wipe virtualenv, requirements folder/files and piper files."
+    piper.wipe()
 
 @cli.command()
 @click.argument("package_name") #, help="Package name you want to explain why")

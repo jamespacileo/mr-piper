@@ -119,7 +119,7 @@ def pip_install_list(packages, allow_global=False):
     # return delegated_commands
 
 def pip_install(
-    package_name=None, r=None, allow_global=False, no_deps=False, block=True, upgrade=False
+    package_name=None, r=None, allow_global=False, editable=False, no_deps=False, block=True, upgrade=False
 ):
 
     # Create files for hash mode.
@@ -134,6 +134,11 @@ def pip_install(
         install_reqs = ' -e "{0}"'.format(package_name.split('-e ')[1])
     else:
         install_reqs = ' "{0}"'.format(package_name)
+
+    if editable:
+        if package_name.startswith('-e '):
+            package_name = package_name.split('-e ')[1]
+        install_reqs = ' -e "{0}"'.format(package_name)
 
     no_deps = '--no-deps' if no_deps else ''
     upgrade_str = '-U' if upgrade else ''
@@ -177,6 +182,13 @@ def pip_versions(package_name):
         return []
 
     return results
+
+def pip_list():
+    pip_command = "{0} list --format=json".format(which_pip())
+    logger.debug(pip_command)
+    c = delegator.run(pip_command)
+    return json.loads(c.out)
+
 
 
 def pip_outdated():
@@ -225,6 +237,9 @@ def add(package_line, editable=False, dev=False, dont_install=False):
     is_local_file = req.local_file
     is_editable = req.editable
 
+    if is_vcs:
+        is_editable = True
+
     # if is_vcs and (not is_editable):
     #     # print("Make sure ")
     #     req.editable = True
@@ -234,7 +249,7 @@ def add(package_line, editable=False, dev=False, dont_install=False):
         click.secho("Make sure to add #egg=<name> to your url", fg="red")
         return
 
-    c = pip_install(package_line, allow_global=False, block=True)
+    c = pip_install(package_line, editable=is_editable, allow_global=False, block=True)
 
     # counter = 0
     # with click.progressbar(length=10) as bar:
@@ -278,7 +293,8 @@ def add(package_line, editable=False, dev=False, dont_install=False):
 
     dependency = {
         "name": frozen_dep.name,
-        "line": req.line if ((not req.vcs) and (not req.local_file) and req.specs) else frozen_dep.line,
+        # "line": req.line if ((not req.vcs) and (not req.local_file) and req.specs) else frozen_dep.line.replace("==",">="),
+        "line": frozen_dep.line.replace("==",">="),
         "specs": frozen_dep.specs,
         "dependencies": [pkg for pkg in all_pkgs if not (pkg == frozen_dep.name)]
     }
@@ -478,6 +494,8 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
 
     outdated_map = []
 
+    local_version_list = pip_list()
+
     with click_spinner.spinner():
         for index, dep in enumerate(which_deps):
             # logger.debug("index:{}".format(index))
@@ -496,7 +514,11 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
             found_versions.reverse()
 
             try:
-                current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
+                logger.debug(dep)
+                if dep["vcs"] != None:
+                    current_version = next(filter(lambda x: (x["name"].lower() == dep["name"].lower()), local_version_list))["version"]# + " ({})".format(dep["vcs"])
+                else:
+                    current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
 
                 # logger.debug("Coerce example: {0} {1}".format(overrides.Version.coerce(found_versions[0]), next(map(lambda x: overrides.Version.coerce(x, partial=True), found_versions))))
 
@@ -506,7 +528,12 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 # logger.debug("versions {0} {1}".format(coerced_versions, version_mapping))
 
                 if dep["specifier"]:
-                    spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
+                    spec_line = ",".join(["".join(x) for x in dep["specs"]])
+                    spec = overrides.Spec(spec_line)
+                    # spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
+                else:
+                    spec = overrides.Spec(">={}".format(current_version))
+
                 # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
                 valid_versions = [_item for _item in spec.filter(coerced_versions)]
                 wanted_version = spec.select(valid_versions).original_version
@@ -524,7 +551,11 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
 
             except ValueError as err:
                 logger.debug("ValueError for {0} with {1}".format(dep["name"], err))
-                current_version = dep["specs"][0][1]
+                if dep["vcs"] != None:
+                    current_version = next(filter(lambda x: (x["name"].lower() == dep["name"].lower()), local_version_list))["version"]# + " ({})".format(dep["vcs"])
+                else:
+                    current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
+
                 # click.echo(err)
                 wanted_version = "//"
                 patch_version = "//"
@@ -540,6 +571,9 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
             #     'wanted': wanted_version.__str__(),
             #     'latest': latest_version.__str__(),
             # })
+
+            if dep["vcs"]:
+                current_version = "{0} ({1})".format(current_version, dep["vcs"])
 
             if verbose:
                 outdated_map.append([
@@ -753,11 +787,11 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
 
     # print(req.__dict__)
 
-def upgrade_all(upgrade_level="latest"):
+def upgrade_all(upgrade_level="latest", noinput=False):
 
     pkgs = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
     for package in pkgs:
-        upgrade(upgrade_level)
+        upgrade(upgrade_level, noinput=noinput)
 
 def why(package_name):
     piper_file = project.piper_file
@@ -780,8 +814,9 @@ def why(package_name):
 def list(depth=None):
     pass
 
-def clear():
-    project.clear()
+def wipe():
+    click.confirm("Are you sure you want to wipe?", abort=True)
+    project.wipe()
 
 if __name__ == "__main__":
     os.chdir("..")
