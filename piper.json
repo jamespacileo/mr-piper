@@ -1,7 +1,7 @@
 {
     "created": "2017-09-20T21:10:07",
     "name": "mrpiper",
-    "version": "0.1.2a5",
+    "version": "0.1.2a6",
     "description": "The simple project package manager",
     "source_dir": "mrpiper",
     "repository": "https://github.com/jamespacileo/mr-piper",
