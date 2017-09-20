@@ -506,7 +506,7 @@ def install(dev=False, force_lockfile=False):
     elif piper_file_exists:
         project.update_piper_lock_from_piper_file_and_tree(tree)
         frozen_deps = pip_freeze()
-        frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
+        # frozen_dep = next(filter(lambda x: x.name.lower() == req.name.lower(), frozen_deps), None)
         project.update_frozen_dependencies_in_piper_lock(frozen_deps)
     else:
         # for node in tree:
@@ -892,6 +892,9 @@ def list(depth=None):
 def wipe():
     click.confirm("Are you sure you want to wipe?", abort=True)
     project.wipe()
+
+def activate():
+    pass
 
 if __name__ == "__main__":
     os.chdir("..")

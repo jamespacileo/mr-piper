@@ -97,7 +97,7 @@ class PythonProject(object):
             else:
                 click.secho("setup.py creation skipped", fg="yellow")
 
-        print([
+        logger.debug([
             self.virtualenv_dir,
             self.piper_file_dir,
             self.piper_lock_dir,
@@ -461,7 +461,7 @@ class PythonProject(object):
         deps = [key for key in piper_file.get("dependencies", {})]
         devDeps = [key for key in piper_file.get("devDependencies", {})]
 
-        base_dependencies = []
+        base_dependencies = {}
         for dep in deps:
             for package in tree:
                 if package["package"]["package_name"] == dep:
@@ -472,9 +472,9 @@ class PythonProject(object):
                         ),
                         "depends_on": [item["package_name"] for item in package["dependencies"]]
                     }
-                    base_dependencies.append(item)
+                    base_dependencies[dep.lower()] = item
 
-        dev_dependencies = []
+        dev_dependencies = {}
         for dep in devDeps:
             for package in tree:
                 if package["package"]["package_name"] == dep:
@@ -485,7 +485,8 @@ class PythonProject(object):
                         ),
                         "depends_on": [item["package_name"] for item in package["dependencies"]]
                     }
-                    dev_dependencies.append(item)
+                    dev_dependencies[dep.lower()] = item
+
 
         lock["dependencies"] = base_dependencies
         lock["devDependencies"] = dev_dependencies

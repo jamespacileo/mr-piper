@@ -117,6 +117,13 @@ def why(package_name):
     "Explain why a package exists"
     piper.why(package_name)
 
+
+@cli.command()
+@click_log.simple_verbosity_option(logger)
+def list(package_name):
+    "List all installed packages"
+    piper.list()
+
 if __name__ == '__main__':
     # os.chdir("..")
     # outdated()

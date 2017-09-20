@@ -12,10 +12,10 @@ import click
 import delegator
 from pip.req.req_file import parse_requirements, process_line
 from pip.req.req_install import InstallRequirement
-from piptools.resolver import Resolver
-from piptools.repositories.pypi import PyPIRepository
-from piptools.scripts.compile import get_pip_command
-from piptools import logging
+# from piptools.resolver import Resolver
+# from piptools.repositories.pypi import PyPIRepository
+# from piptools.scripts.compile import get_pip_command
+# from piptools import logging
 
 
 from .vendor.requirements.parser import parse as parse_requirements_alt
