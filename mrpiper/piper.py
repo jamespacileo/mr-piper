@@ -466,7 +466,11 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
 
     lock = project.piper_lock
     all_deps = [_item for _item in map(lambda x: x[1], lock["frozen_deps"].items())]
-    prime_deps = [_item for _item in filter(lambda x: not (x["name"].lower() in lock["dependables"]), all_deps)]
+
+    mainDepKeys = [_i for _i in lock["dependencies"]]
+    devDepKeys = [_i for _i in lock["devDependencies"]]
+    allKeys = mainDepKeys + devDepKeys
+    prime_deps = [_item for _item in filter(lambda x: x["name"].lower() in allKeys, all_deps)]
 
     which_deps = all_deps if all_pkgs else prime_deps
 
@@ -616,32 +620,52 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
 
     if not noinput:
         original_versions = pip_versions(local_package.name)
+        original_versions.reverse()
         if not original_versions:
             logger.error("Possible error {}".format(original_versions))
 
-        coerced_versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), original_versions))
-        # versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), original_versions))
-        if not coerced_versions:
-            logger.error("Possible error 2 {0} {1}".format(original_versions, coerced_versions))
-        coerced_versions.reverse()
+        # coerced_versions = [_item for _item in map(lambda x: overrides.Version.coerce(x, partial=True), original_versions)]
+        # # versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), original_versions))
+        # if not coerced_versions:
+        #     logger.error("Possible error 2 {0} {1}".format(original_versions, coerced_versions))
+        # coerced_versions.reverse()
 
 
         try:
-            current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
+            logger.debug("req:{}".format(req.__dict__))
+            # current_version = overrides.Version.coerce(req.specs[0][1], partial=True)
+            try:
+                dep = project.piper_lock["frozen_deps"][req.name.lower()]
+            except:
+                click.secho( crayons.red("Package not found. Please use ") + crayons.yellow("piper add {}".format(package_line)) + crayons.red("instead"))
+                sys.exit(1)
 
-            coerced_versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), versions))
-            version_mapping = map(lambda index, x: (x.__str__(), versions[index] ), enumerate(coerced_versions))
+            current_version = overrides.Version.coerce(dep["specs"][0][1])
 
+            coerced_versions = [_item for _item in map(lambda x: overrides.Version.coerce(x, partial=True), original_versions)]
+            # version_mapping = map(lambda index, x: (x.__str__(), versions[index] ), enumerate(coerced_versions))
+
+            spec = None
             if upgrade_specifier:
                 spec = overrides.Spec(upgrade_specifier)
+            elif req.specs:
+                spec_line = ",".join(["".join(x) for x in req.specs])
+                    # logger.debug("specs {0} {1}".format(spec_line, req.specs))
+                spec = overrides.Spec(spec_line)
+                # spec = [_item for _item in map(lambda x: overrides.Spec("".join(x) ), req.specs)]
+                # logger.error("Investigate")
             else:
-                spec = map(lambda x: overrides.Spec("".join(x) ), req.specs)
+                spec = overrides.Spec(">={}".format(current_version.original_version))
 
             # if dep["specifier"]:
             #     spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
             # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
-            valid_versions = list(spec.filter(coerced_versions))
-            wanted_version = spec.select(valid_versions).original_version
+            if spec:
+                valid_versions = [_item for _item in spec.filter(coerced_versions)]
+                wanted_version = spec.select(valid_versions).original_version
+            else:
+                valid_versions = [_item for _item in coerced_versions]
+                wanted_version = valid_versions[0]
             patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
             minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
 
