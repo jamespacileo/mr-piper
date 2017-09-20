@@ -9,6 +9,7 @@ import click_log
 click_log.basic_config(logger)
 
 import click
+click.disable_unicode_literals_warning = True
 import os
 
 # import sys
