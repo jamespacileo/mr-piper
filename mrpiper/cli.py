@@ -60,7 +60,7 @@ def install(dev):
 @click.option("--import", "-r", "file_to_import", help="Import from existing requirements file")
 @click.option("--inside", "virtualenv_location", flag_value="inside", default=True, help="Place virtualenv inside the project folder")
 @click.option("--outside", "virtualenv_location", flag_value="outside", help="Place virtualenv outside the project folder")
-@click.option("--yes", "-y", "noinput", help="For no-input mode")
+@click.option("--yes", "-y", "noinput", is_flag=True, help="For no-input mode")
 @click.option("--private", "-p", "private", help="For private libraries or applications")
 @click.option("--py", type=click.Choice(["2", "2.7", "3", "3.3", "3.4", "3.5", "3.6"]), help="Which Python version should be used")
 @click.option("--global", "is_global", is_flag=True, help="Use global Python")
@@ -90,14 +90,17 @@ def upgrade(upgrade_level, all, noinput, package_names):
             piper.upgrade(name, upgrade_level)
 
 @cli.command()
-@click.option("--format", "output_format", default="table", help="Output format")
+# @click.option("--format", "output_format", default="table", type=click.Choice(["table", "json"]), help="Output format")
+@click.option("--table", "output_format", flag_value="table", default=True, help="Format output as a table")
+@click.option("--json", "-j", "output_format",flag_value="json", help="Format output as JSON")
 @click.option("--all", "all_pkgs", is_flag=True, help="Show all dependencies, not just the top level ones.")
 @click.option("--verbose", is_flag=True, help="Show some extra columns")
 @click_log.simple_verbosity_option(logger)
 def outdated(output_format, all_pkgs, verbose):
     "Deletes virtualenv, requirements folder/files and piper file."
     # logger.error("Test message")
-    piper.outdated(format=output_format, all_pkgs=all_pkgs, verbose=verbose)
+    # logger.debug("{0} {1} {2}".format(output_format, all_pkgs, verbose))
+    piper.outdated(output_format=output_format, all_pkgs=all_pkgs, verbose=verbose)
 
 @cli.command()
 @click.option("--noinput", is_flag=True)
@@ -106,7 +109,7 @@ def clear(noinput):
     piper.clear()
 
 @cli.command()
-@click.argument("package_name", help="Package name you want to explain why")
+@click.argument("package_name") #, help="Package name you want to explain why")
 @click_log.simple_verbosity_option(logger)
 def why(package_name):
     "Explain why a package exists"

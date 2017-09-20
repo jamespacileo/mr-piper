@@ -16,7 +16,7 @@ import pdb
 import crayons
 import time
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("mrpiper.cli")
 
 
 import tabulate
@@ -172,6 +172,10 @@ def pip_versions(package_name):
     results = [result.fixed[0] for result in parse.findall(" {:S},", result.fixed[0] + ",")]
     # last_result = [result.fixed[0] for result in parse.findall(" {:w})", result.fixed[0])]
     # click.echo(results)
+    if not results:
+        logger.debug("No results? {}".format(c.out + c.err))
+        return []
+
     return results
 
 
@@ -450,12 +454,12 @@ def install(dev=False, force_lockfile=False):
     #     click.echo(cmd.out + cmd.err)
     click.secho("Install completed ✓", fg="green")
 
-def outdated(all_pkgs=False, verbose=False, format="table"):
+def outdated(all_pkgs=False, verbose=False, output_format="table"):
     # format can be table, json
 
     # logger.error("test error 2")
 
-    if not (format == "json"):
+    if not (output_format == "json"):
         click.echo("Fetching outdated packages...")
     # c = pip_outdated()
     # click.echo([c.return_code, c.out, c.err])
@@ -477,6 +481,9 @@ def outdated(all_pkgs=False, verbose=False, format="table"):
                 logger.debug("Couldn't find versions for {}".format(dep["name"]))
                 continue
             versions = list(found_versions)
+            if not versions:
+                logger.error("Possible problem please investigate")
+                continue
             versions.reverse()
             try:
                 current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
@@ -525,7 +532,7 @@ def outdated(all_pkgs=False, verbose=False, format="table"):
                     latest_version.__str__(),
                 ])
 
-    if format == "table":
+    if output_format == "table":
         if verbose:
             click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"]))
         else:
@@ -585,16 +592,23 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
         upgrade_specifier = "~={0}".format(".".join(clause))
 
     if not noinput:
-        versions = pip_versions(local_package.name)
-        versions = list(map(lambda x: semantic_version.Version(x, partial=True), versions))
-        versions.reverse()
+        original_versions = pip_versions(local_package.name)
+        if not original_versions:
+            logger.error("Possible error {}".format(original_versions))
+
+        coerced_versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), original_versions))
+        # versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), original_versions))
+        if not coerced_versions:
+            logger.error("Possible error 2 {0} {1}".format(original_versions, coerced_versions))
+        coerced_versions.reverse()
+
         if upgrade_specifier:
-            spec = semantic_version.Spec(upgrade_specifier)
+            spec = overrides.Spec(upgrade_specifier)
         else:
-            spec = map(lambda x: semantic_version.Spec("".join(x) ), req.specs)
+            spec = map(lambda x: overrides.Spec("".join(x) ), req.specs)
         # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
-        valid_versions = list(spec.filter(versions))
-        wanted_version = spec.select(versions)
+        valid_versions = list(spec.filter(coerced_versions))
+        wanted_version = spec.select(coerced_versions)
 
         echo_list = crayons.white("")
         for index, version in enumerate(valid_versions):
@@ -679,7 +693,7 @@ def why(package_name):
         click.echo("This module exists because it's specified in 'dependencies'")
         return
     if package_name.lower() in piper_file["devDependencies"]:
-        click.echo("This module exists because it's specified in 'dependencies'")
+        click.echo("This module exists because it's specified in 'devDependencies'")
         return
     tree = get_dependency_tree()
 
