@@ -347,7 +347,7 @@ def install(dev=False, force_lockfile=False):
     # should run project setup
 
     virtualenv_exists = project.virtualenv_dir.exists()
-    lock_exists = project.piper_lock_dir.exists()
+    piper_lock_exists = project.piper_lock_dir.exists()
     piper_file_exists = project.piper_file_dir.exists()
     dev_locked_txt_exists = project.requirements_file("dev-locked.txt").exists()
     base_locked_txt_exists = project.requirements_file("base-locked.txt").exists()
@@ -361,11 +361,11 @@ def install(dev=False, force_lockfile=False):
 
     packages = None
 
-    if lock_exists:
+    if piper_lock_exists:
         click.echo("Installing from the piper lock file")
         packages = [item["line"] for item in project.piper_lock["frozen_deps"]]
     else:
-        click.echo("Piper lock doesn't exist. Using next best option...")
+        click.secho("Piper lock doesn't exist. Using next best option...", fg="yellow")
 
     if piper_file_exists and (not packages):
         click.echo("Installing from the piper file piper.json")
@@ -373,7 +373,7 @@ def install(dev=False, force_lockfile=False):
         if dev:
             packages += [x[1] for x in project.piper_file["devDependencies"].items()]
     else:
-        click.echo("No piper.json file. Using next best option...")
+        click.secho("No piper.json file. Using next best option...", fg="yellow")
 
     if dev:
         if dev_locked_txt_exists and (not packages):
@@ -405,7 +405,20 @@ def install(dev=False, force_lockfile=False):
     click.secho(c.out, fg="blue")
 
     tree = get_dependency_tree()
-    project.update_piper_lock_from_piper_file_and_tree(tree)
+
+    if piper_lock_exists:
+        pass
+    elif piper_file_exists:
+        project.update_piper_lock_from_piper_file_and_tree(tree)
+    else:
+        # for node in tree:
+        #     if node["package"]["package_name"].lower() in packages:
+        #         project.add_dependency_to_piper_lock({
+        #             "dependencies": [dep["package_name"] for dep in node["dependencies"]],
+        #             "line":
+        #         })
+        pass
+
 
 
     # cmds = pip_install_list(packages)

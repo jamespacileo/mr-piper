@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from builtins import str as text
 from builtins import map, filter
 
+import collections
 import os
 import sys
 import errno
@@ -179,7 +180,7 @@ class PythonProject(object):
 
     @property
     def piper_file(self):
-        return json.loads(self.piper_file_dir.text())
+        return json.loads(self.piper_file_dir.text(), object_pairs_hook=collections.OrderedDict)
 
     @property
     def has_piper_file(self):
@@ -194,7 +195,7 @@ class PythonProject(object):
         return self.piper_lock_dir.exists()
 
     def save_to_piper_lock(self, data):
-        self.piper_lock_dir.write_text(text(data))
+        self.piper_lock_dir.write_text(text(json.dumps(data, indent=4 * ' ')))
 
     def save_to_piper_file(self, data):
         self.piper_file_dir.write_text(text(json.dumps(data, indent=4 * ' ')))
@@ -240,10 +241,10 @@ class PythonProject(object):
             "dependables": [],
             "frozen_deps": {},
         }
-        self.save_to_piper_lock(json.dumps(tpl, indent=4 * ' '))
+        self.save_to_piper_lock(tpl)
 
     def add_dependency_to_piper_lock(self, dep, dev=False):
-        lock = json.load(self.piper_lock_dir.open("r"))
+        lock = self.piper_lock
         piper_file = self.piper_file
 
         dependency = {
@@ -271,7 +272,7 @@ class PythonProject(object):
             if dep["name"].lower() in piper_file["dependencies"]: #.keys():
                 del piper_file["dependencies"][dep["name"].lower()]
 
-        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        self.save_to_piper_lock(lock)
         self.save_to_piper_file(piper_file)
         # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
@@ -280,7 +281,7 @@ class PythonProject(object):
 
 
     def remove_dependency_to_piper_lock(self, dep_name):
-        lock = json.load(self.piper_lock_dir.open("r"))
+        lock = self.piper_lock
         piper_file = self.piper_file
 
         if dep_name.lower() in lock["dependencies"]: #.keys():
@@ -294,7 +295,7 @@ class PythonProject(object):
             del piper_file["devDependencies"][dep_name.lower()]
 
 
-        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        self.save_to_piper_lock(lock)
         self.save_to_piper_file(piper_file)
         # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
 
@@ -350,7 +351,7 @@ class PythonProject(object):
         )
 
     def denormalise_piper_lock(self):
-        lock = json.load(self.piper_lock_dir.open("r"))
+        lock = self.piper_lock
 
         dependencies = lock["dependencies"].items()
         devDependencies = lock["devDependencies"].items()
@@ -363,7 +364,7 @@ class PythonProject(object):
         # lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
         # lock["depended_on"] = list(lock["depended_on"])
 
-        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        self.save_to_piper_lock(lock)
         # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
@@ -402,17 +403,17 @@ class PythonProject(object):
 
         lock["dependencies"] = base_dependencies
         lock["devDependencies"] = dev_dependencies
-        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        self.save_to_piper_lock(lock)
 
 
     def update_frozen_dependencies_in_piper_lock(self, frozen_deps):
-        lock = json.load(self.piper_lock_dir.open("r"))
+        lock = self.piper_lock
         lock["frozen_deps"] = {}
         for dep in frozen_deps:
             if not (dep.name.lower() in CORE_PACKAGES):
                 lock["frozen_deps"][dep.name.lower()] = dep.__dict__
 
-        self.save_to_piper_lock(json.dumps(lock, indent=4 * ' '))
+        self.save_to_piper_lock(lock)
         # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
         return
 
@@ -420,7 +421,7 @@ class PythonProject(object):
     def piper_lock(self):
         # if not self.piper_lock_dir.exists():
         #     self.create_piper_lock()
-        return json.load(self.piper_lock_dir.open("r"))
+        return json.load(self.piper_lock_dir.open("r"), object_pairs_hook=collections.OrderedDict)
 
     def detect_type_of_dependency(self, package_name):
         lock = self.piper_lock

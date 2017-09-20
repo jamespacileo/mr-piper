@@ -24,7 +24,7 @@ install:
 script:
   - "pytest tests/test_piper.py"
   - "coverage run --source ./mrpiper tests/test_piper.py"
-  - "coveralls"
+#   - "coveralls"
 
 # command to run tests
 # jobs:
