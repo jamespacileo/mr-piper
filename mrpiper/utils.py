@@ -216,3 +216,6 @@ def python_version(path_to_python):
         return None
 
     return u"{v[0]}.{v[1]}.{v[2]}".format(v=parsed)
+
+def resolve_git_shortcut(git_shortcut):
+    pass

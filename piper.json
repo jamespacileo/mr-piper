@@ -1,12 +1,35 @@
 {
     "created": "2017-09-20T21:10:07",
-    "name": "mr-piper",
-    "version": "0.0.1",
+    "name": "mrpiper",
+    "version": "0.1.2a3",
     "description": "",
-    "source_dir": "src",
+    // "source_dir": "src",
+
     "repository": "",
     "author": "",
-    "license": "",
+    "author_email": "",
+    "keywords": "",
+    "license": "MIT",
+
+    "py_modules": ["mrpiper.cli"],
+    "entry_points": {
+        "console_scripts": [
+            "piper=mrpiper.cli:cli"
+        ]
+    },
+    "classifiers": [
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Programming Language :: Python :: Implementation :: PyPy"
+    ],
+
     "dependencies": {},
     "devDependencies": {}
 }
