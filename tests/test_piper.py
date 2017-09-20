@@ -13,21 +13,28 @@ from path import Path
 
 # sys.path.append(os.path.join(os.path.abspath(__file__), ".."))
 # print(os.path.join(os.path.realpath(__file__), ".."))
-sys.path.append(".")
-sys.path.append("..")
-from mrpiper import piper
 
-source_path = Path("..") / "mrpiper"
 
-TESTS_LOCATION = os.getcwd()
-# TEMP_LOCATION = tempfile.mkdtemp()
-TEMP_LOCATION = Path("temp") / "temp_project"
-Path("temp").mkdir_p()
-TEMP_LOCATION.rmtree_p()
-TEMP_LOCATION.mkdir_p()
+# source_path = Path("..") / "mrpiper"
+source_path = Path(Path("mrpiper").abspath())
+
+LOCAL_TEST_PROJECT = False
+
+if LOCAL_TEST_PROJECT:
+    TEMP_LOCATION = Path("temp") / "temp_project"
+    Path("temp").mkdir_p()
+    TEMP_LOCATION.rmtree_p()
+    TEMP_LOCATION.mkdir_p()
+    project_dir = Path(TEMP_LOCATION.abspath())
+else:
+    TEMP_LOCATION = tempfile.mkdtemp()
+    project_dir = Path(TEMP_LOCATION)
+
+# TESTS_LOCATION = os.getcwd()
 # TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
-project_dir = Path(TEMP_LOCATION.abspath())
+
 project_dir.chdir()
+print(os.getcwd())
 req_folder = (project_dir / "requirements")
 
 base_txt = (req_folder / "base.txt")
@@ -36,6 +43,10 @@ dev_txt = (req_folder / "dev.txt")
 dev_locked_txt = (req_folder / "dev-locked.txt")
 piper_file = (project_dir / "piper.json")
 virtualenv_dir = (project_dir / ".virtualenvs" / "project_virtualenv")
+
+# sys.path.append(".")
+# sys.path.append("..")
+from mrpiper import piper
 
 try:
     command = 'code-insiders.cmd "{}"'.format(project_dir)
@@ -55,7 +66,10 @@ def test_installing_itself():
         assert c.return_code == 0
 
 def test_init():
+    print(os.getcwd())
+    print(piper.project.project_dir)
     piper.init(noinput=True, private=True)
+    print(req_folder.abspath())
     assert req_folder.exists()
     assert base_txt.exists()
     assert base_locked_txt.exists()

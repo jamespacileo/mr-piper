@@ -41,11 +41,69 @@ from .vendor import pipdeptree
 
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
     remove_from_requirements_file, get_packages_from_requirements_file, get_package_from_requirement_file, \
-    shellquote
+    shellquote, python_version
 from . import overrides
 from .project import PythonProject
 
 project = PythonProject()
+
+
+def system_which(command, mult=False):
+    """Emulates the system's which. Returns None is not found."""
+
+    _which = 'which -a' if not os.name == 'nt' else 'where'
+
+    c = delegator.run('{0} {1}'.format(_which, command))
+    try:
+        # Which Not found...
+        if c.return_code == 127:
+            click.echo(
+                '{}: the {} system utility is required for Pipenv to find Python installations properly.'
+                '\n  Please install it.'.format(
+                    crayons.red('Warning', bold=True),
+                    crayons.red(_which)
+                ), err=True
+            )
+        assert c.return_code == 0
+    except AssertionError:
+        return None if not mult else []
+
+    result = c.out.strip() or c.err.strip()
+
+    if mult:
+        return result.split('\n')
+    else:
+        return result.split('\n')[0]
+
+def find_a_system_python(python):
+    """Finds a system python, given a version (e.g. 2.7 / 3.6.2), or a full path."""
+    if python.startswith('py'):
+        return system_which(python)
+    elif os.path.isabs(python):
+        return python
+    else:
+        possibilities = reversed([
+            'python',
+            'python{0}'.format(python[0]),
+            'python{0}{1}'.format(python[0], python[2]),
+            'python{0}.{1}'.format(python[0], python[2]),
+            'python{0}.{1}m'.format(python[0], python[2])
+        ])
+
+        for possibility in possibilities:
+            # Windows compatibility.
+            if os.name == 'nt':
+                possibility = '{0}.exe'.format(possibility)
+
+            versions = []
+            pythons = system_which(possibility, mult=True)
+
+            for p in pythons:
+                versions.append(python_version(p))
+
+            for i, version in enumerate(versions):
+                if python in (version or ''):
+                    return pythons[i]
 
 def which(command):
     if os.name == 'nt':
@@ -198,16 +256,26 @@ def pip_outdated():
     return c
 
 
-def init(noinput=False, private=False):
+def init(noinput=False, private=False, python=None, virtualenv_location="inside"):
     # create requirements structure
     # create virtualenv
+    if python:
+        found_python = find_a_system_python(python)
+        if not found_python:
+            click.echo(
+                crayons.red("Couldn't find the python executable for: ") + crayons.yellow(python)
+            )
+            sys.exit(1)
+        else:
+            python = found_python
+
     if noinput:
         init_data = {
             "private": private
         }
     else:
         init_data = {}
-    project.setup(noinput=noinput, init_data=init_data)
+    project.setup(noinput=noinput, init_data=init_data, python=python, virtualenv_location=virtualenv_location)
 
 def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements

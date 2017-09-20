@@ -7,6 +7,7 @@ import os
 import hashlib
 import tempfile
 
+import parse
 import click
 import delegator
 from pip.req.req_file import parse_requirements, process_line
@@ -15,6 +16,7 @@ from piptools.resolver import Resolver
 from piptools.repositories.pypi import PyPIRepository
 from piptools.scripts.compile import get_pip_command
 from piptools import logging
+
 
 from .vendor.requirements.parser import parse as parse_requirements_alt
 # from .piper import project
@@ -192,3 +194,25 @@ def shellquote(s):
 
 
 
+def python_version(path_to_python):
+    if not path_to_python:
+        return None
+
+    try:
+        c = delegator.run([path_to_python, '--version'], block=False)
+    except Exception:
+        return None
+    output = c.out.strip() or c.err.strip()
+
+    @parse.with_pattern(r'.*')
+    def allow_empty(text):
+        return text
+
+    TEMPLATE = 'Python {}.{}.{:d}{:AllowEmpty}'
+    parsed = parse.parse(TEMPLATE, output, dict(AllowEmpty=allow_empty))
+    if parsed:
+        parsed = parsed.fixed
+    else:
+        return None
+
+    return u"{v[0]}.{v[1]}.{v[2]}".format(v=parsed)

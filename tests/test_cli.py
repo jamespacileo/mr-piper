@@ -18,15 +18,28 @@ import tempfile
 TEMP_LOCATION = tempfile.mkdtemp()
 os.chdir(TEMP_LOCATION)
 
+LOCAL_TEST_PROJECT = False
+
+if LOCAL_TEST_PROJECT:
+    TEMP_LOCATION = Path("temp") / "cli_testing_project"
+    Path("temp").mkdir_p()
+    TEMP_LOCATION.rmtree_p()
+    TEMP_LOCATION.mkdir_p()
+    project_dir = Path(TEMP_LOCATION.abspath())
+else:
+    TEMP_LOCATION = tempfile.mkdtemp()
+    project_dir = Path(TEMP_LOCATION)
+
+project_dir.chdir()
 # TEMP_LOCATION = (Path("temp") / "cli_testing_project")
 # Path("temp").mkdir_p()
 # TEMP_LOCATION.rmtree_p()
 # TEMP_LOCATION.mkdir_p()
 # os.chdir(TEMP_LOCATION)
-PROJECT_DIR = Path(".")
+# PROJECT_DIR = Path(".")
 # runner = CliRunner()
 try:
-    command = 'code-insiders.cmd "{}"'.format(PROJECT_DIR)
+    command = 'code-insiders.cmd "{}"'.format(project_dir)
     # print(command)
     if (platform.system() == "Windows"):
         delegator.run(command, block=False)
@@ -39,10 +52,10 @@ def test_init():
     print(c.out + c.err)
     assert c.return_code == 0
     # print((PROJECT_DIR / "piper.lock").abspath())
-    assert (PROJECT_DIR / "piper.lock").isfile()
-    assert (PROJECT_DIR / "piper.json").isfile()
-    assert (PROJECT_DIR / ".virtualenvs").exists()
-    assert (PROJECT_DIR / "requirements").exists()
+    assert (project_dir / "piper.lock").isfile()
+    assert (project_dir / "piper.json").isfile()
+    assert (project_dir / ".virtualenvs").exists()
+    assert (project_dir / "requirements").exists()
     # result = runner.invoke(cli.init, [])
     # print(result.output)
     # print("exit_code:{}".format(result.exit_code))

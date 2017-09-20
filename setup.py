@@ -9,7 +9,7 @@ from mrpiper.vendor.requirements.parser import parse as parse_requirements
 
 setup(
     name='mrpiper',
-    version='0.1.2a2',
+    version='0.1.2a3',
     license="MIT",
     py_modules=['mrpiper.cli'],
     author='James Pacileo',

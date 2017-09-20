@@ -15,7 +15,7 @@ import datetime
 import shutil
 import itertools
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("mrpiper.cli")
 
 import click
 import crayons
@@ -41,7 +41,7 @@ class PythonProject(object):
     # _home_dir = expanduser("~")
 
     def __init__(self, path=None):
-        pass
+        self.detect_virtualenv_location()
 
     @property
     def virtualenv(self):
@@ -53,11 +53,13 @@ class PythonProject(object):
     def has_pipfile(self):
         pass
 
-    def setup(self, noinput=False, init_data={}):
+    def setup(self, noinput=False, init_data={}, python=None, virtualenv_location="inside"):
         click.secho("Creating virtualenv...")
         if not self.has_virtualenv:
-            self.create_virtualenv()
+            # self.virtualenv_location = virtualenv_location
+            self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
             click.secho("Virtualenv created ✓", fg="green")
+            click.secho("Your virtualenv path: " + crayons.magenta("{}".format(self.virtualenv_dir)))
         else:
             click.secho("Virtualenv already exists ✓", fg="green")
 
@@ -81,6 +83,13 @@ class PythonProject(object):
             click.secho("Piper lock created ✓", fg="green")
         else:
             click.secho("Piper lock already exists ✓", fg="green")
+
+        print([
+            self.virtualenv_dir,
+            self.piper_file_dir,
+            self.piper_lock_dir,
+            self.requirements_dir
+        ])
 
     def validate(self):
         lock = self.piper_lock
@@ -162,18 +171,70 @@ class PythonProject(object):
             #     file.write("")
             #     file.close()
 
+    _virtualenv_location = None
+    @property
+    def virtualenv_location(self):
+        return self._virtualenv_location
+
+    @property
+    def virtualenv_inside_dir(self):
+        return self.project_dir / ".virtualenvs" / "project_virtualenv"
+
+
+    _virtualenv_outside_dir = None
+    @property
+    def virtualenv_outside_dir(self):
+        if not self._virtualenv_outside_dir:
+            hashed_name = "{0}_{1}".format(
+                self.project_dir.name,
+                hashlib.sha256(self.project_dir.abspath()).hexdigest()[:6]
+            )
+            self._virtualenv_outside_dir = Path("~").expanduser() / ".local" / "share" / "piper_virtualenv" / hashed_name
+        return self._virtualenv_outside_dir
+
     @property
     def virtualenv_dir(self):
         # global_virtualenv_dir = os.path.join(self._home_dir, ".envs")
         # complete_dir = os.path.join(global_virtualenv_dir)
-        return self.project_dir / ".virtualenvs" / "project_virtualenv"
+        # return self.project_dir / ".virtualenvs" / "project_virtualenv"
+        if self.virtualenv_location == "inside":
+            return self.virtualenv_inside_dir
+        if self.virtualenv_location == "outside":
+            return self.virtualenv_outside_dir
+        # raise Exception("Shouldn't happen")
+        return self.virtualenv_inside_dir
+
+    def detect_virtualenv_location(self):
+        if self.virtualenv_inside_dir.exists(): #inside
+            self._virtualenv_location = "inside"
+            return True
+        if self.virtualenv_outside_dir.exists(): #outside
+            self._virtualenv_location = "outside"
+            return True
+        return False
 
     @property
     def has_virtualenv(self):
-        return self.virtualenv_dir.isdir()
+        if self.virtualenv_inside_dir.exists(): #inside
+            self._virtualenv_location = "inside"
+            return True
+        if self.virtualenv_outside_dir.exists(): #outside
+            self._virtualenv_location = "outside"
+            return True
+        return False
 
-    def create_virtualenv(self):
-        command = "virtualenv {0}".format(self.virtualenv_dir)
+    def create_virtualenv(self, python=None, virtualenv_location="inside"):
+        virtualenv_dir = self.virtualenv_inside_dir if (virtualenv_location == "inside") else self.virtualenv_outside_dir
+        if python:
+            command = "virtualenv {0} --python={1}".format(
+                utils.shellquote(virtualenv_dir.abspath()),
+                utils.shellquote(python)
+                )
+        else:
+            command = "virtualenv {0}".format(
+                utils.shellquote(virtualenv_dir.abspath()),
+            )
+        self._virtualenv_location = virtualenv_location
         # click.echo(command)
         c = delegator.run(command)
         return c.return_code == 0
