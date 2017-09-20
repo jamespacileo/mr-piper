@@ -65,11 +65,12 @@ def install(dev):
 @click.option("--py", "python", help="Which Python version should be used e.g. 2.7, 3.6")
 # @click.option("--py", type=click.Choice(["2", "2.7", "3", "3.3", "3.4", "3.5", "3.6"]), help="Which Python version should be used")
 @click.option("--global", "is_global", is_flag=True, help="Use global Python")
+@click.option("--installable", "is_installable", is_flag=True, help="Use installable Python")
 @click_log.simple_verbosity_option(logger)
-def init(file_to_import, virtualenv_location, noinput, private, python, is_global):
+def init(file_to_import, virtualenv_location, noinput, private, python, is_global, installable):
     "Initialise project with virtual environment, requirements structure and package lock."
     click.echo("Initializing project")
-    piper.init(noinput=noinput, python=python, virtualenv_location=virtualenv_location)
+    piper.init(noinput=noinput, python=python, virtualenv_location=virtualenv_location, installable=installable)
 
 @cli.command()
 @click.option("--patch", "upgrade_level", flag_value="patch", help="For patch version upgrades")

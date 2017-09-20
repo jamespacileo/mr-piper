@@ -1,15 +1,20 @@
 from setuptools import setup, find_packages
-
-import sys
-sys.path.append(".")
-
+import os
 import json
 
+here = os.path.abspath(os.path.dirname(__file__))
+
 module_data = None
-with open("piper.json", "r") as file:
+with open(os.path.join(here, "piper.json")) as file:
     module_data = json.load(file)
     file.close()
 
+readme_filename = module_data.get("readme_filename")
+long_description = ""
+if readme_filename:
+    with open(os.path.join(here, readme_filename)) as file:
+        long_description = file.read()
+        file.close()
 # from mrpiper.vendor.requirements.parser import parse as parse_requirements
 # dependencies = list(parse_requirements("-r requirements.txt"))
 
@@ -19,19 +24,22 @@ setup(
     license=module_data.get("license"),
     py_modules=module_data.get("py_modules"),
     author=module_data.get("author"),
-    author_email=module_data.get("author_email")
+    author_email=module_data.get("author_email"),
     packages=find_packages(),
+
+    description=module_data.get("description", ""),
+    long_description=long_description,
 
     keywords=module_data.get("keywords"),
 
     url=module_data.get("repository"),
 
-    install_requires=[_key for _key in module_data.get("dependencies", {})],
+    install_requires=[_item[1] for _item in module_data.get("dependencies", {}).items()],
 
     extra_require={
-        'dev': [_key for _key in module_data.get("dependencies", {})],
+        'dev': [_item[1] for _item in module_data.get("devDependencies", {}).items()],
 
-    }
+    },
     # install_requires=[item.line for item in dependencies],
     # install_requires=[
     #     'pytest',

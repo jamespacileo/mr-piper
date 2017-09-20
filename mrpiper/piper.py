@@ -256,7 +256,7 @@ def pip_outdated():
     return c
 
 
-def init(noinput=False, private=False, python=None, virtualenv_location="inside"):
+def init(noinput=False, private=False, python=None, virtualenv_location="inside", installable=False):
     # create requirements structure
     # create virtualenv
     if python:
@@ -275,7 +275,7 @@ def init(noinput=False, private=False, python=None, virtualenv_location="inside"
         }
     else:
         init_data = {}
-    project.setup(noinput=noinput, init_data=init_data, python=python, virtualenv_location=virtualenv_location)
+    project.setup(noinput=noinput, init_data=init_data, python=python, virtualenv_location=virtualenv_location, installable=installable)
 
 def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements

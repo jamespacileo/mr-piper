@@ -1,17 +1,18 @@
 {
     "created": "2017-09-20T21:10:07",
     "name": "mrpiper",
-    "version": "0.1.2a3",
-    "description": "",
-    // "source_dir": "src",
-
-    "repository": "",
-    "author": "",
+    "version": "0.1.2a5",
+    "description": "The simple project package manager",
+    "source_dir": "mrpiper",
+    "repository": "https://github.com/jamespacileo/mr-piper",
+    "author": "James Pacileo",
     "author_email": "",
-    "keywords": "",
+    "keywords": "pip piper mrpiper package manager",
     "license": "MIT",
-
-    "py_modules": ["mrpiper.cli"],
+    "readme_filename": "README.rst",
+    "py_modules": [
+        "mrpiper.cli"
+    ],
     "entry_points": {
         "console_scripts": [
             "piper=mrpiper.cli:cli"
@@ -29,7 +30,15 @@
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy"
     ],
-
-    "dependencies": {},
-    "devDependencies": {}
+    "data_files": [],
+    "package_data": [],
+    "exclude_packages": [],
+    "dependencies": {
+        "requests": "requests>=2.18.4",
+        "path.py": "path.py>=10.4"
+    },
+    "devDependencies": {
+        "coverage": "coverage>=4.4.1"
+    },
+    "private": false
 }
