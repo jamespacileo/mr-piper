@@ -635,6 +635,24 @@ def upgrade_all(upgrade_level="latest"):
     for package in pkgs:
         upgrade(upgrade_level)
 
+def why(package_name):
+    piper_file = project.piper_file
+    if package_name.lower() in piper_file["dependencies"]:
+        click.echo("This module exists because it's specified in 'dependencies'")
+        return
+    if package_name.lower() in piper_file["devDependencies"]:
+        click.echo("This module exists because it's specified in 'dependencies'")
+        return
+    tree = get_dependency_tree()
+
+    parents = []
+    for node in tree:
+        found = [dep for dep in node["dependencies"] if (dep["package_name"].lower() == package_name.lower())]
+        if found:
+            parents.append(node["package"])
+    for parent in parents:
+        click.echo('The module "{0}" depends on "{1}'.format(parent["package_name"], package_name))
+
 def clear():
     project.clear()
 

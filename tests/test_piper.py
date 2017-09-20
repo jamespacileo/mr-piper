@@ -22,6 +22,7 @@ source_path = Path("..") / "mrpiper"
 TESTS_LOCATION = os.getcwd()
 # TEMP_LOCATION = tempfile.mkdtemp()
 TEMP_LOCATION = Path("temp") / "temp_project"
+Path("temp").mkdir_p()
 TEMP_LOCATION.rmtree_p()
 TEMP_LOCATION.mkdir_p()
 # TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
@@ -145,6 +146,8 @@ def test_outdated():
     assert ("requests" in dev_txt.text())
     piper.outdated(all_pkgs=True, verbose=True)
 
+def test_why():
+    piper.why("requests")
 
 def test_install():
     piper.add("requests")
@@ -161,10 +164,13 @@ def test_install():
     assert "coverage" in frozen_deps
     # assert ("requests" in dev_txt.text())
 
+
+
 if __name__=="__main__":
     test_init()
     test_add()
     test_remove()
     test_upgrade()
     test_outdated()
+    test_why()
     test_install()

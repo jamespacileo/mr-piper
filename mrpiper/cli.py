@@ -105,6 +105,13 @@ def clear(noinput):
     "Deletes virtualenv, requirements folder/files and piper file."
     piper.clear()
 
+@cli.command()
+@click.argument("package_name", help="Package name you want to explain why")
+@click_log.simple_verbosity_option(logger)
+def why(package_name):
+    "Explain why a package exists"
+    piper.why(package_name)
+
 if __name__ == '__main__':
     # os.chdir("..")
     # outdated()
