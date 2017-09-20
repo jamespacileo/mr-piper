@@ -509,14 +509,26 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
                 minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
                 current_version = current_version.original_version
+
+                if output_format == "table":
+                    if wanted_version != current_version:
+                        wanted_version = crayons.yellow(wanted_version)
+                    if patch_version != current_version:
+                        patch_version = crayons.yellow(patch_version)
+                    if minor_version != current_version:
+                        minor_version = crayons.yellow(minor_version)
+
             except ValueError as err:
                 logger.debug("ValueError for {0} with {1}".format(dep["name"], err))
                 current_version = dep["specs"][0][1]
                 # click.echo(err)
-                wanted_version = "not semantic"
-                patch_version = ""
-                minor_version = ""
+                wanted_version = "//"
+                patch_version = "//"
+                minor_version = "//"
+
             latest_version = found_versions[0]
+            if (output_format == "table") and (latest_version != current_version):
+                latest_version = crayons.yellow(latest_version)
 
             # outdated_map.append({
             #     'name': dep["name"],
@@ -529,17 +541,17 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 outdated_map.append([
                     dep["name"],
                     current_version,
-                    wanted_version.__str__(),
-                    patch_version.__str__(),
-                    minor_version.__str__(),
-                    latest_version.__str__(),
+                    wanted_version,
+                    patch_version,
+                    minor_version,
+                    latest_version,
                 ])
             else:
                 outdated_map.append([
                     dep["name"],
                     current_version,
-                    wanted_version.__str__(),
-                    latest_version.__str__(),
+                    wanted_version,
+                    latest_version,
                 ])
 
     if output_format == "table":
