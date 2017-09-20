@@ -166,14 +166,14 @@ def pip_versions(package_name):
     if no_matching:
         return False
 
-    result = parse.search("from versions: {})", c.err)
+    main_result = parse.search("from versions: {})", c.err)
     # click.echo([package_name, c.err])
     # click.echo([package_name, result.fixed[0], [item for item in parse.findall(" {:S},", result.fixed[0] + ",")]])
-    results = [result.fixed[0] for result in parse.findall(" {:S},", result.fixed[0] + ",")]
+    results = [result.fixed[0] for result in parse.findall(" {:S},", main_result.fixed[0] + ",")]
     # last_result = [result.fixed[0] for result in parse.findall(" {:w})", result.fixed[0])]
     # click.echo(results)
+    # logger.error("No results? {0} \nMAIN: {1} \nRESULTS: {2}".format(c.err, main_result.fixed[0], type(results)))
     if not results:
-        logger.debug("No results? {}".format(c.out + c.err))
         return []
 
     return results
@@ -465,40 +465,50 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
     # click.echo([c.return_code, c.out, c.err])
 
     lock = project.piper_lock
-    all_deps = map(lambda x: x[1], lock["frozen_deps"].items())
-    prime_deps = filter(lambda x: not (x in lock["dependables"]), all_deps)
+    all_deps = [_item for _item in map(lambda x: x[1], lock["frozen_deps"].items())]
+    prime_deps = [_item for _item in filter(lambda x: not (x["name"].lower() in lock["dependables"]), all_deps)]
 
     which_deps = all_deps if all_pkgs else prime_deps
+
+    logger.debug("which deps {0} {1} {2}".format(len(all_deps), len(prime_deps), len(which_deps)))
 
     outdated_map = []
 
     with click_spinner.spinner():
-        for dep in all_deps:
-            logger.debug("checking versions for {}".format(dep["name"]))
+        for index, dep in enumerate(which_deps):
+            # logger.debug("index:{}".format(index))
+            # logger.debug("checking versions for {}".format(dep["name"]))
             found_versions = pip_versions(dep["name"])
+            # logger.debug("found versions {}".format(found_versions))
             if found_versions == False:
                 # TODO: Address failure to find versions for package
                 logger.debug("Couldn't find versions for {}".format(dep["name"]))
                 continue
-            versions = list(found_versions)
-            if not versions:
-                logger.error("Possible problem please investigate")
+            # versions = list(found_versions)
+            # versions = [item for item in found_versions]
+            if not found_versions:
+                logger.debug("Possible problem please investigate dep:{0} name:{1} versions:{2}".format(dep, dep["name"], found_versions))
                 continue
-            versions.reverse()
+            found_versions.reverse()
+
             try:
                 current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
 
-                coerced_versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), versions))
-                version_mapping = map(lambda index, x: (x.__str__(), versions[index] ), enumerate(coerced_versions))
+                # logger.debug("Coerce example: {0} {1}".format(overrides.Version.coerce(found_versions[0]), next(map(lambda x: overrides.Version.coerce(x, partial=True), found_versions))))
+
+                coerced_versions = [_item for _item in map(lambda x: overrides.Version.coerce(x, partial=True), found_versions)]
+                # logger.debug("Coerced list {}".format(coerced_versions))
+                # version_mapping = map(lambda index, x: (x.__str__(), found_versions[index] ), enumerate(coerced_versions))
+                # logger.debug("versions {0} {1}".format(coerced_versions, version_mapping))
 
                 if dep["specifier"]:
                     spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
                 # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
-                valid_versions = list(spec.filter(coerced_versions))
+                valid_versions = [_item for _item in spec.filter(coerced_versions)]
                 wanted_version = spec.select(valid_versions).original_version
                 patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
                 minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
-
+                current_version = current_version.original_version
             except ValueError as err:
                 logger.debug("ValueError for {0} with {1}".format(dep["name"], err))
                 current_version = dep["specs"][0][1]
@@ -506,7 +516,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 wanted_version = "not semantic"
                 patch_version = ""
                 minor_version = ""
-            latest_version = versions[0]
+            latest_version = found_versions[0]
 
             # outdated_map.append({
             #     'name': dep["name"],
@@ -519,7 +529,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 outdated_map.append([
                     dep["name"],
                     current_version,
-                    crayons.yellow(wanted_version.__str__()),
+                    wanted_version.__str__(),
                     patch_version.__str__(),
                     minor_version.__str__(),
                     latest_version.__str__(),
@@ -528,7 +538,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 outdated_map.append([
                     dep["name"],
                     current_version,
-                    crayons.yellow(wanted_version.__str__()),
+                    wanted_version.__str__(),
                     latest_version.__str__(),
                 ])
 
@@ -539,8 +549,9 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
             click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Latest"]))
     else:
         headers = headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"] if verbose else ["Name", "Current", "Wanted", "Latest"]
-        output = [dict(zip(headers,item)) for item in outdated_map]
-        click.echo(json.dumps(output, indent="    "))
+        output = [dict(zip(headers, item)) for item in outdated_map]
+        logger.debug(output)
+        click.echo(json.dumps(output, indent=4))
     # frozen_reqs = [req for req in parse_requirements(os.path.join(".", "requirements", "base-locked.txt"))]
 
     # versions = pip_versions("django")
@@ -602,13 +613,38 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
             logger.error("Possible error 2 {0} {1}".format(original_versions, coerced_versions))
         coerced_versions.reverse()
 
-        if upgrade_specifier:
-            spec = overrides.Spec(upgrade_specifier)
-        else:
-            spec = map(lambda x: overrides.Spec("".join(x) ), req.specs)
+
+        try:
+            current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
+
+            coerced_versions = list(map(lambda x: overrides.Version.coerce(x, partial=True), versions))
+            version_mapping = map(lambda index, x: (x.__str__(), versions[index] ), enumerate(coerced_versions))
+
+            if upgrade_specifier:
+                spec = overrides.Spec(upgrade_specifier)
+            else:
+                spec = map(lambda x: overrides.Spec("".join(x) ), req.specs)
+
+            # if dep["specifier"]:
+            #     spec = next(map(lambda x: semantic_version.Spec("".join(x) ), dep["specs"]))
+            # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
+            valid_versions = list(spec.filter(coerced_versions))
+            wanted_version = spec.select(valid_versions).original_version
+            patch_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
+            minor_version = semantic_version.Spec("~={}".format(current_version.major, current_version.minor, current_version.patch)).select(valid_versions).original_version
+
+        except ValueError as err:
+            logger.debug("ValueError for {0} with {1}".format(dep["name"], err))
+            current_version = dep["specs"][0][1]
+            # click.echo(err)
+            wanted_version = "not semantic"
+            patch_version = ""
+            minor_version = ""
+
+
         # click.echo("{} {} {}".format(versions, spec, upgrade_specifier))
-        valid_versions = list(spec.filter(coerced_versions))
-        wanted_version = spec.select(coerced_versions)
+        # valid_versions = list(spec.filter(coerced_versions))
+        # wanted_version = spec.select(coerced_versions)
 
         echo_list = crayons.white("")
         for index, version in enumerate(valid_versions):
