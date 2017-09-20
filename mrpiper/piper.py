@@ -205,6 +205,8 @@ def init(noinput=False, private=False):
         init_data = {
             "private": private
         }
+    else:
+        init_data = {}
     project.setup(noinput=noinput, init_data=init_data)
 
 def add(package_line, editable=False, dev=False, dont_install=False):
@@ -383,34 +385,39 @@ def install(dev=False, force_lockfile=False):
 
     if piper_lock_exists:
         click.echo("Installing from the piper lock file")
-        packages = [item["line"] for item in project.piper_lock["frozen_deps"]]
+        packages = [item[1]["line"] for item in project.piper_lock["frozen_deps"].items()]
     else:
         click.secho("Piper lock doesn't exist. Using next best option...", fg="yellow")
 
-    if piper_file_exists and (not packages):
+    if piper_file_exists and (packages == None):
         click.echo("Installing from the piper file piper.json")
         packages = [x[1] for x in project.piper_file["dependencies"].items()]
         if dev:
             packages += [x[1] for x in project.piper_file["devDependencies"].items()]
-    else:
+
+    elif (packages == None):
         click.secho("No piper.json file. Using next best option...", fg="yellow")
 
     if dev:
-        if dev_locked_txt_exists and (not packages):
+        if dev_locked_txt_exists and (packages == None):
             click.echo("Installing from requirements/dev-locked.txt")
             packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
-        if dev_txt_exists and (not packages):
+        if dev_txt_exists and (packages == None):
             click.echo("Installing from requirements/dev.txt")
             packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev.txt"))]
 
-    if base_locked_txt_exists and (not packages):
+    if base_locked_txt_exists and (packages == None):
         click.echo("Installing from requirements/base-locked.txt")
         packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))]
-    if base_txt_exists and (not packages):
+    if base_txt_exists and (packages == None):
         click.echo("Installing from requirements/base.txt")
         packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base.txt"))]
 
-    if not packages:
+    if packages == []:
+        click.secho("No installable packages found", fg="red")
+        sys.exit(0)
+
+    if packages == None:
         click.echo(
             crayons.red("No available files to install packages from. Please run ") + crayons.yellow("piper init")
             )
