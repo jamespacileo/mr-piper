@@ -17,6 +17,7 @@ from piptools.scripts.compile import get_pip_command
 from piptools import logging
 
 from .vendor.requirements.parser import parse as parse_requirements_alt
+# from .piper import project
 # from piper import which, which_pip
 
 # Packages that should be ignored later.
@@ -184,3 +185,10 @@ def get_package_from_requirement_file(package_name, filename):
 
 def map_piper_json_to_requirements():
     pass
+
+def shellquote(s):
+    """Prepares a string for the shell (on Windows too!)"""
+    return '"' + s.replace("'", "'\\''") + '"'
+
+
+

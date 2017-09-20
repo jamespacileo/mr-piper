@@ -20,9 +20,12 @@ from mrpiper import piper
 source_path = Path("..") / "mrpiper"
 
 TESTS_LOCATION = os.getcwd()
-TEMP_LOCATION = tempfile.mkdtemp()
+# TEMP_LOCATION = tempfile.mkdtemp()
+TEMP_LOCATION = Path("temp") / "temp_project"
+TEMP_LOCATION.rmtree_p()
+TEMP_LOCATION.mkdir_p()
 # TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
-project_dir = Path(TEMP_LOCATION)
+project_dir = Path(TEMP_LOCATION.abspath())
 project_dir.chdir()
 req_folder = (project_dir / "requirements")
 
@@ -64,9 +67,11 @@ def test_add():
     piper.add("requests")
     assert base_txt.isfile()
     assert "requests" in base_txt.text()
+    assert "requests" in piper.project.piper_file["dependencies"]
 
     piper.add("Werkzeug")
     assert "Werkzeug" in base_txt.text()
+    assert "werkzeug" in piper.project.piper_file["dependencies"]
 
     piper.add("regex")
     assert "regex" in base_txt.text()
@@ -77,7 +82,7 @@ def test_add():
 
     if not (platform.system() == "Windows"):
         piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
-        assert "scrapy" in base_txt.text()
+        assert "Scrapy" in base_txt.text()
 
     piper.add("path.py", dev=True)
     assert dev_txt.isfile()
@@ -89,6 +94,7 @@ def test_remove():
     piper.remove("requests")
     assert base_txt.isfile()
     assert not ("requests" in base_txt.text())
+    assert not ("requests" in piper.project.piper_file["dependencies"])
 
     if not (platform.system() == "Windows"):
         piper.remove("scrapy")
@@ -99,12 +105,18 @@ def test_remove():
     assert dev_txt.isfile()
     assert not ("requests" in dev_txt.text())
 
+    piper.remove("werkzeug")
+    piper.remove("regex")
+
     lock = piper.project.piper_lock
     assert not lock["dependencies"].keys()
     assert not lock["devDependencies"].keys()
     assert not lock["dependables"]
     assert not lock["frozen_deps"].keys()
 
+    piper_file = piper.project.piper_file
+    assert not piper_file["dependencies"].keys()
+    assert not piper_file["devDependencies"].keys()
 
 def test_upgrade():
     piper.add("requests==2.0.0", dev=True)
@@ -125,8 +137,6 @@ def test_upgrade():
 
     # Version selection
 
-
-
 def test_outdated():
     piper.outdated(all_pkgs=True)
     piper.add("requests==2.16.0", dev=True)
@@ -143,7 +153,7 @@ def test_install():
     piper.add("coverage", dev=True)
     piper.project.virtualenv_dir.rmtree_p()
     piper.project.piper_lock_dir.remove_p()
-    piper.install()
+    piper.install(dev=True)
     frozen_deps = [item.name for item in piper.pip_freeze()]
     assert "requests" in frozen_deps
     assert "pytest" in frozen_deps

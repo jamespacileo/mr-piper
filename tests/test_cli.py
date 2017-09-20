@@ -31,6 +31,10 @@ def test_add():
     delegator.run("piper add pytest --dev").return_code == 0
     delegator.run("piper add coverage pytest --dev").return_code == 0
 
+    delegator.run("piper add https://github.com/requests/requests/archive/master.zip").return_code == 0
+    delegator.run("git clone https://github.com/requests/requests.git temp_requests").return_code == 0
+    delegator.run("piper add ./temp_requests/").return_code == 0
+
     # result = runner.invoke(cli.add, ["requests", "git+https://github.com/django/django.git@1.11.5#egg=django"])
     # print(result.output)
     # print("exit_code:{}".format(result.exit_code))

@@ -33,15 +33,42 @@ from pip.req.req_file import parse_requirements, process_line
 
 from .vendor.requirements.requirement import Requirement
 from .vendor.requirements.parser import parse as parse_requirements
+from .vendor import pipdeptree
 
 # import pipfile
 
+
+
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
-    remove_from_requirements_file, get_packages_from_requirements_file, get_package_from_requirement_file
-from .project import PythonProject
+    remove_from_requirements_file, get_packages_from_requirements_file, get_package_from_requirement_file, \
+    shellquote
 from . import overrides
+from .project import PythonProject
 
 project = PythonProject()
+
+def which(command):
+    if os.name == 'nt':
+        if command.endswith('.py'):
+            return os.sep.join([project.virtualenv_dir] + ['Scripts\{0}'.format(command)])
+        return os.sep.join([project.virtualenv_dir] + ['Scripts\{0}.exe'.format(command)])
+    return os.sep.join([project.virtualenv_dir] + ['bin/{0}'.format(command)])
+
+
+def which_pip(allow_global=False):
+    """Returns the location of virtualenv-installed pip."""
+    if allow_global:
+        return distutils.spawn.find_executable('pip')
+
+    return which('pip')
+
+def get_dependency_tree():
+    vendor_path = Path(pipdeptree.__file__)
+    command = "{0} {1} --json".format(which("python"), shellquote(vendor_path))
+    c = delegator.run(command)
+    if c.return_code != 0:
+        return {}
+    return json.loads(c.out)
 
 def pip_freeze():
     # temp = tempfile.TemporaryFile()
@@ -153,21 +180,6 @@ def pip_outdated():
     logger.debug(pip_command)
     c = delegator.run(pip_command)
     return c
-
-def which(command):
-    if os.name == 'nt':
-        if command.endswith('.py'):
-            return os.sep.join([project.virtualenv_dir] + ['Scripts\{0}'.format(command)])
-        return os.sep.join([project.virtualenv_dir] + ['Scripts\{0}.exe'.format(command)])
-    return os.sep.join([project.virtualenv_dir] + ['bin/{0}'.format(command)])
-
-
-def which_pip(allow_global=False):
-    """Returns the location of virtualenv-installed pip."""
-    if allow_global:
-        return distutils.spawn.find_executable('pip')
-
-    return which('pip')
 
 
 def init(noinput=False, private=False):
@@ -331,31 +343,57 @@ def remove(package_line, dev=False):
     # remove_from_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     click.secho("Requirement files updated ✓", fg="green")
 
-def install(dev=False):
+def install(dev=False, force_lockfile=False):
     # should run project setup
 
+    virtualenv_exists = project.virtualenv_dir.exists()
     lock_exists = project.piper_lock_dir.exists()
-    dev_txt_exists = project.requirements_file("dev-locked.txt").exists()
-    base_txt_exists = project.requirements_file("base-locked.txt").exists()
+    piper_file_exists = project.piper_file_dir.exists()
+    dev_locked_txt_exists = project.requirements_file("dev-locked.txt").exists()
+    base_locked_txt_exists = project.requirements_file("base-locked.txt").exists()
+    dev_txt_exists = project.requirements_file("dev.txt").exists()
+    base_txt_exists = project.requirements_file("base.txt").exists()
 
-    project.setup()
+    project.setup(noinput=True)
 
     # first choice piper.json
     # second choice requirements
 
+    packages = None
+
     if lock_exists:
-        click.echo("Installing from the piper lock file piper.json")
+        click.echo("Installing from the piper lock file")
         packages = [item["line"] for item in project.piper_lock["frozen_deps"]]
-
-    elif dev and dev_txt_exists:
-        click.echo("Installing from requirements/dev-locked.txt")
-        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
-
-    elif base_txt_exists:
-        click.echo("Installing from requirements/base-locked.txt")
-        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
     else:
-        click.secho("No available packages to install from")
+        click.echo("Piper lock doesn't exist. Using next best option...")
+
+    if piper_file_exists and (not packages):
+        click.echo("Installing from the piper file piper.json")
+        packages = [x[1] for x in project.piper_file["dependencies"].items()]
+        if dev:
+            packages += [x[1] for x in project.piper_file["devDependencies"].items()]
+    else:
+        click.echo("No piper.json file. Using next best option...")
+
+    if dev:
+        if dev_locked_txt_exists and (not packages):
+            click.echo("Installing from requirements/dev-locked.txt")
+            packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
+        if dev_txt_exists and (not packages):
+            click.echo("Installing from requirements/dev.txt")
+            packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev.txt"))]
+
+    if base_locked_txt_exists and (not packages):
+        click.echo("Installing from requirements/base-locked.txt")
+        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))]
+    if base_txt_exists and (not packages):
+        click.echo("Installing from requirements/base.txt")
+        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base.txt"))]
+
+    if not packages:
+        click.echo(
+            crayons.red("No available files to install packages from. Please run ") + crayons.yellow("piper init")
+            )
         sys.exit()
 
     # if dev:
@@ -365,6 +403,10 @@ def install(dev=False):
 
     c = pip_install_list(packages)
     click.secho(c.out, fg="blue")
+
+    tree = get_dependency_tree()
+    project.update_piper_lock_from_piper_file_and_tree(tree)
+
 
     # cmds = pip_install_list(packages)
     # for cmd in cmds:
