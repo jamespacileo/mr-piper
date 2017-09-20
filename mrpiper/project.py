@@ -383,7 +383,7 @@ class PythonProject(object):
                             package["package"]["package_name"],
                             package["package"]["installed_version"]
                         ),
-                        "depends_on": [item["package_name"] for item in package["package"]["dependencies"]]
+                        "depends_on": [item["package_name"] for item in package["dependencies"]]
                     }
                     base_dependencies.append(item)
 
@@ -396,7 +396,7 @@ class PythonProject(object):
                             package["package"]["package_name"],
                             package["package"]["installed_version"]
                         ),
-                        "depends_on": [item["package_name"] for item in package["package"]["dependencies"]]
+                        "depends_on": [item["package_name"] for item in package["dependencies"]]
                     }
                     dev_dependencies.append(item)
 
