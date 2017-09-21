@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 import os
 import json
+import codecs
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,8 +13,8 @@ with open(os.path.join(here, "piper.json")) as file:
 readme_filename = module_data.get("readme_filename")
 long_description = ""
 if readme_filename:
-    with open(os.path.join(here, readme_filename)) as file:
-        long_description = file.read()
+    with codecs.open(os.path.join(here, readme_filename), encoding='utf-8') as file:
+        long_description = "\n" + file.read()
         file.close()
 # from mrpiper.vendor.requirements.parser import parse as parse_requirements
 # dependencies = list(parse_requirements("-r requirements.txt"))
