@@ -321,6 +321,16 @@ Check why a package is installed.
 
 ---------------
 
+**Get virtualenv activate command** :code:`piper activate`
+
+e.g. :code:`piper activate`
+
+Returns the shell command used to activate the virtualenv
+
+.. image:: https://transfer.sh/JKnuk/Hyper_2017-09-21_20-27-12.png
+
+---------------
+
 Concise docs on usage and API going here
 
 
