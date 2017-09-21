@@ -103,22 +103,13 @@ Install development packages
 
         $ piper add pytest coverage --dev
         Installing pytest...
-        Collecting pytest
-        Using cached pytest-3.2.2-py2.py3-none-any.whl
-        Requirement already satisfied: setuptools in ./.virtualenvs/project_virtualenv/lib/python2.7/site-packages (from pytest)
-        Collecting py>=1.4.33 (from pytest)
-        Using cached py-1.4.34-py2.py3-none-any.whl
-        Installing collected packages: py, pytest
-        Successfully installed py-1.4.34 pytest-3.2.2
+        ...
         Package pytest installed ✓
         Requirements locked ✓
         Requirements updated ✓
 
         Installing coverage...
-        Collecting coverage
-        Using cached coverage-4.4.1-cp27-cp27mu-manylinux1_x86_64.whl
-        Installing collected packages: coverage
-        Successfully installed coverage-4.4.1
+        ...
         Package coverage installed ✓
         Requirements locked ✓
         Requirements updated ✓
@@ -133,24 +124,66 @@ Install a package from github
         $ piper add requests/requests
         Installing requests/requests...
         requests/requests resolved as git+https://github.com/requests/requests.git#egg=requests
-        Obtaining requests from git+https://github.com/requests/requests.git#egg=requests
-        Cloning https://github.com/requests/requests.git to ./.virtualenvs/project_virtualenv/src/requests
-        Collecting chardet<3.1.0,>=3.0.2 (from requests)
-        Using cached chardet-3.0.4-py2.py3-none-any.whl
-        Collecting idna<2.7,>=2.5 (from requests)
-        Using cached idna-2.6-py2.py3-none-any.whl
-        Collecting urllib3<1.23,>=1.21.1 (from requests)
-        Using cached urllib3-1.22-py2.py3-none-any.whl
-        Collecting certifi>=2017.4.17 (from requests)
-        Using cached certifi-2017.7.27.1-py2.py3-none-any.whl
-        Installing collected packages: chardet, idna, urllib3, certifi, requests
-        Running setup.py develop for requests
-        Successfully installed certifi-2017.7.27.1 chardet-3.0.4 idna-2.6 requests urllib3-1.22
+        ...
         Package requests installed ✓
         Requirements locked ✓
         Requirements updated ✓
 
         ✨  Adding package complete
+
+
+Removing a package
+//////////////////////////////
+
+.. code::
+
+        $ piper remove requests
+        Removing package requests...
+        Uninstalling certifi-2017.7.27.1:
+        Successfully uninstalled certifi-2017.7.27.1
+        Uninstalling chardet-3.0.4:
+        Successfully uninstalled chardet-3.0.4
+        Uninstalling idna-2.6:
+        Successfully uninstalled idna-2.6
+        Uninstalling urllib3-1.22:
+        Successfully uninstalled urllib3-1.22
+        Uninstalling requests-2.18.4:
+        Successfully uninstalled requests-2.18.4
+        Package requests removed ✓
+        Packaged locked ✓
+        Requirement files updated ✓
+
+        ✨  Package removal complete
+
+Find outdated packages
+//////////////////////////////
+
+.. code::
+
+        $ piper outdated --all
+        Fetching outdated packages...
+        Name      Current    Wanted    Latest
+        --------  ---------  --------  --------
+        requests  2.0.0      2.0.0     2.18.4
+        py        1.4.34     1.4.34    1.4.34
+        pytest    3.2.2      3.2.2     3.2.2
+        coverage  4.4.1      4.4.1     4.4.1
+        Werkzeug  0.9.6      0.9.6     0.12.2
+
+List project's package structure
+/////////////////////////////////
+
+.. code::
+
+        $ piper list
+        # base = green | dev = magenta | sub dependencies = cyan
+        ├─ pytest==3.2.2
+        │  └─ setuptools
+        │  └─ py>=1.4.33
+        ├─ py==1.4.34
+        ├─ Werkzeug==0.9.6
+        ├─ coverage==4.4.1
+        ├─ requests==2.0.0
 
 Concise docs on usage and API going here
 
