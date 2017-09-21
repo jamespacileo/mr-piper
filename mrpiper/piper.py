@@ -971,17 +971,17 @@ def version(noinput=False, set_version=None, set_git=False):
     # else:
     #     # show current version
     click.echo(
-        "Your project is at version " + crayons.yellow(project.piper_file["version"])
+        "Your " + crayons.green("project version") + " is " + crayons.yellow(project.piper_file["version"])
     )
     if project.is_git_repository:
         git_tag = project.git_tag
         if git_tag:
             click.echo(
-                "You last git tag is " + crayons.yellow(project.git_tag)
+                "You last " + crayons.green("git tag") + " is " + crayons.yellow(project.git_tag)
             )
         else:
             click.echo(
-                "No git tags have been created"
+                crayons.yellow("No git tags have been created")
             )
     if not noinput:
         set_version = click.confirm("Do you wish to update the version?")
@@ -993,7 +993,7 @@ def version(noinput=False, set_version=None, set_git=False):
         project.save_to_piper_file(updated_piper_file)
 
         if project.is_git_repository:
-            set_git = click.confirm("Would you like to create a git tag for this version?")
+            set_git = click.confirm("Would you like to create a " + crayons.green("git tag") + " for this version?")
             if set_git:
                 project.set_git_tag(version)
 
