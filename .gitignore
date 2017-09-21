@@ -12,6 +12,7 @@ nest.lock
 src
 .piper
 mrpiper.egg-info
+mr_piper.egg-info
 build**
 .vscode**
 dist**
