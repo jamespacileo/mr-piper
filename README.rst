@@ -77,6 +77,7 @@ Concise docs on usage and API going here
 e.g. :code:`piper init --py 3.6 --outside`
 
 Initializing a project creates:
+
 - the PIP requirement files (base, dev and frozen lock files)
 - the virtualenv (either outside or inside the project folder)
 - a Piper file (where project information is stored)
