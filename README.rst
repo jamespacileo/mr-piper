@@ -3,9 +3,7 @@ Mr Piper (alpha) - Simple project package management
 
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
-`Imgur`_
-
-.. _Imgur: https://i.imgur.com/bKWITFN.gifv
+.. image:: https://i.imgur.com/bKWITFN.gifv
 
 TODO:
 ~~~~~
