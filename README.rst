@@ -234,6 +234,17 @@ Current TODO
 -  ⬜ Add a few more tests
 -  ⬜ 90%+ test coverage
 
+Planned CLI APIs
+-----------------
+
+- `piper tag` - Update your project's distribution tag
+- `piper shell` - Spawn a shell where the virtualenv is activated
+- `piper build` - Build distributable package from project
+- `piper publish --build` - Build and publish project on PyPI (or other index)
+- `piper run command` - Run custom command (inspired by npm/yarn commands)
+- `piper licenses` - List all dependency licences
+- `piper config` - To store user global settings for Piper's behavior
+
 ROADMAP (PyconUK 2017 sprint):
 ------------
 
