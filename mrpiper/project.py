@@ -210,7 +210,7 @@ class PythonProject(object):
         if not self._virtualenv_outside_dir:
             hashed_name = "{0}_{1}".format(
                 self.project_dir.name,
-                hashlib.sha256(self.project_dir.abspath()).hexdigest()[:6]
+                hashlib.sha256(str(self.project_dir.abspath()).encoding("utf-8")).hexdigest()[:6]
             )
             self._virtualenv_outside_dir = Path("~").expanduser() / ".local" / "share" / "piper_virtualenv" / hashed_name
         return self._virtualenv_outside_dir
