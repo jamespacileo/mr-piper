@@ -38,9 +38,11 @@ setup(
     install_requires=[_item[1] for _item in module_data.get("dependencies", {}).items()],
 
     extra_require={
-        'dev': [_item[1] for _item in module_data.get("devDependencies", {}).items()],
+        'dev': [_item[1] for _item in module_data.get("dev_dependencies", {}).items()],
 
     },
+
+    package_data=module_data.get("package_data"),
     # install_requires=[item.line for item in dependencies],
     # install_requires=[
     #     'pytest',

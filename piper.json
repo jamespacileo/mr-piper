@@ -31,7 +31,9 @@
         "Programming Language :: Python :: Implementation :: PyPy"
     ],
     "data_files": [],
-    "package_data": [],
+    "package_data": {
+        "": ["*.template", "*.rst"]
+    },
     "exclude_packages": [],
     "dependencies": {
         "requests": "requests>=2.0.0",
