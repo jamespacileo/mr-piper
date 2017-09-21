@@ -110,6 +110,70 @@ Initializing a project creates:
 
 ---------------
 
+**Example piper.json**
+
+.. code-block:: json
+
+        {
+            "created": "2017-09-20T21:10:07",
+            "name": "mr-piper",
+            "version": "0.1.3a2",
+            "description": "The simple project package manager",
+            "source_dir": "mrpiper",
+            "repository": "https://github.com/jamespacileo/mr-piper",
+            "author": "James Pacileo",
+            "author_email": "",
+            "keywords": "pip piper mrpiper package manager",
+            "license": "MIT",
+            "readme_filename": "README.rst",
+            "py_modules": [
+                "mrpiper.cli"
+            ],
+            "entry_points": {
+                "console_scripts": [
+                    "piper=mrpiper.cli:cli"
+                ]
+            },
+            "classifiers": [
+                "License :: OSI Approved :: MIT License",
+                "Programming Language :: Python",
+                "Programming Language :: Python :: 2.7",
+                "Programming Language :: Python :: 3",
+                "Programming Language :: Python :: 3.3",
+                "Programming Language :: Python :: 3.4",
+                "Programming Language :: Python :: 3.5",
+                "Programming Language :: Python :: 3.6",
+                "Programming Language :: Python :: Implementation :: CPython",
+                "Programming Language :: Python :: Implementation :: PyPy"
+            ],
+            "data_files": [],
+            "package_data": [],
+            "exclude_packages": [],
+            "dependencies": {
+                "requests": "requests>=2.0.0",
+                "path.py": "path.py>=10.4",
+                "click": "click>=6.7",
+                "click-log": "click-log>=0.2.0",
+                "delegator.py": "delegator.py>=0.0.13",
+                "future": "future>=0.16.0",
+                "parse": "parse>=1.8.2",
+                "semantic-version": "semantic-version>=2.6.0",
+                "simplejson": "simplejson>=3.11.1",
+                "tabulate": "tabulate>=0.7.7",
+                "crayons": "crayons>=0.1.2",
+                "click-spinner": "click-spinner>=0.1.7",
+                "emoji": "emoji>=0.4.5"
+            },
+            "dev_dependencies": {
+                "coverage": "coverage>=4.4.1",
+                "coveralls": "coveralls>=1.2.0",
+                "pytest": "pytest>=3.2.2"
+            },
+            "private": false
+        }
+
+---------------
+
 **Install development packages** :code:`piper add`
 
 e.g. :code:`piper add pytest --dev`
