@@ -27,13 +27,21 @@ Why?
 - Piper increases usefulness of some basic pip commands (e.g. check out `piper list`, `piper outdated`)
 - A bunch of convenient utilities are included (e.g. `piper why`)
 
+Usage
+----------
+
+Concise docs on usage and API going here
 
 ROADMAP (PyconUK 2017 sprint):
 ------------
 
--  ⬜ Docs
--  ⬜ Store and use hashes in lock file
--  ⬜ Optional Pipfile support
+This list is undergoing changes.
+
+-  ⬜ Improve documentation
+-  ⬜ Integrate packages hashes
+-  ⬜ Easy way to add setup.py commands (e.g. packaga.json scripts)
+-  ⬜ Custom virtualenv location
+-  ⬜ Optional: Pipfile support
 
 
 .. |windows| image:: https://img.shields.io/badge/Windows-supported-brightgreen.svg
