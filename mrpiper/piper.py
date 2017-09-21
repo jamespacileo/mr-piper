@@ -489,7 +489,7 @@ def install(dev=False, force_lockfile=False):
         click.echo("Installing from the piper file piper.json")
         packages = [x[1] for x in project.piper_file["dependencies"].items()]
         if dev:
-            packages += [x[1] for x in project.piper_file["devDependencies"].items()]
+            packages += [x[1] for x in project.piper_file["dev_dependencies"].items()]
 
     elif (packages == None):
         click.secho("No piper.json file. Using next best option...", fg="yellow")
@@ -591,7 +591,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
     all_deps = [_item for _item in map(lambda x: x[1], lock["frozen_deps"].items())]
 
     mainDepKeys = [_i for _i in lock["dependencies"]]
-    devDepKeys = [_i for _i in lock["devDependencies"]]
+    devDepKeys = [_i for _i in lock["dev_dependencies"]]
     allKeys = mainDepKeys + devDepKeys
     prime_deps = [_item for _item in filter(lambda x: x["name"].lower() in allKeys, all_deps)]
 
@@ -910,8 +910,8 @@ def why(package_name):
     if package_name.lower() in piper_file["dependencies"]:
         click.echo( crayons.green(package_name) + " exists because it's specified in " + crayons.yellow("dependencies"))
         return
-    if package_name.lower() in piper_file["devDependencies"]:
-        click.echo( crayons.green(package_name) + " exists because it's specified in " + crayons.yellow("devDependencies"))
+    if package_name.lower() in piper_file["dev_dependencies"]:
+        click.echo( crayons.green(package_name) + " exists because it's specified in " + crayons.yellow("dev_dependencies"))
         return
     tree = get_dependency_tree()
 
@@ -929,7 +929,7 @@ def list(depth=None):
 
     piper_file = project.piper_file
     base_keys = [_key for _key in piper_file["dependencies"]]
-    dev_keys = [_key for _key in piper_file["devDependencies"]]
+    dev_keys = [_key for _key in piper_file["dev_dependencies"]]
 
     click.echo(
         "# " + crayons.green("base = green") + " | " + crayons.magenta("dev = magenta") + " | " + crayons.cyan("sub dependencies = cyan")
@@ -963,6 +963,42 @@ def wipe():
 def info(package_name):
     text = pip_show(package_name)
     click.echo(text)
+
+def version(noinput=False, set_version=None, set_git=False):
+    # if new:
+    #     # update version
+
+    # else:
+    #     # show current version
+    click.echo(
+        "Your project is at version " + crayons.yellow(project.piper_file["version"])
+    )
+    if project.is_git_repository:
+        git_tag = project.git_tag
+        if git_tag:
+            click.echo(
+                "You last git tag is " + crayons.yellow(project.git_tag)
+            )
+        else:
+            click.echo(
+                "No git tags have been created"
+            )
+    if not noinput:
+        set_version = click.confirm("Do you wish to update the version?")
+        if not set_version:
+            sys.exit(0)
+        version = click.prompt("New version (current version is {})".format(crayons.yellow(project.piper_file["version"])))
+        updated_piper_file = project.piper_file.copy()
+        updated_piper_file["version"] = version
+        project.save_to_piper_file(updated_piper_file)
+
+        if project.is_git_repository:
+            set_git = click.confirm("Would you like to create a git tag for this version?")
+            if set_git:
+                project.set_git_tag(version)
+
+        click.secho("Done", fg="green")
+
 
 def activate():
     pass

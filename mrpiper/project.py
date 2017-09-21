@@ -318,7 +318,7 @@ class PythonProject(object):
             ("author", author),
             ("license", licence),
             ("dependencies", {}),
-            ("devDependencies", {}),
+            ("dev_dependencies", {}),
         ])
         self.save_to_piper_file(tpl)
 
@@ -326,7 +326,7 @@ class PythonProject(object):
         tpl = collections.OrderedDict([
             ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
             ("dependencies", {}),
-            ("devDependencies", {}),
+            ("dev_dependencies", {}),
             ("dependables", []),
             ("frozen_deps", {}),
         ])
@@ -348,13 +348,13 @@ class PythonProject(object):
             piper_file["dependencies"][dep["name"].lower()] = dep["line"]
             lock["dependencies"][dep["name"].lower()] = dependency
 
-            if dep["name"].lower() in lock["devDependencies"]: #.keys():
-                del lock["devDependencies"][dep["name"].lower()]
-            if dep["name"].lower() in piper_file["devDependencies"]: #.keys():
-                del piper_file["devDependencies"][dep["name"].lower()]
+            if dep["name"].lower() in lock["dev_dependencies"]: #.keys():
+                del lock["dev_dependencies"][dep["name"].lower()]
+            if dep["name"].lower() in piper_file["dev_dependencies"]: #.keys():
+                del piper_file["dev_dependencies"][dep["name"].lower()]
         else:
-            piper_file["devDependencies"][dep["name"].lower()] = dep["line"]
-            lock["devDependencies"][dep["name"].lower()] = dependency
+            piper_file["dev_dependencies"][dep["name"].lower()] = dep["line"]
+            lock["dev_dependencies"][dep["name"].lower()] = dependency
 
             if dep["name"].lower() in lock["dependencies"]: #.keys():
                 del lock["dependencies"][dep["name"].lower()]
@@ -378,10 +378,10 @@ class PythonProject(object):
         if dep_name.lower() in piper_file["dependencies"]: #.keys():
             del piper_file["dependencies"][dep_name.lower()]
 
-        if dep_name.lower() in lock["devDependencies"]: #.keys():
-            del lock["devDependencies"][dep_name.lower()]
-        if dep_name.lower() in piper_file["devDependencies"]: #.keys():
-            del piper_file["devDependencies"][dep_name.lower()]
+        if dep_name.lower() in lock["dev_dependencies"]: #.keys():
+            del lock["dev_dependencies"][dep_name.lower()]
+        if dep_name.lower() in piper_file["dev_dependencies"]: #.keys():
+            del piper_file["dev_dependencies"][dep_name.lower()]
 
 
         self.save_to_piper_lock(lock)
@@ -397,7 +397,7 @@ class PythonProject(object):
         frozen = lock["frozen_deps"]
 
         dependencies = lock["dependencies"]
-        devDependencies = lock["devDependencies"]
+        dev_dependencies = lock["dev_dependencies"]
 
         base_main = []
         base_locked = []
@@ -415,11 +415,11 @@ class PythonProject(object):
                 base_locked.append(item)
                 continue
 
-            if key.lower() in devDependencies: #.keys():
+            if key.lower() in dev_dependencies: #.keys():
                 dev_main.append(item)
                 dev_locked.append(item)
                 continue
-            list_of_dev_dependables = map(lambda x: x[1]["depends_on"], devDependencies.items())
+            list_of_dev_dependables = map(lambda x: x[1]["depends_on"], dev_dependencies.items())
             if key.lower() in itertools.chain.from_iterable(list_of_dev_dependables):
                 dev_locked.append(item)
                 continue
@@ -443,8 +443,8 @@ class PythonProject(object):
         lock = self.piper_lock
 
         dependencies = lock["dependencies"].items()
-        devDependencies = lock["devDependencies"].items()
-        allDeps = itertools.chain(dependencies, devDependencies)
+        dev_dependencies = lock["dev_dependencies"].items()
+        allDeps = itertools.chain(dependencies, dev_dependencies)
 
         allDependendables = map(lambda x: x[1]["depends_on"], allDeps)
         allChainedDependables = itertools.chain.from_iterable(allDependendables)
@@ -462,7 +462,7 @@ class PythonProject(object):
         lock = self.piper_lock
 
         deps = [key for key in piper_file.get("dependencies", {})]
-        devDeps = [key for key in piper_file.get("devDependencies", {})]
+        devDeps = [key for key in piper_file.get("dev_dependencies", {})]
 
         base_dependencies = {}
         for dep in deps:
@@ -492,7 +492,7 @@ class PythonProject(object):
 
 
         lock["dependencies"] = base_dependencies
-        lock["devDependencies"] = dev_dependencies
+        lock["dev_dependencies"] = dev_dependencies
         self.save_to_piper_lock(lock)
         self.denormalise_piper_lock()
 
@@ -521,9 +521,9 @@ class PythonProject(object):
         base_dependables = map(lambda x: x[1]["depends_on"], lock["dependencies"].items())
         if package_name in itertools.chain.from_iterable(base_dependables):
             return "base"
-        if package_name in lock["devDependencies"]: #.keys():
+        if package_name in lock["dev_dependencies"]: #.keys():
             return "dev"
-        dev_dependables = map(lambda x: x[1]["depends_on"], lock["devDependencies"].items())
+        dev_dependables = map(lambda x: x[1]["depends_on"], lock["dev_dependencies"].items())
         if package_name in itertools.chain.from_iterable(dev_dependables):
             return "dev"
         return None
@@ -532,14 +532,14 @@ class PythonProject(object):
         lock = self.piper_lock
 
         regular = package_name.lower() in lock["dependencies"]#.keys()
-        dev = package_name.lower() in lock["devDependencies"]#.keys()
+        dev = package_name.lower() in lock["dev_dependencies"]#.keys()
 
         if (not regular) and (not dev):
             # click.echo("No")
             return False
 
         deps = dict(lock["dependencies"])
-        deps.update(lock["devDependencies"])
+        deps.update(lock["dev_dependencies"])
 
         to_remove = deps[package_name.lower()]["depends_on"]
         locked_dependencies = set()
@@ -552,3 +552,23 @@ class PythonProject(object):
 
         removable = [item for item in to_remove if not (item in locked_dependencies)]
         return removable
+
+    @property
+    def is_git_repository(self):
+        c = delegator.run("git status")
+        if "Not a git repository" in (c.out + c.err):
+            return False
+        return True
+
+    @property
+    def git_tag(self):
+        c = delegator.run("git tag")
+        if c.return_code != 0:
+            return False
+        if not c.out.strip():
+            return False
+        return c.out.split()[-1]
+
+    def set_git_tag(self, tag):
+        c = delegator.run("git tag {}".format(tag))
+        return c.return_code == 0

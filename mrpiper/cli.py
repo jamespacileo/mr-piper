@@ -134,6 +134,14 @@ def list():
     "List all installed packages"
     piper.list()
 
+
+@cli.command()
+@click.option("--yes", "-y", "noinput", is_flag=True)
+@click_log.simple_verbosity_option(logger)
+def version(noinput):
+    "Get and set project version"
+    piper.version(noinput)
+
 @cli.command()
 @click.argument("package_name", nargs=1)
 @click_log.simple_verbosity_option(logger)
