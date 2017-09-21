@@ -125,13 +125,13 @@ def test_remove():
 
     lock = piper.project.piper_lock
     assert not lock["dependencies"].keys()
-    assert not lock["devDependencies"].keys()
+    assert not lock["dev_dependencies"].keys()
     assert not lock["dependables"]
     assert not lock["frozen_deps"].keys()
 
     piper_file = piper.project.piper_file
     assert not piper_file["dependencies"].keys()
-    assert not piper_file["devDependencies"].keys()
+    assert not piper_file["dev_dependencies"].keys()
 
 def test_upgrade():
     piper.add("requests==2.0.0", dev=True)
