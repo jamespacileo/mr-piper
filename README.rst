@@ -32,12 +32,21 @@ Usage
 
 Concise docs on usage and API going here
 
+Current TODO
+-------------
+
+-  ⬜ Complete basic docs
+-  ⬜ Prune and cleanup code
+-  ⬜ Add a few more tests
+-  ⬜ 90%+ test coverage
+
 ROADMAP (PyconUK 2017 sprint):
 ------------
 
 This list is undergoing changes.
 
 -  ⬜ Improve documentation
+-  ⬜ Prune some dependencies used
 -  ⬜ Integrate packages hashes
 -  ⬜ Easy way to add setup.py commands (e.g. packaga.json scripts)
 -  ⬜ Custom virtualenv location
