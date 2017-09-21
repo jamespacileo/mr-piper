@@ -36,9 +36,9 @@ ROADMAP (PyconUK 2017 sprint):
 -  ⬜ Optional Pipfile support
 
 
-.. |windows|:: https://img.shields.io/badge/Windows-supported!-brightgreen.svg
-.. |linux|:: https://img.shields.io/badge/Linux-supported!-brightgreen.svg
-.. |macos|:: https://img.shields.io/badge/MacOS-supported!-brightgreen.svg
+.. |windows| image:: https://img.shields.io/badge/Windows-supported-brightgreen.svg
+.. |linux| image:: https://img.shields.io/badge/Linux-supported-brightgreen.svg
+.. |macos| image:: https://img.shields.io/badge/MacOS-supported-brightgreen.svg
 
 
 .. |image0| image:: https://img.shields.io/pypi/v/mrpiper.svg
