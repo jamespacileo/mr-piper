@@ -1,4 +1,4 @@
-Mr Piper 🎻🐍 - Simple project package management
+Mr Piper 🎻🐍 - Super simple project package manager
 =====================================================
 
 |windows| |linux| |macos|
