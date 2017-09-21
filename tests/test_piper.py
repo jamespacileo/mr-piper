@@ -59,11 +59,11 @@ except:
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
 
-def test_installing_itself():
-    with source_path:
-        c = delegator.run("piper add .")
-        print(c.out + c.err)
-        assert c.return_code == 0
+# def test_installing_itself():
+#     with source_path:
+#         c = delegator.run("piper add .")
+#         print(c.out + c.err)
+#         assert c.return_code == 0
 
 def test_init():
     print(os.getcwd())
