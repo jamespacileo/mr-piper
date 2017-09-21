@@ -8,7 +8,6 @@ nest.lock
 .cache
 
 # temporary
-/requirements**
 .virtualenvs
 src
 .piper
