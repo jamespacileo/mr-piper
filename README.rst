@@ -70,9 +70,18 @@ Concise docs on usage and API going here
         why       Explain why a package exists
         wipe      Wipe virtualenv, requirements folder/files...
 
+---------------
+
 **Initialize project** :code:`piper init`
 
 e.g. :code:`piper init --py 3.6 --outside`
+
+Initializing a project creates:
+- the PIP requirement files (base, dev and frozen lock files)
+- the virtualenv (either outside or inside the project folder)
+- a Piper file (where project information is stored)
+- a Piper lock (where the reproducible working project configuration is stored)
+- a working setup.py
 
 .. image:: https://transfer.sh/zavDl/Hyper_2017-09-21_15-59-20.png
 
@@ -104,6 +113,7 @@ e.g. :code:`piper init --py 3.6 --outside`
 
 e.g. :code:`piper add pytest --dev`
 
+Dev only packages can be installed with the `--dev` option. These are automatically added to the dependencies and the lock is refreshed.
 
 .. image:: https://transfer.sh/15Hnv0/Hyper_2017-09-21_16-01-00.png
 
@@ -129,6 +139,7 @@ e.g. :code:`piper add pytest --dev`
 
 e.g. :code:`piper add django/django@1.11.5`
 
+Easy install of python modules stored on Github.
 
 .. image:: https://transfer.sh/MRrvR/2017-09-21_15-59-56.png
 
@@ -149,6 +160,7 @@ e.g. :code:`piper add django/django@1.11.5`
 
 e.g. :code:`piper remove django`
 
+Removing packages also removes safe-to-remove sub-dependencies, leaving enviornment nice and clean.
 
 .. image:: https://transfer.sh/1OGtW/Hyper_2017-09-21_16-03-26.png
 
