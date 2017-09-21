@@ -1,4 +1,4 @@
-Mr Piper (alpha) - Simple project package management
+Mr Piper (alpha) 🎻🐍 - Simple project package management
 =====================================================
 
 |windows| |linux| |macos|
@@ -7,7 +7,7 @@ Mr Piper (alpha) - Simple project package management
 
 ---------------
 
-Heavily inspired by Yarn, Piper offers a dead simple way to manage a project's dependencies (and more).
+Heavily inspired by `yarn <https://yarnpkg.com/en/docs/cli/>`_, Piper offers a dead simple way to manage a project's dependencies (and more).
 
 Piper uses pip and virtualenv under the hood, and (just like NPM and Yarn) always installs packages in a project isolated environment.
 
@@ -17,15 +17,15 @@ Piper makes it easy to make modules installable (and updatable) via a `piper.jso
 
 .. image:: https://i.imgur.com/QfiOH6z.gif
 
-Why?
+🤔 Why?
 -----------
 
-- No need to jump through countless hoops to get a test project going (with proper package management)
-- Keep your environment nice and clean, with auto-removal of unnecessary components
+- No need to jump through countless hoops to get a test project going ☺️ (with proper package management)
+- Keep your environment nice and clean ✨, with auto-removal of unnecessary components
 - It's easy to make reproducible environments for your CI and deployments (no more "it-works-on-my-machine" syndrome)
-- Easily make installable modules, no more `setup.py` fiddling
-- Piper increases usefulness of some basic pip commands (e.g. check out `piper list`, `piper outdated`)
-- A bunch of convenient utilities are included (e.g. `piper why`)
+- Easily make installable modules, no more :code:`setup.py` fiddling
+- Piper increases usefulness of some basic pip commands (e.g. check out :code:`piper list`, :code:`piper outdated`)
+- A bunch of convenient utilities are included (e.g. :code:`piper why`)
 
 Usage
 ----------
