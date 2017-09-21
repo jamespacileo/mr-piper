@@ -1,12 +1,12 @@
 Mr Piper (alpha) - Simple project package management
-----------------------------------------------------
+=====================================================
 
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
 .. image:: https://i.imgur.com/QfiOH6z.gif
 
 ROADMAP:
-~~~~~
+------------
 
 -  [ ] Docs
 -  [ ] Store and use hashes in lock file
