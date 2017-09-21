@@ -287,6 +287,19 @@ e.g. :code:`piper list`
         ├─ coverage==4.4.1
         ├─ requests==2.0.0
 
+
+---------------
+
+**Update porject version (and git tag)** :code:`piper version`
+
+e.g. :code:`piper version -y`
+
+Easily check and update the project's version, with the option ability to add a git tag version.
+
+.. image:: https://transfer.sh/gyhnV/Hyper_2017-09-21_19-22-24.png
+
+---------------
+
 Concise docs on usage and API going here
 
 

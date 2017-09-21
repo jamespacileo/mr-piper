@@ -983,6 +983,8 @@ def version(noinput=False, set_version=None, set_git=False):
             click.echo(
                 crayons.yellow("No git tags have been created")
             )
+    else:
+        click.echo(crayons.yellow("There is no local git repository setup"))
     if not noinput:
         set_version = click.confirm("Do you wish to update the version?")
         if not set_version:

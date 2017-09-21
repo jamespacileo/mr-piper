@@ -571,4 +571,6 @@ class PythonProject(object):
 
     def set_git_tag(self, tag):
         c = delegator.run("git tag {}".format(tag))
+        if c.return_code != 0:
+            click.secho(c.err, fg="red")
         return c.return_code == 0
