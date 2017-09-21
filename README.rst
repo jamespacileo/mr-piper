@@ -190,7 +190,7 @@ e.g. :code:`piper remove django`
 e.g. :code:`piper outdated --all`
 
 
-.. image:: https://transfer.sh/rlXo7/Hyper_2017-09-21_16-54-12.png
+.. image:: https://transfer.sh/3gfBu/Hyper_2017-09-21_17-02-56.png
 
 ..
         $ piper outdated --all
