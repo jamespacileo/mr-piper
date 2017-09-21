@@ -7,6 +7,7 @@ import os
 import hashlib
 import tempfile
 
+import requests
 import parse
 import click
 import delegator
@@ -218,4 +219,34 @@ def python_version(path_to_python):
     return u"{v[0]}.{v[1]}.{v[2]}".format(v=parsed)
 
 def resolve_git_shortcut(git_shortcut):
-    pass
+    result = parse.parse("{:w}/{:w}#{:w}", git_shortcut)
+    if not result:
+        result = parse.parse("{:w}/{:w}", git_shortcut)
+    if not result:
+        return False
+
+    username = result.fixed[0]
+    project = result.fixed[1]
+
+    git_tag = None
+    if len(result.fixed) > 2:
+        git_tag = result.fixed[2]
+
+
+    r = requests.get("https://raw.githubusercontent.com/{0}/{1}/master/setup.py".format(username, project))
+    if r.status_code == 404:
+        return False
+
+    result = parse.search("name='{}'", r.content)
+    result2 = parse.search('name="{}"', r.content)
+    if result:
+        egg_name = result.fixed[0]
+    elif result2:
+        egg_name = result2.fixed[0]
+    else:
+        egg_name = project
+
+    if git_tag:
+        return "git+https://github.com/{0}/{1}.git@{2}#egg={3}".format(username, project, git_tag, egg_name)
+    else:
+        return "git+https://github.com/{0}/{1}.git#egg={2}".format(username, project, egg_name)

@@ -1,7 +1,7 @@
 {
     "created": "2017-09-20T21:10:07",
     "name": "mrpiper",
-    "version": "0.1.2a6",
+    "version": "0.1.2a7",
     "description": "The simple project package manager",
     "source_dir": "mrpiper",
     "repository": "https://github.com/jamespacileo/mr-piper",
@@ -45,7 +45,8 @@
         "simplejson": "simplejson>=3.11.1",
         "tabulate": "tabulate>=0.7.7",
         "crayons": "crayons>=0.1.2",
-        "click-spinner": "click-spinner>=0.1.7"
+        "click-spinner": "click-spinner>=0.1.7",
+        "emoji": "emoji>=0.4.5"
     },
     "devDependencies": {
         "coverage": "coverage>=4.4.1",

@@ -18,6 +18,7 @@ import logging
 logger = logging.getLogger("mrpiper.cli")
 
 import click
+import click_spinner
 import crayons
 # from sets import Set
 
@@ -56,30 +57,31 @@ class PythonProject(object):
         pass
 
     def setup(self, noinput=False, init_data={}, python=None, virtualenv_location="inside", installable=False):
-        click.secho("Creating virtualenv...")
+        click.secho("Creating virtualenv...", fg="yellow")
         if not self.has_virtualenv:
             # self.virtualenv_location = virtualenv_location
-            self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
+            with click_spinner.spinner():
+                self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
             click.secho("Virtualenv created ✓", fg="green")
             click.secho("Your virtualenv path: " + crayons.magenta("{}".format(self.virtualenv_dir)))
         else:
             click.secho("Virtualenv already exists ✓", fg="green")
 
-        click.secho("Creating requirement files...")
+        click.secho("Creating requirement files...", fg="yellow")
         if not self.has_requirements_structure:
             self.create_requirements_structure()
             click.secho("Requirement files created ✓", fg="green")
         else:
             click.secho("Requirement files already exists ✓", fg="green")
 
-        click.secho("Creating piper file...")
+        click.secho("Creating piper file...", fg="yellow")
         if not self.has_piper_file:
             self.create_piper_file(noinput=noinput, init_data=init_data)
             click.secho("Piper file created ✓", fg="green")
         else:
             click.secho("Piper file already exists ✓", fg="green")
 
-        click.secho("Creating piper lock...")
+        click.secho("Creating piper lock...", fg="yellow")
         if not self.has_piper_lock:
             self.create_piper_lock()
             click.secho("Piper lock created ✓", fg="green")

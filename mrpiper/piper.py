@@ -26,6 +26,7 @@ import click
 import delegator
 import semantic_version
 import click_spinner
+import emoji
 
 from pkg_resources import Requirement as Req
 from pkg_resources import RequirementParseError
@@ -37,11 +38,9 @@ from .vendor import pipdeptree
 
 # import pipfile
 
-
-
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
     remove_from_requirements_file, get_packages_from_requirements_file, get_package_from_requirement_file, \
-    shellquote, python_version
+    shellquote, python_version, IGNORED_PACKAGES, resolve_git_shortcut
 from . import overrides
 from .project import PythonProject
 
@@ -222,6 +221,11 @@ def pip_uninstall(packages):
     c = delegator.run(pip_command)
     return c
 
+def pip_show(package_name):
+    pip_command = "{0} show {1}".format(which_pip(), package_name)
+    c = delegator.run(pip_command)
+    return c.out
+
 def pip_versions(package_name):
     pip_command = "{0} install {1}==0.xx".format(which_pip(), package_name)
     c = delegator.run(pip_command)
@@ -277,6 +281,11 @@ def init(noinput=False, private=False, python=None, virtualenv_location="inside"
         init_data = {}
     project.setup(noinput=noinput, init_data=init_data, python=python, virtualenv_location=virtualenv_location, installable=installable)
 
+    click.echo(
+        crayons.green(emoji.emojize("\n:sparkles:  Initialization complete", use_aliases=True))
+    )
+
+
 def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements
     # init()
@@ -284,6 +293,15 @@ def add(package_line, editable=False, dev=False, dont_install=False):
         click.secho("Installing {0} in editable mode...".format(crayons.yellow(package_line)))
     else:
         click.secho("Installing {0}...".format(crayons.yellow(package_line)))
+
+    could_be_github = parse.parse("{:w}/{:w}#{:w}", package_line) or parse.parse("{:w}/{:w}", package_line)
+    if could_be_github:
+        git_url = resolve_git_shortcut(package_line)
+        click.secho("{0} resolved as {1}".format(
+            crayons.yellow(package_line),
+            crayons.green(git_url)
+        ))
+        package_line = git_url
 
     # req = Req.parse(package_line)
     # logger.debug("{}".format(req.__dict__))
@@ -319,7 +337,8 @@ def add(package_line, editable=False, dev=False, dont_install=False):
         click.secho("Make sure to add #egg=<name> to your url", fg="red")
         return
 
-    c = pip_install(package_line, editable=is_editable, allow_global=False, block=True)
+    with click_spinner.spinner():
+        c = pip_install(package_line, editable=is_editable, allow_global=False, block=True)
 
     # counter = 0
     # with click.progressbar(length=10) as bar:
@@ -388,6 +407,9 @@ def add(package_line, editable=False, dev=False, dont_install=False):
 
     # print(req.__dict__)
 
+    click.echo(
+        crayons.green(emoji.emojize("\n:sparkles:  Adding package complete", use_aliases=True))
+    )
 
 
 def find_removable_dependencies(package_name):
@@ -399,12 +421,14 @@ def remove(package_line, dev=False):
     logger.debug(package_line)
     click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
 
-    removable_packages = project.find_removable_dependencies(req.name)
-    if removable_packages:
-        removable_packages.append(req.name)
-        c = pip_uninstall(removable_packages)
-    else:
-        c = pip_uninstall([req.name])
+    with click_spinner.spinner():
+        removable_packages = project.find_removable_dependencies(req.name)
+        if removable_packages:
+            removable_packages.append(req.name)
+            c = pip_uninstall(removable_packages)
+        else:
+            c = pip_uninstall([req.name])
+
     if not (c.return_code == 0):
         click.secho(c.err, fg="red")
         click.echo(
@@ -432,6 +456,10 @@ def remove(package_line, dev=False):
     # click.secho("Updating requirement files...")
     # remove_from_requirements_file(req, os.path.join(".", "requirements", "base.txt"))
     click.secho("Requirement files updated ✓", fg="green")
+
+    click.echo(
+        crayons.green(emoji.emojize("\n:sparkles:  Package removal complete", use_aliases=True))
+    )
 
 def install(dev=False, force_lockfile=False):
     # should run project setup
@@ -545,6 +573,10 @@ def install(dev=False, force_lockfile=False):
     #     click.echo(cmd.out + cmd.err)
     click.secho("Install completed ✓", fg="green")
 
+    click.echo(
+        crayons.green(emoji.emojize("\n:sparkles:  Install complete", use_aliases=True))
+    )
+
 def outdated(all_pkgs=False, verbose=False, output_format="table"):
     # format can be table, json
 
@@ -591,7 +623,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
             try:
                 logger.debug(dep)
                 if dep["vcs"] != None:
-                    current_version = next(filter(lambda x: (x["name"].lower() == dep["name"].lower()), local_version_list))["version"]# + " ({})".format(dep["vcs"])
+                    current_version = next(filter(lambda x: (x["name"].lower() == dep["name"].lower()), local_version_list))#["version"]# + " ({})".format(dep["vcs"])
                 else:
                     current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
 
@@ -629,7 +661,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                 if dep["vcs"] != None:
                     current_version = next(filter(lambda x: (x["name"].lower() == dep["name"].lower()), local_version_list))["version"]# + " ({})".format(dep["vcs"])
                 else:
-                    current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True)
+                    current_version = overrides.Version.coerce(dep["specs"][0][1], partial=True).original_version
 
                 # click.echo(err)
                 wanted_version = "//"
@@ -681,7 +713,8 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
 
     # versions = pip_versions("django")
     # click.echo(versions)
-    return
+
+
 
 def upgrade(package_line, upgrade_level="latest", noinput=False):
     # get current version
@@ -862,6 +895,10 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
 
     # print(req.__dict__)
 
+    click.echo(
+        crayons.green(emoji.emojize("\n:sparkles:  Upgrade complete", use_aliases=True))
+    )
+
 def upgrade_all(upgrade_level="latest", noinput=False):
 
     pkgs = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
@@ -871,10 +908,10 @@ def upgrade_all(upgrade_level="latest", noinput=False):
 def why(package_name):
     piper_file = project.piper_file
     if package_name.lower() in piper_file["dependencies"]:
-        click.echo("This module exists because it's specified in 'dependencies'")
+        click.echo( crayons.green(package_name) + " exists because it's specified in " + crayons.yellow("dependencies"))
         return
     if package_name.lower() in piper_file["devDependencies"]:
-        click.echo("This module exists because it's specified in 'devDependencies'")
+        click.echo( crayons.green(package_name) + " exists because it's specified in " + crayons.yellow("devDependencies"))
         return
     tree = get_dependency_tree()
 
@@ -884,14 +921,48 @@ def why(package_name):
         if found:
             parents.append(node["package"])
     for parent in parents:
-        click.echo('The module "{0}" depends on "{1}'.format(parent["package_name"], package_name))
+        click.echo('The module {0} depends on {1}'.format(crayons.green(parent["package_name"]), crayons.yellow(package_name)))
 
 def list(depth=None):
-    pass
+    tree = get_dependency_tree()
+    # click.echo(json.dumps(tree, indent=4))
+
+    piper_file = project.piper_file
+    base_keys = [_key for _key in piper_file["dependencies"]]
+    dev_keys = [_key for _key in piper_file["devDependencies"]]
+
+    click.echo(
+        "# " + crayons.green("base = green") + " | " + crayons.magenta("dev = magenta") + " | " + crayons.cyan("sub dependencies = cyan")
+    )
+
+    for node in tree:
+        name = node["package"]["package_name"]
+        if node["package"]["package_name"].lower() in IGNORED_PACKAGES:
+            continue
+        elif node["package"]["package_name"].lower() in base_keys:
+            name = crayons.green(node["package"]["package_name"])
+        elif node["package"]["package_name"].lower() in dev_keys:
+            name = crayons.magenta(node["package"]["package_name"])
+        else:
+            name = crayons.cyan(node["package"]["package_name"])
+
+        click.echo("├─ {0}=={1}".format(name, node["package"]["installed_version"]))
+        for dep in node["dependencies"]:
+            version_string = dep["required_version"] or ""
+            click.echo("│  └─ {0}{1}".format(dep["package_name"], version_string))
+
+    click.echo(
+        crayons.green(emoji.emojize("\n:sparkles:  Package list complete", use_aliases=True))
+    )
+
 
 def wipe():
     click.confirm("Are you sure you want to wipe?", abort=True)
     project.wipe()
+
+def info(package_name):
+    text = pip_show(package_name)
+    click.echo(text)
 
 def activate():
     pass
