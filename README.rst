@@ -98,6 +98,8 @@ e.g. :code:`piper init --py 3.6 --outside`
 
         ✨  Initialization complete
 
+---------------
+
 **Install development packages** :code:`piper add`
 
 e.g. :code:`piper add pytest --dev`
@@ -121,6 +123,8 @@ e.g. :code:`piper add pytest --dev`
 
         ✨  Adding package complete
 
+---------------
+
 **Install a package from github** :code:`piper add username/project@tag`
 
 e.g. :code:`piper add django/django@1.11.5`
@@ -139,6 +143,7 @@ e.g. :code:`piper add django/django@1.11.5`
 
         ✨  Adding package complete
 
+---------------
 
 **Removing a package** :code:`piper remove`
 
@@ -166,6 +171,8 @@ e.g. :code:`piper remove django`
 
         ✨  Package removal complete
 
+---------------
+
 **Find outdated packages** :code:`piper outdated`
 
 e.g. :code:`piper outdated --all`
@@ -183,6 +190,8 @@ e.g. :code:`piper outdated --all`
         pytest    3.2.2      3.2.2     3.2.2
         coverage  4.4.1      4.4.1     4.4.1
         Werkzeug  0.9.6      0.9.6     0.12.2
+
+---------------
 
 **List project's package structure** :code:`piper list`
 
