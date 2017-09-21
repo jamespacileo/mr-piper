@@ -70,7 +70,32 @@ Concise docs on usage and API going here
         why       Explain why a package exists
         wipe      Wipe virtualenv, requirements folder/files...
 
+Initialize project
 
+::
+
+        ❯ piper init
+        Initializing project
+        Creating virtualenv...
+        Virtualenv created ✓
+        Your virtualenv path: /home/james/example_app/.virtualenvs/project_virtualenv
+        Creating requirement files...
+        Requirement files created ✓
+        Creating piper file...
+        Project name [example_app]: quick_example_project
+        Author []: James Pacileo
+        Version [0.0.1]: 0.0.1a1
+        Description []: A quick example as demonstration
+        Repository []:
+        Licence []: MIT
+        Is it a public project? [y/N]: y
+        Piper file created ✓
+        Creating piper lock...
+        Piper lock created ✓
+
+✨  Initialization complete
+
+Concise docs on usage and API going here
 
 
 Current TODO
