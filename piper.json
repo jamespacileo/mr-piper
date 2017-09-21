@@ -1,7 +1,7 @@
 {
     "created": "2017-09-20T21:10:07",
-    "name": "mrpiper",
-    "version": "0.1.5",
+    "name": "mr-piper",
+    "version": "0.1.6",
     "description": "The simple project package manager",
     "source_dir": "mrpiper",
     "repository": "https://github.com/jamespacileo/mr-piper",
@@ -31,9 +31,8 @@
         "Programming Language :: Python :: Implementation :: PyPy"
     ],
     "data_files": [],
-    "package_data": {
-        "": ["*.template", "*.rst"]
-    },
+    "include_package_data": true,
+    "package_data": {},
     "exclude_packages": [],
     "dependencies": {
         "requests": "requests>=2.0.0",

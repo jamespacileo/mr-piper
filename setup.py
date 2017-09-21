@@ -42,7 +42,8 @@ setup(
 
     },
 
-    package_data=module_data.get("package_data"),
+    include_package_data=module_data.get("include_package_data", True),
+    # package_data=module_data.get("package_data", {}),
     # install_requires=[item.line for item in dependencies],
     # install_requires=[
     #     'pytest',
