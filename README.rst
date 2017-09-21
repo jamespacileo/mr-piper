@@ -71,6 +71,7 @@ Concise docs on usage and API going here
         wipe      Wipe virtualenv, requirements folder/files...
 
 Initialize project
+///////////////////
 
 .. code::
 
@@ -96,6 +97,7 @@ Initialize project
         ✨  Initialization complete
 
 Install development packages
+/////////////////////////////
 
 .. code::
 
@@ -124,6 +126,7 @@ Install development packages
         ✨  Adding package complete
 
 Install a package from github
+//////////////////////////////
 
 .. code::
 
