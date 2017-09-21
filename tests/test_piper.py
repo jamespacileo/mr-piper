@@ -65,7 +65,7 @@ def handleRemoveReadonly(func, path, exc):
       os.chmod(path, stat.S_IRWXU| stat.S_IRWXG| stat.S_IRWXO) # 0777
       func(path)
   else:
-      raise
+      pass
 
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
