@@ -291,7 +291,7 @@ class PythonProject(object):
     def create_piper_file(self, noinput=False, init_data={}):
         package_name = init_data.get("package_name", self.project_dir.name)
         author = init_data.get("author", "")
-        src = init_data.get("src", "src")
+        # src = init_data.get("src", "src")
         version = init_data.get("version", "0.0.1")
         description = init_data.get("description", "")
         repository = init_data.get("repository", "")
@@ -300,19 +300,20 @@ class PythonProject(object):
         if not noinput:
             package_name = click.prompt("Project name", default=package_name)
             author = click.prompt("Author", default=author)
-            src = click.prompt("Source directory", default=src)
+            # src = click.prompt("Source directory", default=src)
             version = click.prompt("Version", default=version)
             description = click.prompt("Description", default=description)
             repository = click.prompt("Repository", default=repository)
             licence = click.prompt("Licence", default=licence)
-            private = click.prompt("Is it a private project?", default=private, type=bool)
+            # private = click.prompt("Is it a private project?", default=private, type=bool)
+            private = not click.confirm("Is it a public project?")
 
         tpl = collections.OrderedDict([
             ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
             ("name", package_name),
             ("version", version),
             ("description", description),
-            ("source_dir", src),
+            # ("source_dir", src),
             ("repository", description),
             ("author", author),
             ("license", licence),

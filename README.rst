@@ -26,11 +26,52 @@ Piper makes it easy to make modules installable (and updatable) via a `piper.jso
 - Easily make installable modules, no more :code:`setup.py` fiddling
 - Piper increases usefulness of some basic pip commands (e.g. check out :code:`piper list`, :code:`piper outdated`)
 - A bunch of convenient utilities are included (e.g. :code:`piper why`)
+- Easy install from Github (e.g. :code:`piper add requests/requests`)
+
+Installation
+------------
+
+::
+
+    $ pip install mr-piper
 
 Usage
 ----------
 
 Concise docs on usage and API going here
+
+::
+
+        ❯ piper
+        Usage: piper [OPTIONS] COMMAND [ARGS]...
+
+        |  _____ _
+        | |  __ (_)
+        | | |__) | _ __   ___ _ __
+        | |  ___/ | '_ \ / _ \ '__|
+        | | |   | | |_) |  __/ |
+        | |_|   |_| .__/ \___|_|
+        |         | |
+        |         |_|
+        |
+
+        Options:
+        --help  Show this message and exit.
+
+        Commands:
+        add       Install and add a package to requirements
+        info      info all installed packages
+        init      Initialise project with virtual environment,...
+        install   Install all packages in requirement files.
+        list      List all installed packages
+        outdated  Deletes virtualenv, requirements folder/files...
+        remove    Remove a list of packages and their...
+        upgrade   Upgrade a list of packages.
+        why       Explain why a package exists
+        wipe      Wipe virtualenv, requirements folder/files...
+
+
+
 
 Current TODO
 -------------
