@@ -1003,7 +1003,18 @@ def version(noinput=False, set_version=None, set_git=False):
 
 
 def activate():
-    pass
+    activate_bin = which("activate")
+    if os.name == 'nt':
+        click.echo(activate_bin.replace(".exe", ".bat"))
+    else:
+        click.echo("source {}".format(shellquote(activate_bin)))
+
+# def run_bin(bin_name, args):
+#     path = which(bin_name)
+#     if not Path(path).exists():
+#         click.secho("Couldn't find {} in the virtualenv".format(bin_name))
+#         sys.exit(1)
+#     c = delegator.run("{0} {1}".format())
 
 if __name__ == "__main__":
     os.chdir("..")

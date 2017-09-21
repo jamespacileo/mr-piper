@@ -250,6 +250,16 @@ e.g. :code:`piper remove django`
 
 ---------------
 
+**Install all dependencies (uses lock by default)** :code:`piper install`
+
+e.g. :code:`piper install -dev`
+
+Install (or reinstall) dependencies specified in the requirements. It uses the locked dependencies by default to guarantee a working version.
+
+.. image:: https://transfer.sh/G8QRZ/Hyper_2017-09-21_19-37-38.png
+
+---------------
+
 **Find outdated packages** :code:`piper outdated`
 
 e.g. :code:`piper outdated --all`
@@ -301,6 +311,16 @@ Easily check and update the project's version, with the option ability to add a 
 
 ---------------
 
+**Why does a package exist** :code:`piper why`
+
+e.g. :code:`piper why idna`
+
+Check why a package is installed.
+
+.. image:: https://transfer.sh/CCLhh/Hyper_2017-09-21_19-44-55.png
+
+---------------
+
 Concise docs on usage and API going here
 
 
@@ -315,7 +335,6 @@ Current TODO
 Planned CLI APIs
 -----------------
 
-- :code:`piper version --new 0.1 --git` - Update your project's distribution version (and git tag)
 - :code:`piper shell` - Spawn a shell where the virtualenv is activated
 - :code:`piper build` - Build distributable package from project
 - :code:`piper publish --build` - Build and publish project on PyPI (or other index)

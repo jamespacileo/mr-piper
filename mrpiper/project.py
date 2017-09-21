@@ -57,8 +57,9 @@ class PythonProject(object):
         pass
 
     def setup(self, noinput=False, init_data={}, python=None, virtualenv_location="inside", installable=False):
-        click.secho("Creating virtualenv...", fg="yellow")
+
         if not self.has_virtualenv:
+            click.secho("Creating virtualenv...", fg="yellow")
             # self.virtualenv_location = virtualenv_location
             with click_spinner.spinner():
                 self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
@@ -67,22 +68,22 @@ class PythonProject(object):
         else:
             click.secho("Virtualenv already exists ✓", fg="green")
 
-        click.secho("Creating requirement files...", fg="yellow")
         if not self.has_requirements_structure:
+            click.secho("Creating requirement files...", fg="yellow")
             self.create_requirements_structure()
             click.secho("Requirement files created ✓", fg="green")
         else:
             click.secho("Requirement files already exists ✓", fg="green")
 
-        click.secho("Creating piper file...", fg="yellow")
         if not self.has_piper_file:
+            click.secho("Creating piper file...", fg="yellow")
             self.create_piper_file(noinput=noinput, init_data=init_data)
             click.secho("Piper file created ✓", fg="green")
         else:
             click.secho("Piper file already exists ✓", fg="green")
 
-        click.secho("Creating piper lock...", fg="yellow")
         if not self.has_piper_lock:
+            click.secho("Creating piper lock...", fg="yellow")
             self.create_piper_lock()
             click.secho("Piper lock created ✓", fg="green")
         else:

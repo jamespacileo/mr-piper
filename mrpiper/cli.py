@@ -149,6 +149,18 @@ def info(package_name):
     "info all installed packages"
     piper.info(package_name)
 
+@cli.command()
+@click_log.simple_verbosity_option(logger)
+def activate():
+    "Echo the virtualenv activation commandline"
+    piper.activate()
+
+
+# @cli.command()
+# @click.argument('timeit_args', nargs=-1, type=click.UNPROCESSED)
+# def python(args):
+#     piper.run_bin("python", args)
+
 if __name__ == '__main__':
     # os.chdir("..")
     # outdated()
