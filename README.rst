@@ -83,7 +83,7 @@ Initializing a project creates:
 - a Piper lock (where the reproducible working project configuration is stored)
 - a working setup.py
 
-.. image:: https://transfer.sh/zavDl/Hyper_2017-09-21_15-59-20.png
+.. image:: https://transfer.sh/34gGu/Hyper_2017-09-21_16-50-13.png
 
 ..
         $ piper init
