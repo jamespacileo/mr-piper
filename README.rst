@@ -1,7 +1,7 @@
 Mr Piper (alpha) - Simple project package management
 =====================================================
 
-.. image:: https://img.shields.io/badge/Windows-supported!-brightgreen.svg  .. image:: https://img.shields.io/badge/Linux-supported!-brightgreen.svg  .. image:: https://img.shields.io/badge/MacOS-supported!-brightgreen.svg
+|windows| |linux| |macos|
 
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
@@ -34,6 +34,11 @@ ROADMAP (PyconUK 2017 sprint):
 -  ⬜ Docs
 -  ⬜ Store and use hashes in lock file
 -  ⬜ Optional Pipfile support
+
+
+.. |windows|:: https://img.shields.io/badge/Windows-supported!-brightgreen.svg
+.. |linux|:: https://img.shields.io/badge/Linux-supported!-brightgreen.svg
+.. |macos|:: https://img.shields.io/badge/MacOS-supported!-brightgreen.svg
 
 
 .. |image0| image:: https://img.shields.io/pypi/v/mrpiper.svg
