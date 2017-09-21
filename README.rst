@@ -1,11 +1,11 @@
 Mr Piper (alpha) - Simple project package management
 =====================================================
 
-.. image:: https://img.shields.io/badge/Windows-supported!-brightgreen.svg
+.. image:: https://img.shields.io/badge/Windows-supported!-brightgreen.svg  .. image:: https://img.shields.io/badge/Linux-supported!-brightgreen.svg  .. image:: https://img.shields.io/badge/MacOS-supported!-brightgreen.svg
 
-.. image:: https://img.shields.io/badge/Linux-supported!-brightgreen.svg
+|image0| |image1| |image2| |image3| |image4| |Travis|
 
-.. image:: https://img.shields.io/badge/MacOS-supported!-brightgreen.svg
+---------------
 
 Heavily inspired by Yarn, Piper offers a dead simple way to manage a project's dependencies (and more).
 
@@ -14,7 +14,6 @@ Piper uses pip and virtualenv under the hood, and (just like NPM and Yarn) alway
 Piper makes it easy to make modules installable (and updatable) via a `piper.json` JSON file, instead of `setup.py`.
 
 
-|image0| |image1| |image2| |image3| |image4| |Travis|
 
 .. image:: https://i.imgur.com/QfiOH6z.gif
 
