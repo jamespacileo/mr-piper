@@ -73,6 +73,8 @@ Concise docs on usage and API going here
 Initialize project
 ///////////////////
 
+.. image:: https://transfer.sh/u6Iyg/2017-09-21_15-50-57.png
+
 .. code::
 
         $ piper init
