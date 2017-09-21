@@ -75,8 +75,7 @@ Initialize project
 
 .. image:: https://transfer.sh/u6Iyg/2017-09-21_15-50-57.png
 
-.. code::
-
+..
         $ piper init
         Initializing project
         Creating virtualenv...
@@ -101,8 +100,9 @@ Initialize project
 Install development packages
 /////////////////////////////
 
-.. code::
+.. image:: https://transfer.sh/15Hnv0/Hyper_2017-09-21_16-01-00.png
 
+..
         $ piper add pytest coverage --dev
         Installing pytest...
         ...
@@ -121,8 +121,9 @@ Install development packages
 Install a package from github
 //////////////////////////////
 
-.. code::
+.. image:: https://transfer.sh/MRrvR/2017-09-21_15-59-56.png
 
+..
         $ piper add requests/requests
         Installing requests/requests...
         requests/requests resolved as git+https://github.com/requests/requests.git#egg=requests
@@ -137,8 +138,9 @@ Install a package from github
 Removing a package
 //////////////////////////////
 
-.. code::
+.. image:: https://transfer.sh/1OGtW/Hyper_2017-09-21_16-03-26.png
 
+..
         $ piper remove requests
         Removing package requests...
         Uninstalling certifi-2017.7.27.1:
@@ -160,8 +162,9 @@ Removing a package
 Find outdated packages
 //////////////////////////////
 
-.. code::
+.. image:: https://transfer.sh/cayvC/Hyper_2017-09-21_16-05-29.png
 
+..
         $ piper outdated --all
         Fetching outdated packages...
         Name      Current    Wanted    Latest
@@ -175,8 +178,9 @@ Find outdated packages
 List project's package structure
 /////////////////////////////////
 
-.. code::
+.. image:: https://transfer.sh/U0frS/Hyper_2017-09-21_16-08-48.png
 
+..
         $ piper list
         # base = green | dev = magenta | sub dependencies = cyan
         ├─ pytest==3.2.2
