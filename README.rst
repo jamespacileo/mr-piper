@@ -226,6 +226,7 @@ Easy install of python modules stored on Github.
 
 e.g. :code:`piper remove django`
 
+Remove a package and all safely deletable sub-dependencies, for a sparkly clean environment.
 
 .. image:: https://transfer.sh/MpUXN/Hyper_2017-09-21_16-53-00.png
 
