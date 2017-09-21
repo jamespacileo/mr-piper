@@ -237,7 +237,7 @@ Current TODO
 Planned CLI APIs
 -----------------
 
-- :code:`piper tag` - Update your project's distribution tag
+- :code:`piper version --new 0.1 --git` - Update your project's distribution version (and git tag)
 - :code:`piper shell` - Spawn a shell where the virtualenv is activated
 - :code:`piper build` - Build distributable package from project
 - :code:`piper publish --build` - Build and publish project on PyPI (or other index)
