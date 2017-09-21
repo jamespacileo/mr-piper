@@ -70,8 +70,9 @@ Concise docs on usage and API going here
         why       Explain why a package exists
         wipe      Wipe virtualenv, requirements folder/files...
 
-Initialize project
-///////////////////
+**Initialize project** :code:`piper init`
+
+e.g. :code:`piper init --py 3.6 --outside`
 
 .. image:: https://transfer.sh/zavDl/Hyper_2017-09-21_15-59-20.png
 
@@ -97,8 +98,10 @@ Initialize project
 
         ✨  Initialization complete
 
-Install development packages
-/////////////////////////////
+**Install development packages** :code:`piper add`
+
+e.g. :code:`piper add pytest --dev`
+
 
 .. image:: https://transfer.sh/15Hnv0/Hyper_2017-09-21_16-01-00.png
 
@@ -118,8 +121,10 @@ Install development packages
 
         ✨  Adding package complete
 
-Install a package from github
-//////////////////////////////
+**Install a package from github** :code:`piper add username/project@tag`
+
+e.g. :code:`piper add django/django@1.11.5`
+
 
 .. image:: https://transfer.sh/MRrvR/2017-09-21_15-59-56.png
 
@@ -135,8 +140,10 @@ Install a package from github
         ✨  Adding package complete
 
 
-Removing a package
-//////////////////////////////
+**Removing a package** :code:`piper remove`
+
+e.g. :code:`piper remove django`
+
 
 .. image:: https://transfer.sh/1OGtW/Hyper_2017-09-21_16-03-26.png
 
@@ -159,8 +166,10 @@ Removing a package
 
         ✨  Package removal complete
 
-Find outdated packages
-//////////////////////////////
+**Find outdated packages** :code:`piper outdated`
+
+e.g. :code:`piper outdated --all`
+
 
 .. image:: https://transfer.sh/cayvC/Hyper_2017-09-21_16-05-29.png
 
@@ -175,8 +184,10 @@ Find outdated packages
         coverage  4.4.1      4.4.1     4.4.1
         Werkzeug  0.9.6      0.9.6     0.12.2
 
-List project's package structure
-/////////////////////////////////
+**List project's package structure** :code:`piper list`
+
+e.g. :code:`piper list`
+
 
 .. image:: https://transfer.sh/U0frS/Hyper_2017-09-21_16-08-48.png
 
