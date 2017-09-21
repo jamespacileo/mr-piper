@@ -57,6 +57,8 @@ except:
     pass
 
 
+import errno
+import stat
 def handleRemoveReadonly(func, path, exc):
   excvalue = exc[1]
   if func in (os.rmdir, os.remove) and excvalue.errno == errno.EACCES:
@@ -180,9 +182,9 @@ def test_install():
     piper.add("pytest", dev=True)
     piper.add("six")
     piper.add("coverage", dev=True)
-    piper.project.virtualenv_dir.rmtree_p(onerror=handleRemoveReadonly)
-    piper.project.piper_lock_dir.remove_p(onerror=handleRemoveReadonly)
-    piper.project.piper_file_dir.remove_p(onerror=handleRemoveReadonly)
+    piper.project.virtualenv_dir.rmptree(ignore_errors=False, onerror=handleRemoveReadonly)
+    piper.project.piper_lock_dir.remove_p()
+    piper.project.piper_file_dir.remove_p()
     piper.install(dev=True)
     frozen_deps = [item.name for item in piper.pip_freeze()]
     assert "requests" in frozen_deps
