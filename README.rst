@@ -11,7 +11,7 @@ Heavily inspired by `yarn <https://yarnpkg.com/en/docs/cli/>`_, Piper offers a d
 
 Piper uses pip and virtualenv under the hood, and (just like NPM and Yarn) always installs packages in a project isolated environment.
 
-Piper makes it easy to make modules installable (and updatable) via a `piper.json` JSON file, instead of `setup.py`.
+Piper makes it easy to make modules installable (and updatable) via a `piper.json` JSON file, instead of fiddling with `setup.py`.
 
 
 
@@ -27,6 +27,7 @@ Piper makes it easy to make modules installable (and updatable) via a `piper.jso
 - Piper increases usefulness of some basic pip commands (e.g. check out :code:`piper list`, :code:`piper outdated`)
 - A bunch of convenient utilities are included (e.g. :code:`piper why`)
 - Easy install from Github (e.g. :code:`piper add requests/requests`)
+- Effortlessly keep your project version and git tags updated
 
 Installation
 ------------
