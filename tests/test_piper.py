@@ -182,7 +182,7 @@ def test_install():
     piper.add("pytest", dev=True)
     piper.add("six")
     piper.add("coverage", dev=True)
-    piper.project.virtualenv_dir.rmptree(ignore_errors=False, onerror=handleRemoveReadonly)
+    piper.project.virtualenv_dir.rmtree(ignore_errors=False, onerror=handleRemoveReadonly)
     piper.project.piper_lock_dir.remove_p()
     piper.project.piper_file_dir.remove_p()
     piper.install(dev=True)
