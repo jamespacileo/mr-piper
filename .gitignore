@@ -1,23 +1,17 @@
 *.pyc
 .ipynb_checkpoints
-.temp_env
-temp_env
-python_env
-.nest.lock
-nest.lock
 .cache
 
-# temporary
-.virtualenvs
+# # temporary
+.virtualenvs**
 src
-.piper
 mrpiper.egg-info
 mr_piper.egg-info
-build**
-.vscode**
-dist**
-temp**
-node_modules
+build
+.vscode
+dist
+temp
+node_modules**
 package.json
 yarn.lock
 
