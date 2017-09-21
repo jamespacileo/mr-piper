@@ -237,13 +237,13 @@ Current TODO
 Planned CLI APIs
 -----------------
 
-- `piper tag` - Update your project's distribution tag
-- `piper shell` - Spawn a shell where the virtualenv is activated
-- `piper build` - Build distributable package from project
-- `piper publish --build` - Build and publish project on PyPI (or other index)
-- `piper run command` - Run custom command (inspired by npm/yarn commands)
-- `piper licenses` - List all dependency licences
-- `piper config` - To store user global settings for Piper's behavior
+- :code:`piper tag` - Update your project's distribution tag
+- :code:`piper shell` - Spawn a shell where the virtualenv is activated
+- :code:`piper build` - Build distributable package from project
+- :code:`piper publish --build` - Build and publish project on PyPI (or other index)
+- :code:`piper run command` - Run custom command (inspired by npm/yarn commands)
+- :code:`piper licenses` - List all dependency licences
+- :code:`piper config` - To store user global settings for Piper's behavior
 
 ROADMAP (PyconUK 2017 sprint):
 ------------
