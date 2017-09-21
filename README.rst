@@ -371,14 +371,14 @@ This list is undergoing changes.
 .. |macos| image:: https://img.shields.io/badge/MacOS-supported-brightgreen.svg
 
 
-.. |image0| image:: https://img.shields.io/pypi/v/mrpiper.svg
-   :target: https://pypi.python.org/pypi/mrpiper
-.. |image1| image:: https://img.shields.io/pypi/l/mrpiper.svg
-   :target: https://pypi.python.org/pypi/mrpiper
-.. |image2| image:: https://img.shields.io/pypi/wheel/mrpiper.svg
-   :target: https://pypi.python.org/pypi/mrpiper
-.. |image3| image:: https://img.shields.io/pypi/pyversions/mrpiper.svg
-   :target: https://pypi.python.org/pypi/mrpiper
+.. |image0| image:: https://img.shields.io/pypi/v/mr-piper.svg
+   :target: https://pypi.python.org/pypi/mr-piper
+.. |image1| image:: https://img.shields.io/pypi/l/mr-piper.svg
+   :target: https://pypi.python.org/pypi/mr-piper
+.. |image2| image:: https://img.shields.io/pypi/wheel/mr-piper.svg
+   :target: https://pypi.python.org/pypi/mr-piper
+.. |image3| image:: https://img.shields.io/pypi/pyversions/mr-piper.svg
+   :target: https://pypi.python.org/pypi/mr-piper
 .. |image4| image:: https://img.shields.io/appveyor/ci/jamespacileo/mr-piper.svg
    :target: https://ci.appveyor.com/project/jamespacileo/mr-piper/branch/master
 .. |Travis| image:: https://img.shields.io/travis/rust-lang/rust.svg

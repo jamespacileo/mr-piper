@@ -56,6 +56,15 @@ try:
 except:
     pass
 
+
+def handleRemoveReadonly(func, path, exc):
+  excvalue = exc[1]
+  if func in (os.rmdir, os.remove) and excvalue.errno == errno.EACCES:
+      os.chmod(path, stat.S_IRWXU| stat.S_IRWXG| stat.S_IRWXO) # 0777
+      func(path)
+  else:
+      raise
+
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
 
@@ -171,9 +180,9 @@ def test_install():
     piper.add("pytest", dev=True)
     piper.add("six")
     piper.add("coverage", dev=True)
-    piper.project.virtualenv_dir.rmtree_p()
-    piper.project.piper_lock_dir.remove_p()
-    piper.project.piper_file_dir.remove_p()
+    piper.project.virtualenv_dir.rmtree_p(onerror=handleRemoveReadonly)
+    piper.project.piper_lock_dir.remove_p(onerror=handleRemoveReadonly)
+    piper.project.piper_file_dir.remove_p(onerror=handleRemoveReadonly)
     piper.install(dev=True)
     frozen_deps = [item.name for item in piper.pip_freeze()]
     assert "requests" in frozen_deps
