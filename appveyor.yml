@@ -48,4 +48,4 @@ install:
   - "pip install -r requirements/dev-locked.txt"
 
 test_script:
-  - "pytest tests/test_piper.py"
+  - "pytest --verbose tests"

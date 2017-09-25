@@ -1,10 +1,10 @@
 language: python
 os:
   - "linux"
-  - "osx"
+#   - "osx"
 matrix:
   allow_failures:
-    - os: osx
+    # - os: osx
     - python: pypy
     - python: 3.7-dev
 python:
