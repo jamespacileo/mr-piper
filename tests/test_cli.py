@@ -37,7 +37,7 @@ try:
 except:
     pass
 
-project_dir.chdir()
+
 # TEMP_LOCATION = (Path("temp") / "cli_testing_project")
 # Path("temp").mkdir_p()
 # TEMP_LOCATION.rmtree_p()
@@ -54,16 +54,18 @@ except:
     pass
 
 def test_init():
+    project_dir.chdir()
     print("Testing init...")
-    c = delegator.run("piper init --yes")
+    print(project_dir)
+    c = delegator.run("piper init --yes", block=True)
     print(c.out + c.err)
     assert c.return_code == 0
     # print((PROJECT_DIR / "piper.lock").abspath())
     print(project_dir.files())
     print(project_dir.dirs())
+    assert (project_dir / ".virtualenvs").exists()
     assert (project_dir / "piper.lock").isfile()
     assert (project_dir / "piper.json").isfile()
-    assert (project_dir / ".virtualenvs").exists()
     assert (project_dir / "requirements").exists()
     # result = runner.invoke(cli.init, [])
     # print(result.output)
@@ -135,6 +137,8 @@ def test_why():
 def test_install():
     print("Testing install...")
     delegator.run("piper install").return_code == 0
+
+# assert 'dev_dpendencies' in "pytest exists because it's specified in dev_dependencies\n"
 
 if __name__=="__main__":
     test_init()

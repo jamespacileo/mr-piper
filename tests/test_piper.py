@@ -33,7 +33,7 @@ else:
 # TESTS_LOCATION = os.getcwd()
 # TEMP_LOCATION = "C:\\Users\\james\\AppData\\Local\\Temp\\tmp6q_l1n1g"
 
-project_dir.chdir()
+
 print(os.getcwd())
 req_folder = (project_dir / "requirements")
 
@@ -77,6 +77,10 @@ def create_test_project():
 #         assert c.return_code == 0
 
 def test_init():
+    project_dir.chdir()
+    piper.project._project_dir = None
+    piper.project.detect_virtualenv_location()
+
     print(os.getcwd())
     print(piper.project.project_dir)
     piper.init(noinput=True, private=True)

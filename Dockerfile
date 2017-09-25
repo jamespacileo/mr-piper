@@ -9,12 +9,14 @@ RUN apt-get -y install libncurses5 libncurses5-dev libncursesw5
 
 
 RUN pyenv install 2.7.14
-RUN pyenv install 3.6.2
+# RUN pyenv install 3.6.2
 RUN pyenv install 3.7-dev
 # RUN pyenv install pypy-dev
 # RUN pyenv install pypy3-dev
 
-RUN pyenv global 2.7.14 3.6.2 3.7-dev
+RUN pyenv global 2.7.14 3.6.1 3.7-dev
+RUN pyenv local 3.6.1
+RUN pip install pytest
 # pypy-dev pypy3-dev
 
 # RUN pip install -U piper
@@ -24,7 +26,6 @@ RUN pyenv global 2.7.14 3.6.2 3.7-dev
 COPY ./requirements ./requirements
 COPY ./wheelhouse ./wheelhouse
 # RUN pip install -r requirements/dev-locked.txt
-RUN pyenv local 3.6.2
 RUN pip install --no-index --find-links=./wheelhouse -r requirements/dev-locked.txt
 
 COPY . .
