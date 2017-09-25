@@ -17,3 +17,8 @@ yarn.lock
 
 Pipfile
 Pipfile.lock
+
+
+wheelhouse
+.python-version
+*.egg-info

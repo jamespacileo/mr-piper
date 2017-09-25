@@ -274,7 +274,8 @@ class PythonProject(object):
         self._virtualenv_location = virtualenv_location
         # click.echo(command)
         c = delegator.run(command)
-        click.echo(c.out)
+        # click.echo(c.err)
+        # click.echo(c.out)
         return c.return_code == 0
 
     @property
