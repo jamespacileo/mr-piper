@@ -43,6 +43,7 @@ from .utils import add_to_requirements_file, compile_requirements, add_to_requir
     shellquote, python_version, IGNORED_PACKAGES, resolve_git_shortcut
 from . import overrides
 from .project import PythonProject
+from . import pyenv_utils
 
 project = PythonProject()
 
@@ -272,6 +273,9 @@ def init(noinput=False, private=False, python=None, virtualenv_location="inside"
             sys.exit(1)
         else:
             python = found_python
+            click.echo(
+                "found python version" + python
+            )
 
     if noinput:
         init_data = {

@@ -27,7 +27,7 @@ import simplejson as json
 import delegator
 
 from . import utils
-
+from . import pyenv_utils
 
 CORE_PACKAGES = ["pip", "setuptools", "piper"]
 
@@ -61,6 +61,7 @@ class PythonProject(object):
         if not self.has_virtualenv:
             click.secho("Creating virtualenv...", fg="yellow")
             # self.virtualenv_location = virtualenv_location
+            # click.echo([python, virtualenv_location])
             with click_spinner.spinner():
                 self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
             click.secho("Virtualenv created ✓", fg="green")
@@ -249,18 +250,31 @@ class PythonProject(object):
 
     def create_virtualenv(self, python=None, virtualenv_location="inside"):
         virtualenv_dir = self.virtualenv_inside_dir if (virtualenv_location == "inside") else self.virtualenv_outside_dir
+        # click.echo("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
         if python:
+
+            if pyenv_utils.is_python_pyenv(python):
+                versions = pyenv_utils.get_pyenv_version(python)
+                click.echo("versions {}".format(versions))
+                if versions:
+                    pyenv_utils.set_local(versions[-1])
+
+
+            click.echo("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
             command = "virtualenv {0} --python={1}".format(
                 utils.shellquote(virtualenv_dir.abspath()),
                 utils.shellquote(python)
                 )
+
         else:
+
             command = "virtualenv {0}".format(
                 utils.shellquote(virtualenv_dir.abspath()),
             )
         self._virtualenv_location = virtualenv_location
         # click.echo(command)
         c = delegator.run(command)
+        click.echo(c.out)
         return c.return_code == 0
 
     @property
@@ -305,9 +319,13 @@ class PythonProject(object):
             version = click.prompt("Version", default=version)
             description = click.prompt("Description", default=description)
             repository = click.prompt("Repository", default=repository)
-            licence = click.prompt("Licence", default=licence)
             # private = click.prompt("Is it a private project?", default=private, type=bool)
             private = not click.confirm("Is it a public project?")
+
+            if not private:
+                licence = click.prompt("Licence", default=licence)
+            else:
+                licence = None
 
         tpl = collections.OrderedDict([
             ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
