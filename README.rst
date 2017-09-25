@@ -32,7 +32,7 @@ Piper makes it easy to make modules installable (and updatable) via a `piper.jso
 
 ------------
 
-A star makes the authors happy 😊 .. image:: https://transfer.sh/CsffY/2017-09-25_16-51-28.gif
+A star makes the authors happy 😊 |star-gif|
 
 Installation
 ------------
@@ -388,3 +388,6 @@ This list is undergoing changes.
    :target: https://ci.appveyor.com/project/jamespacileo/mr-piper/branch/master
 .. |Travis| image:: https://img.shields.io/travis/rust-lang/rust.svg
    :target: https://travis-ci.org/jamespacileo/mr-piper
+
+.. |star-gif| image:: https://transfer.sh/CsffY/2017-09-25_16-51-28.gif
+   :target: https://github.com/jamespacileo/mr-piper
