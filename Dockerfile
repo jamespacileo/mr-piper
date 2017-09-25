@@ -1,14 +1,34 @@
-FROM python:2.7
+FROM randomknowledge/docker-pyenv-tox
 
 WORKDIR /src/app
+
+RUN curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+RUN pyenv update
+
+RUN apt-get -y install libncurses5 libncurses5-dev libncursesw5
+
+
+RUN pyenv install 2.7.14
+RUN pyenv install 3.6.2
+RUN pyenv install 3.7-dev
+# RUN pyenv install pypy-dev
+# RUN pyenv install pypy3-dev
+
+RUN pyenv global 2.7.14 3.6.2 3.7-dev
+# pypy-dev pypy3-dev
 
 # RUN pip install -U piper
 # COPY piper.json piper.json
 # COPY piper.lock piper.lock
 # RUN piper install
 COPY ./requirements ./requirements
-RUN pip install -r requirements/dev-locked.txt
+COPY ./wheelhouse ./wheelhouse
+# RUN pip install -r requirements/dev-locked.txt
+RUN pyenv local 3.6.2
+RUN pip install --no-index --find-links=./wheelhouse -r requirements/dev-locked.txt
 
 COPY . .
 RUN pip install -e .
-RUN python tests/test_piper.py
+# RUN python tests/test_piper.py
+
+# CMD python tests

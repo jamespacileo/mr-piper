@@ -23,7 +23,7 @@ install:
 
 # command to run the dependencies
 script:
-  - "pytest tests/test_piper.py"
+  - "pytest tests"
 #   - "coverage run --source ./mrpiper tests/test_piper.py"
 #   - "coveralls"
 
