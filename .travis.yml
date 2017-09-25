@@ -19,7 +19,9 @@ python:
 # command to install dependencies
 install:
 #   - "pip install -r ./requirements.txt"
-  - "pip install -r ./requirements/dev-locked.txt"
+  - "pip install mr-piper"
+  - "piper install"
+  - "pip install -e ."
 
 # command to run the dependencies
 script:
