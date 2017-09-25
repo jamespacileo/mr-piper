@@ -258,7 +258,7 @@ Remove a package and all safely deletable sub-dependencies, for a sparkly clean 
 
 **Install all dependencies (uses lock by default)** :code:`piper install`
 
-e.g. :code:`piper install -dev`
+e.g. :code:`piper install --dev`
 
 Install (or reinstall) dependencies specified in the requirements. It uses the locked dependencies by default to guarantee a working version.
 
