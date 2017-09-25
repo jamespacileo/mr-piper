@@ -5,7 +5,6 @@ Mr Piper 🎻🐍 - Super simple project package manager
 
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
-.. image:: https://transfer.sh/CsffY/2017-09-25_16-51-28.gif
 
 ---------------
 
@@ -30,6 +29,10 @@ Piper makes it easy to make modules installable (and updatable) via a `piper.jso
 - A bunch of convenient utilities are included (e.g. :code:`piper why`)
 - Easy install from Github (e.g. :code:`piper add requests/requests`)
 - Effortlessly keep your project version and git tags updated
+
+------------
+
+A star makes the authors happy 😊 .. image:: https://transfer.sh/CsffY/2017-09-25_16-51-28.gif
 
 Installation
 ------------
