@@ -5,6 +5,8 @@ Mr Piper 🎻🐍 - Super simple project package manager
 
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
+.. image:: https://transfer.sh/CsffY/2017-09-25_16-51-28.gif
+
 ---------------
 
 Heavily inspired by `yarn <https://yarnpkg.com/en/docs/cli/>`_, Piper offers a dead simple way to manage a project's dependencies (and more).
