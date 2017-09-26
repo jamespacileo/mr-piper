@@ -32,7 +32,11 @@ Piper makes it easy to make modules installable (and updatable) via a `piper.jso
 
 ------------
 
-A star makes the authors happy 😊 |star-gif|
+A star makes the developers happy 😊
+
+|star-gif|
+
+------------
 
 Installation
 ------------

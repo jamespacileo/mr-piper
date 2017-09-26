@@ -61,10 +61,12 @@ def remove(noinput, package_names):
 
 @cli.command()
 @click.option("--dev", is_flag=True, help="If to install dev packages")
+@click.option("--cache", "cache_url", default=None, help="Cache url to grab packages from")
+@click.option("--hashes", "require_hashes", is_flag=True, help="Should install check the hashes")
 @click_log.simple_verbosity_option(logger)
-def install(dev):
+def install(dev, cache_url, require_hashes):
     "Install all packages in requirement files."
-    piper.install(dev=dev)
+    piper.install(dev=dev, cache_url=cache_url, require_hashes=require_hashes)
 
 @cli.command()
 @click.option("--import", "-r", "file_to_import", help="Import from existing requirements file")
@@ -79,7 +81,6 @@ def install(dev):
 @click_log.simple_verbosity_option(logger)
 def init(file_to_import, virtualenv_location, noinput, private, python, is_global, installable):
     "Initialise project with virtual environment, requirements structure and package lock."
-    click.echo("Initializing project")
     piper.init(noinput=noinput, python=python, virtualenv_location=virtualenv_location, installable=installable)
 
 @cli.command()
@@ -132,7 +133,7 @@ def why(package_name):
 @click_log.simple_verbosity_option(logger)
 def list():
     "List all installed packages"
-    piper.list()
+    piper.dependency_list()
 
 
 @cli.command()
@@ -155,6 +156,25 @@ def activate():
     "Echo the virtualenv activation commandline"
     piper.activate()
 
+@cli.command()
+@click.option("--output", "-o", "output_dir", default="./piper_cache")
+@click.option("--dev", "dev", is_flag=True)
+@click_log.simple_verbosity_option(logger)
+def cache(output_dir, dev=False):
+    "Cache your installed packages"
+    piper.cache(output_dir, dev)
+
+@cli.command()
+@click_log.simple_verbosity_option(logger)
+def fix():
+    "Fix"
+    piper.fix()
+
+@cli.command()
+@click_log.simple_verbosity_option(logger)
+def hash():
+    "Gather dependency hashes"
+    piper.hash()
 
 # @cli.command()
 # @click.argument('timeit_args', nargs=-1, type=click.UNPROCESSED)

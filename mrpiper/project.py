@@ -27,7 +27,7 @@ import simplejson as json
 import delegator
 
 from . import utils
-
+from . import pyenv_utils
 
 CORE_PACKAGES = ["pip", "setuptools", "piper"]
 
@@ -58,9 +58,11 @@ class PythonProject(object):
 
     def setup(self, noinput=False, init_data={}, python=None, virtualenv_location="inside", installable=False):
 
+        click.secho("[1/5] 🎻  Checking virtualenv...", fg="yellow")
         if not self.has_virtualenv:
-            click.secho("Creating virtualenv...", fg="yellow")
             # self.virtualenv_location = virtualenv_location
+            # click.echo([python, virtualenv_location])
+            click.secho("Creating virtualenv...") #, fg="yellow")
             with click_spinner.spinner():
                 self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
             click.secho("Virtualenv created ✓", fg="green")
@@ -68,27 +70,31 @@ class PythonProject(object):
         else:
             click.secho("Virtualenv already exists ✓", fg="green")
 
+        click.secho("[2/5] 🎻  Checking project file...", fg="yellow")
+        if not self.has_piper_file:
+            click.secho("Creating project file...") #, fg="yellow")
+            self.create_piper_file(noinput=noinput, init_data=init_data)
+            click.secho("Project file created ✓", fg="green")
+        else:
+            click.secho("Project file already exists ✓", fg="green")
+
+        click.secho("[3/5] 🎻  Checking lock file...", fg="yellow")
+        if not self.has_piper_lock:
+            click.secho("Creating lock file...") #, fg="yellow")
+            self.create_piper_lock()
+            click.secho("Lock file created ✓", fg="green")
+        else:
+            click.secho("Lock file already exists ✓", fg="green")
+
+        click.secho("[4/5] 🎻  Cheching requirement files...", fg="yellow")
         if not self.has_requirements_structure:
-            click.secho("Creating requirement files...", fg="yellow")
+            click.secho("Creating requirement files...") #, fg="yellow")
             self.create_requirements_structure()
             click.secho("Requirement files created ✓", fg="green")
         else:
             click.secho("Requirement files already exists ✓", fg="green")
 
-        if not self.has_piper_file:
-            click.secho("Creating piper file...", fg="yellow")
-            self.create_piper_file(noinput=noinput, init_data=init_data)
-            click.secho("Piper file created ✓", fg="green")
-        else:
-            click.secho("Piper file already exists ✓", fg="green")
-
-        if not self.has_piper_lock:
-            click.secho("Creating piper lock...", fg="yellow")
-            self.create_piper_lock()
-            click.secho("Piper lock created ✓", fg="green")
-        else:
-            click.secho("Piper lock already exists ✓", fg="green")
-
+        click.secho("[5/5] 🎻  Checking install-ability...", fg="yellow")
         if not self.has_setup_py:
             if (not installable) and (not noinput):
                 wants_setup_py = click.confirm("Do you want to make the project installable (adding setup.py)?")
@@ -99,6 +105,9 @@ class PythonProject(object):
                 click.secho("setup.py created ✓", fg="green")
             else:
                 click.secho("setup.py creation skipped", fg="yellow")
+        else:
+                click.secho("setup.py already exists ✓", fg="green")
+
 
         logger.debug([
             self.virtualenv_dir,
@@ -249,18 +258,33 @@ class PythonProject(object):
 
     def create_virtualenv(self, python=None, virtualenv_location="inside"):
         virtualenv_dir = self.virtualenv_inside_dir if (virtualenv_location == "inside") else self.virtualenv_outside_dir
+        logger.debug("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
         if python:
+
+            if pyenv_utils.is_python_pyenv(python):
+                versions = pyenv_utils.get_pyenv_version(python)
+                logger.debug("versions {}".format(versions))
+                if versions:
+                    pyenv_utils.set_local(versions[-1])
+
+
+            logger.debug("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
             command = "virtualenv {0} --python={1}".format(
                 utils.shellquote(virtualenv_dir.abspath()),
                 utils.shellquote(python)
                 )
+
         else:
+
             command = "virtualenv {0}".format(
                 utils.shellquote(virtualenv_dir.abspath()),
             )
         self._virtualenv_location = virtualenv_location
         # click.echo(command)
         c = delegator.run(command)
+        click.echo(c.err)
+        click.echo(c.out)
+        # click.echo(c.return_code)
         return c.return_code == 0
 
     @property
@@ -305,9 +329,13 @@ class PythonProject(object):
             version = click.prompt("Version", default=version)
             description = click.prompt("Description", default=description)
             repository = click.prompt("Repository", default=repository)
-            licence = click.prompt("Licence", default=licence)
             # private = click.prompt("Is it a private project?", default=private, type=bool)
             private = not click.confirm("Is it a public project?")
+
+            if not private:
+                licence = click.prompt("Licence", default="MIT")
+            else:
+                licence = None
 
         tpl = collections.OrderedDict([
             ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
@@ -405,14 +433,21 @@ class PythonProject(object):
         dev_main = []
         dev_locked = []
 
+        list_of_dependables =  [_i.lower() for _i in itertools.chain.from_iterable(
+            map(lambda x: x[1]["depends_on"], dependencies.items())
+            )]
+        list_of_dev_dependables =  [_i.lower() for _i in itertools.chain.from_iterable(
+            map(lambda x: x[1]["depends_on"], dev_dependencies.items())
+            )]
+
         # iterate frozen and detect if needs to be in base.txt or dev.txt
         for key, item in frozen.items():
             if key.lower() in dependencies: #.keys():
                 base_main.append(item)
                 base_locked.append(item)
                 continue
-            list_of_dependables = map(lambda x: x[1]["depends_on"], dependencies.items())
-            if key.lower() in itertools.chain.from_iterable(list_of_dependables):
+
+            if key.lower() in list_of_dependables:
                 base_locked.append(item)
                 continue
 
@@ -420,25 +455,59 @@ class PythonProject(object):
                 dev_main.append(item)
                 dev_locked.append(item)
                 continue
-            list_of_dev_dependables = map(lambda x: x[1]["depends_on"], dev_dependencies.items())
-            if key.lower() in itertools.chain.from_iterable(list_of_dev_dependables):
+
+            if key.lower() in list_of_dev_dependables:
                 dev_locked.append(item)
                 continue
 
-        logger.debug([base_main, base_locked, dev_main, dev_locked])
+        # logger.debug([base_main, base_locked, dev_main, dev_locked])
+
+        # logger.debug(json.dumps(dev_locked, indent=4))
+
+        def convert_to_line(_item):
+            lines = []
+            line = _item["line"]
+            if _item.get("hashes"):
+                hashes = _item.get("hashes")
+                for _hash in hashes:
+                    lines.append(line + " \\")
+                    line = "    --hash=sha256:{}".format(_hash["hash"])
+            lines.append(line)
+            return lines
 
         self.requirements_file("base.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + [item["line"] for item in base_main]
+            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in base_main]))
         )
         self.requirements_file("base-locked.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + [item["line"] for item in base_locked]
+            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in base_locked]))
         )
         self.requirements_file("dev.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base.txt", ""] + [item["line"] for item in dev_main]
+            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base.txt", ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in dev_main]))
         )
         self.requirements_file("dev-locked.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base-locked.txt", ""] + [item["line"] for item in dev_locked]
+            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base-locked.txt", ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in dev_locked]))
         )
+        # logger.debug([REQUIREMENT_FILE_GENERATED_TEXT, "-r base-locked.txt", ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in dev_main])))
+
+    def prune_frozen_deps(self):
+        lock = self.piper_lock
+
+        list_of_dependables = itertools.chain.from_iterable(map(lambda x: x[1]["depends_on"], lock["dependencies"].items()))
+        list_of_dev_dependables = itertools.chain.from_iterable(map(lambda x: x[1]["depends_on"], lock["dev_dependencies"].items()))
+
+        combined_deps = [i.lower() for i in list_of_dependables] + [i.lower() for i in list_of_dev_dependables]
+
+        logger.debug([i for i in list_of_dependables])
+        logger.debug([i for i in list_of_dev_dependables])
+        # all_dependables = list_of_dependables + list_of_dev_dependables
+
+        for key, item in list(lock["frozen_deps"].items()):
+            if (key.lower() in combined_deps):
+                pass
+            else:
+                lock["frozen_deps"].pop(key)
+
+        self.save_to_piper_lock(lock)
 
     def denormalise_piper_lock(self):
         lock = self.piper_lock

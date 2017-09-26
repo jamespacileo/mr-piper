@@ -2,13 +2,8 @@
     "created": "2017-09-20T23:10:13",
     "dependencies": {
         "requests": {
-            "depends_on": [
-                "urllib3",
-                "idna",
-                "chardet",
-                "certifi"
-            ],
-            "line": "requests>=2.18.4"
+            "depends_on": [],
+            "line": "requests>=2.0.0"
         },
         "path.py": {
             "depends_on": [],
@@ -66,24 +61,23 @@
             "line": "emoji>=0.4.5"
         }
     },
-    "devDependencies": {
+    "dev_dependencies": {
         "coveralls": {
             "depends_on": [
-                "asn1crypto",
-                "certifi",
-                "cffi",
-                "chardet",
                 "coverage",
-                "cryptography",
+                "requests",
                 "docopt",
-                "enum34",
-                "idna",
-                "ipaddress",
-                "pyOpenSSL",
-                "pycparser",
-                "six",
                 "urllib3",
-                "requests"
+                "idna",
+                "pyOpenSSL",
+                "cryptography",
+                "certifi",
+                "ipaddress",
+                "six",
+                "asn1crypto",
+                "enum34",
+                "cffi",
+                "pycparser"
             ],
             "line": "coveralls>=1.2.0"
         },
@@ -95,621 +89,1038 @@
         }
     },
     "dependables": [
-        "ipaddress",
-        "docopt",
-        "pexpect",
-        "cryptography",
-        "enum34",
-        "cffi",
         "six",
-        "urllib3",
-        "py",
-        "ptyprocess",
-        "pycparser",
-        "pyOpenSSL",
-        "chardet",
+        "asn1crypto",
         "coverage",
-        "colorama",
-        "requests",
+        "cffi",
+        "pycparser",
+        "cryptography",
+        "urllib3",
         "certifi",
+        "py",
+        "docopt",
+        "requests",
         "idna",
         "click",
-        "asn1crypto"
+        "enum34",
+        "ipaddress",
+        "pexpect",
+        "ptyprocess",
+        "colorama",
+        "pyOpenSSL"
     ],
     "frozen_deps": {
-        "six": {
-            "specifier": true,
-            "local_file": false,
-            "name": "six",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "six==1.11.0",
-            "specs": [
-                [
-                    "==",
-                    "1.11.0"
-                ]
-            ],
-            "revision": null
-        },
-        "cffi": {
-            "specifier": true,
-            "local_file": false,
-            "name": "cffi",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "cffi==1.11.0",
-            "specs": [
-                [
-                    "==",
-                    "1.11.0"
-                ]
-            ],
-            "revision": null
-        },
-        "parse": {
-            "specifier": true,
-            "local_file": false,
-            "name": "parse",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "parse==1.8.2",
-            "specs": [
-                [
-                    "==",
-                    "1.8.2"
-                ]
-            ],
-            "revision": null
-        },
-        "click-log": {
-            "specifier": true,
-            "local_file": false,
-            "name": "click-log",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "click-log==0.2.0",
-            "specs": [
-                [
-                    "==",
-                    "0.2.0"
-                ]
-            ],
-            "revision": null
-        },
-        "click": {
-            "specifier": true,
-            "local_file": false,
-            "name": "click",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "click==6.7",
-            "specs": [
-                [
-                    "==",
-                    "6.7"
-                ]
-            ],
-            "revision": null
-        },
-        "tabulate": {
-            "specifier": true,
-            "local_file": false,
-            "name": "tabulate",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "tabulate==0.7.7",
-            "specs": [
-                [
-                    "==",
-                    "0.7.7"
-                ]
-            ],
-            "revision": null
-        },
-        "emoji": {
-            "specifier": true,
-            "local_file": false,
-            "name": "emoji",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "emoji==0.4.5",
-            "specs": [
-                [
-                    "==",
-                    "0.4.5"
-                ]
-            ],
-            "revision": null
-        },
-        "pexpect": {
-            "specifier": true,
-            "local_file": false,
-            "name": "pexpect",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "pexpect==4.2.1",
-            "specs": [
-                [
-                    "==",
-                    "4.2.1"
-                ]
-            ],
-            "revision": null
-        },
-        "simplejson": {
-            "specifier": true,
-            "local_file": false,
-            "name": "simplejson",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "simplejson==3.11.1",
-            "specs": [
-                [
-                    "==",
-                    "3.11.1"
-                ]
-            ],
-            "revision": null
-        },
-        "pyopenssl": {
-            "specifier": true,
-            "local_file": false,
-            "name": "pyOpenSSL",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "pyOpenSSL==17.3.0",
-            "specs": [
-                [
-                    "==",
-                    "17.3.0"
-                ]
-            ],
-            "revision": null
-        },
-        "py": {
-            "specifier": true,
-            "local_file": false,
-            "name": "py",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "py==1.4.34",
-            "specs": [
-                [
-                    "==",
-                    "1.4.34"
-                ]
-            ],
-            "revision": null
-        },
-        "ptyprocess": {
-            "specifier": true,
-            "local_file": false,
-            "name": "ptyprocess",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "ptyprocess==0.5.2",
-            "specs": [
-                [
-                    "==",
-                    "0.5.2"
-                ]
-            ],
-            "revision": null
-        },
-        "path.py": {
-            "specifier": true,
-            "local_file": false,
-            "name": "path.py",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "path.py==10.4",
-            "specs": [
-                [
-                    "==",
-                    "10.4"
-                ]
-            ],
-            "revision": null
-        },
-        "pytest": {
-            "specifier": true,
-            "local_file": false,
-            "name": "pytest",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "pytest==3.2.2",
-            "specs": [
-                [
-                    "==",
-                    "3.2.2"
-                ]
-            ],
-            "revision": null
-        },
-        "click-spinner": {
-            "specifier": true,
-            "local_file": false,
-            "name": "click-spinner",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "click-spinner==0.1.7",
-            "specs": [
-                [
-                    "==",
-                    "0.1.7"
-                ]
-            ],
-            "revision": null
-        },
-        "certifi": {
-            "specifier": true,
-            "local_file": false,
-            "name": "certifi",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "certifi==2017.7.27.1",
-            "specs": [
-                [
-                    "==",
-                    "2017.7.27.1"
-                ]
-            ],
-            "revision": null
-        },
-        "crayons": {
-            "specifier": true,
-            "local_file": false,
-            "name": "crayons",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "crayons==0.1.2",
-            "specs": [
-                [
-                    "==",
-                    "0.1.2"
-                ]
-            ],
-            "revision": null
-        },
-        "cryptography": {
-            "specifier": true,
-            "local_file": false,
-            "name": "cryptography",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "cryptography==2.0.3",
-            "specs": [
-                [
-                    "==",
-                    "2.0.3"
-                ]
-            ],
-            "revision": null
-        },
-        "pycparser": {
-            "specifier": true,
-            "local_file": false,
-            "name": "pycparser",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "pycparser==2.18",
-            "specs": [
-                [
-                    "==",
-                    "2.18"
-                ]
-            ],
-            "revision": null
-        },
-        "urllib3": {
-            "specifier": true,
-            "local_file": false,
-            "name": "urllib3",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "urllib3==1.22",
-            "specs": [
-                [
-                    "==",
-                    "1.22"
-                ]
-            ],
-            "revision": null
-        },
-        "colorama": {
-            "specifier": true,
-            "local_file": false,
-            "name": "colorama",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "colorama==0.3.9",
-            "specs": [
-                [
-                    "==",
-                    "0.3.9"
-                ]
-            ],
-            "revision": null
-        },
-        "coverage": {
-            "specifier": true,
-            "local_file": false,
-            "name": "coverage",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "coverage==4.4.1",
-            "specs": [
-                [
-                    "==",
-                    "4.4.1"
-                ]
-            ],
-            "revision": null
-        },
-        "semantic-version": {
-            "specifier": true,
-            "local_file": false,
-            "name": "semantic-version",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "semantic-version==2.6.0",
-            "specs": [
-                [
-                    "==",
-                    "2.6.0"
-                ]
-            ],
-            "revision": null
-        },
-        "ipaddress": {
-            "specifier": true,
-            "local_file": false,
-            "name": "ipaddress",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "ipaddress==1.0.18",
-            "specs": [
-                [
-                    "==",
-                    "1.0.18"
-                ]
-            ],
-            "revision": null
-        },
-        "coveralls": {
-            "specifier": true,
-            "local_file": false,
-            "name": "coveralls",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "coveralls==1.2.0",
-            "specs": [
-                [
-                    "==",
-                    "1.2.0"
-                ]
-            ],
-            "revision": null
-        },
-        "delegator.py": {
-            "specifier": true,
-            "local_file": false,
-            "name": "delegator.py",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "delegator.py==0.0.13",
-            "specs": [
-                [
-                    "==",
-                    "0.0.13"
-                ]
-            ],
-            "revision": null
-        },
-        "enum34": {
-            "specifier": true,
-            "local_file": false,
-            "name": "enum34",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "enum34==1.1.6",
-            "specs": [
-                [
-                    "==",
-                    "1.1.6"
-                ]
-            ],
-            "revision": null
-        },
-        "future": {
-            "specifier": true,
-            "local_file": false,
-            "name": "future",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "future==0.16.0",
-            "specs": [
-                [
-                    "==",
-                    "0.16.0"
-                ]
-            ],
-            "revision": null
-        },
-        "chardet": {
-            "specifier": true,
-            "local_file": false,
-            "name": "chardet",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "chardet==3.0.4",
-            "specs": [
-                [
-                    "==",
-                    "3.0.4"
-                ]
-            ],
-            "revision": null
-        },
-        "requests": {
-            "specifier": true,
-            "local_file": false,
-            "name": "requests",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "requests==2.18.4",
-            "specs": [
-                [
-                    "==",
-                    "2.18.4"
-                ]
-            ],
-            "revision": null
-        },
-        "docopt": {
-            "specifier": true,
-            "local_file": false,
-            "name": "docopt",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "docopt==0.6.2",
-            "specs": [
-                [
-                    "==",
-                    "0.6.2"
-                ]
-            ],
-            "revision": null
-        },
-        "idna": {
-            "specifier": true,
-            "local_file": false,
-            "name": "idna",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
-            "line": "idna==2.6",
-            "specs": [
-                [
-                    "==",
-                    "2.6"
-                ]
-            ],
-            "revision": null
-        },
         "asn1crypto": {
-            "specifier": true,
-            "local_file": false,
-            "name": "asn1crypto",
-            "extras": [],
-            "editable": false,
-            "uri": null,
-            "vcs": null,
-            "path": null,
             "line": "asn1crypto==0.22.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "asn1crypto",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
             "specs": [
                 [
                     "==",
                     "0.22.0"
                 ]
             ],
-            "revision": null
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/97/ba/7e8117d8efcee589f4d96dd2b2eb1d997f96d27d214cf2b7134ad8acf6ab/asn1crypto-0.22.0-py2.py3-none-any.whl",
+                    "hash": "d232509fefcfcdb9a331f37e9c9dc20441019ad927c7d2176cf18ed5da0ba097"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/67/14/5d66588868c4304f804ebaff9397255f6ec5559e46724c2496e0f26e68d6/asn1crypto-0.22.0.tar.gz",
+                    "hash": "cbbadd640d3165ab24b06ef25d1dca09a3441611ac15f6a6b452474fdf0aed1a"
+                }
+            ]
+        },
+        "certifi": {
+            "line": "certifi==2017.7.27.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "certifi",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2017.7.27.1"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/40/66/06130724e8205fc8c105db7edb92871c7fff7d31324d7f4405c762624a43/certifi-2017.7.27.1-py2.py3-none-any.whl",
+                    "hash": "54a07c09c586b0e4c619f02a5e94e36619da8e2b053e20f594348c0611803704"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/20/d0/3f7a84b0c5b89e94abbd073a5f00c7176089f526edb056686751d5064cbd/certifi-2017.7.27.1.tar.gz",
+                    "hash": "40523d2efb60523e113b44602298f0960e900388cf3bb6043f645cf57ea9e3f5"
+                }
+            ]
+        },
+        "cffi": {
+            "line": "cffi==1.11.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "cffi",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.11.0"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/43/f5/109c8ba43db5b55090c35c4f03c527bd2600cb42000d4c7cf3424428ee1f/cffi-1.11.0-cp26-cp26m-manylinux1_i686.whl",
+                    "hash": "eddf6bd95b100f34c56a226847be92bde416d028213e87fd700bc593cbf3e9da"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/74/14/5d23ee78050bcdbe3177ba138a1dc4017b8b75a0ac06e02ed64004ddbcfa/cffi-1.11.0-cp26-cp26m-manylinux1_x86_64.whl",
+                    "hash": "929d206ecfefadcec0b0e13956131eec7442829d240da020d67274fefb9e61a4"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c9/13/9c5586b759a0506324599fe0b2f939fa2339382428c69dc6c3430cfb9c81/cffi-1.11.0-cp26-cp26mu-manylinux1_i686.whl",
+                    "hash": "040e0b5462c65a39b7112ad9e951f3f57b487d0db053ea510dcf8fc53931ab4b"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/16/25/9e42730b51318aeb6545bcd0fc568271063926fec9f83bd51f333c87e3f3/cffi-1.11.0-cp26-cp26mu-manylinux1_x86_64.whl",
+                    "hash": "d361e8c504bae02f665fad8d5ba4b74a6c1fab7862eec39cddcc21e4479fa275"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/db/96/e78b40d2ce4c141a463f8d75d4df5fb93474b4f3f967ba8f86a39a35149a/cffi-1.11.0-cp27-cp27m-macosx_10_6_intel.whl",
+                    "hash": "56a8c39e6e7225474b36c16a03240fcbbfc5c8cb016645793e0dec2d2f9bdf67"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c3/21/4bfedb4182ecc2931a6a834538163baf38e41ed3209dd6f9efd36b8bd909/cffi-1.11.0-cp27-cp27m-manylinux1_i686.whl",
+                    "hash": "4d2e388ce51e6a4efae8d4533ca15503ea957c41233bad165f8ccec354edca67"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a1/8d/fdaef3401bd2c42de53541090865221326fd5b443a56b73352b8c2b09563/cffi-1.11.0-cp27-cp27m-manylinux1_x86_64.whl",
+                    "hash": "c091a1ac521dac2770632f499c124762ddf978d23ced0472f19a8830e006eab8"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a3/f4/cd21e4bf3609df15189001742936643ff800f81bc70ad3db23f1a021c9bd/cffi-1.11.0-cp27-cp27m-win32.whl",
+                    "hash": "f2ffdfd930bc4bcd4900def32fbb2a16a91656d9caafff573a25934327140431"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ff/cc/bda1078e087a3769298f3732b5ce9ccc2a9899ecb48ca2f4882c8b737e9a/cffi-1.11.0-cp27-cp27m-win_amd64.whl",
+                    "hash": "bd93a0df4dc72893ba604c05d487ea4d47a799e54172b89e414953685b0b08fb"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/77/da/0e3884191a2ab79ac70cc06c885a2d9a3eea4d178bdf85a2887da789bb56/cffi-1.11.0-cp27-cp27mu-manylinux1_i686.whl",
+                    "hash": "5c20f34a6858cd8c59eac23f80bc80bb5fd294bd9b22b264255a3eec0ab459f5"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/12/14/9912da32881785ca4079892daa80d75d01665f36d9775c94a40924801867/cffi-1.11.0-cp27-cp27mu-manylinux1_x86_64.whl",
+                    "hash": "b45efc8d81640a8e9122c1ba1817da2a998ca0168c40de7bbfc47b960771ca94"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/d5/01/721370f0acdd8ca7e274fe327fe9f77f5a4cbb8f08ac20e15417c1502f5a/cffi-1.11.0-cp33-cp33m-manylinux1_i686.whl",
+                    "hash": "45233398f5e7114e719d0b83ffd0642af7fbf05136195f500fb6b72133c8e998"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e8/fc/9db261373d284abc30894929d12e49d48388232d1cac067b13bbf7201ea0/cffi-1.11.0-cp33-cp33m-manylinux1_x86_64.whl",
+                    "hash": "47853d133f0de32697b55e0c2ee377d88e3143bc8645a3b93d38be2f5387b0a2"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/73/69/b75802bdd645b497fb1d329866e42ffe31f7b68e445737d0fd8fbdf671c2/cffi-1.11.0-cp33-cp33m-win32.whl",
+                    "hash": "6f1a2f85510c675b068e29625ff534f02567f24839cbd7d61cda6b7df62da2b1"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/4f/07/9c6c331e121e76be9339eb0e223de4a4418358e2281a738a927908e3e112/cffi-1.11.0-cp33-cp33m-win_amd64.whl",
+                    "hash": "6153b26756de2f34f80ca4e8b1e79011ad62bb670539dc3df71e62909a112fdf"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/dc/21/1a7aaec7a36e8eacadb57045c9732962185bc5bbb52ed946f2e322089a43/cffi-1.11.0-cp34-cp34m-macosx_10_6_intel.whl",
+                    "hash": "5152bbde6ee514a11e2cd1b76a7ccab5af1043356ec3df9efe0112d97b20dae3"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a3/f1/4a962a1bfc2e39bc4abe1dfb43fae0aef826d45f6ba1f4431dc9a5dbb1af/cffi-1.11.0-cp34-cp34m-manylinux1_i686.whl",
+                    "hash": "42b38cd48e55b2a4c5f038f80137c2cb4393fd4e4d1c3dbeeb7aea9475b68ea1"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/2a/d3/9aaf90c694595c7132613096e192de4a0701d0225209d424de0075e63d3b/cffi-1.11.0-cp34-cp34m-manylinux1_x86_64.whl",
+                    "hash": "f6202eab19fd2c44d7d7af2bb8d286cf18b7b3d67b0e5bf1f2f113c99303ff87"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/f1/c7/7b01946642a62f593b2b3a67bd87de79f715f09a12fc0d4d43964b212bc3/cffi-1.11.0-cp34-cp34m-win32.whl",
+                    "hash": "ec1112466a924ba69df5a90f31d26d323e3b91ce21f94b10fa0b77f44a07df48"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/1b/13/7cf6bb6d52b3a064595286349996d35254fbdb70ad6072909bd7003bb244/cffi-1.11.0-cp34-cp34m-win_amd64.whl",
+                    "hash": "7a55f044dd78fdca379d455550c581b9455af022b8f8b5d97f585a25f4da63f6"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/2c/2b/33af741a5f53307691382d3bd5ba45fee3da21658f0bdf1f016d70ac3fb0/cffi-1.11.0-cp35-cp35m-macosx_10_6_intel.whl",
+                    "hash": "fd3c49d7d22ba75382e19c4877e1d4dca232ef48137442f8582c2259b0cdf612"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/f8/4d/6f884e6e3d8d8ca4db05cdf10eefa1983391726966d071b5bb38b34c1b2d/cffi-1.11.0-cp35-cp35m-manylinux1_i686.whl",
+                    "hash": "a76b89adecd46138aafdbd348563df1deb714962b5b3659ee1b6b0c5cf6ae0e5"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/01/cb/3f6c311f13e0e04a691c161ff5f2272304cc0e7fcd95500ea7848d5b3da5/cffi-1.11.0-cp35-cp35m-manylinux1_x86_64.whl",
+                    "hash": "dd9577197fff563e4784ef4ace7da28c7da96a81895b69c008cdb82f1e82853c"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/94/88/190143d2a202db0250f89da44de46160241ebba45c4479d96a3d2d27e254/cffi-1.11.0-cp35-cp35m-win32.whl",
+                    "hash": "2217d22cb001386947693bd93ca4370224989468daf2939f3bf717956fb0a119"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/06/cd/563ef179bc8032381b0fc7a38b8f9a49292022c97c4510c3e4f42fb99d0a/cffi-1.11.0-cp35-cp35m-win_amd64.whl",
+                    "hash": "59fc30a6f7331fe69cfc67ef151fd03a33491d25430ae0c4597e69c4235fa87e"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/03/d6/8e321f24a2e3b20d33358541f77c1799c1789fac67053f5ee73a36d4dee8/cffi-1.11.0-cp36-cp36m-macosx_10_6_intel.whl",
+                    "hash": "8a5632592b2752375b6d9e81da022896ece235713129fcc33703b3e10c639ef9"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/be/21/9266aa9c565baa03fee1ee92e9a6f064993786ff442974593d180206729d/cffi-1.11.0-cp36-cp36m-manylinux1_i686.whl",
+                    "hash": "48d6589fda4ec0ccb7d973807890a733381f828d29167177eb7d97892255a769"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/bd/28/7129e4c0bd7f3c19e823654a4463410b439f468b96adfabfa9eedfcdc49a/cffi-1.11.0-cp36-cp36m-manylinux1_x86_64.whl",
+                    "hash": "f14c53dc624529eef175c993ceb886f37ecece09825bf47bf3230aacbc3b7acc"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/9d/58/e6b6543ce632cb587809743000de0ccaee424265a29b45e1b6b1f24adcbb/cffi-1.11.0-cp36-cp36m-win32.whl",
+                    "hash": "d8930a719781987a876d6de8cf33ce937191c383158daafcb9db804bf3421adf"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e8/37/2cd7033e9d0a5ac7d8faac7fabf19d2d85f81a21066b57dca4ad65ddc77d/cffi-1.11.0-cp36-cp36m-win_amd64.whl",
+                    "hash": "765cf591a2f790b012075c7f54344a02b622a8561708ec27b3042c8c1699a465"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/4e/32/4070bdf32812c89eb635c80880a5caa2e0189aa7999994c265577e5154f3/cffi-1.11.0.tar.gz",
+                    "hash": "5f4ff33371c6969b39b293d9771ee91e81d26f9129be093ca1b7be357fcefd15"
+                }
+            ]
+        },
+        "chardet": {
+            "line": "chardet==3.0.4",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "chardet",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.0.4"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl",
+                    "hash": "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d/chardet-3.0.4.tar.gz",
+                    "hash": "84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"
+                }
+            ]
+        },
+        "click": {
+            "line": "click==6.7",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "click",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "6.7"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl",
+                    "hash": "29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz",
+                    "hash": "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b"
+                }
+            ]
+        },
+        "colorama": {
+            "line": "colorama==0.3.9",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "colorama",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.3.9"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/db/c8/7dcf9dbcb22429512708fe3a547f8b6101c0d02137acbd892505aee57adf/colorama-0.3.9-py2.py3-none-any.whl",
+                    "hash": "463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e6/76/257b53926889e2835355d74fec73d82662100135293e17d382e2b74d1669/colorama-0.3.9.tar.gz",
+                    "hash": "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1"
+                }
+            ]
+        },
+        "coverage": {
+            "line": "coverage==4.4.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "coverage",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "4.4.1"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/3d/e7/c101c039608c30691802ece6fb2b638042ef78fb54f6da31971f3570f9fd/coverage-4.4.1-cp26-cp26m-macosx_10_10_x86_64.whl",
+                    "hash": "c1456f66c536010cf9e4633a8853a9153e8fd588393695295afd4d0fc16c1d74"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/76/bc/c7d1e47d49d81c5a9a959e4ea803e2347a04a51d6b90d1466d02a23d2f84/coverage-4.4.1-cp26-cp26m-manylinux1_i686.whl",
+                    "hash": "97a7ec51cdde3a386e390b159b20f247ccb478084d925c75f1faa3d26c01335e"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/50/7c/f8783573f9416b854b6c92617511af130ce0023f49c6335c1c9ebc7beb30/coverage-4.4.1-cp26-cp26m-manylinux1_x86_64.whl",
+                    "hash": "83e955b975666b5a07d217135e7797857ce844eb340a99e46cc25525120417c4"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/bf/fb/552618c65289589295e6f9361574afe7d2b11e8bcbbf8e80b49c280bf3ea/coverage-4.4.1-cp26-cp26m-win32.whl",
+                    "hash": "c5a205b4da3c624f5119dc4d84240789b5906bb8468902ec22dcc4aad8aa4638"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ca/fb/be0688b98c65b7580e236decca433098e6fb2dd4de6589522ec62d67a75f/coverage-4.4.1-cp26-cp26m-win_amd64.whl",
+                    "hash": "5dea90ed140e7fa9bc00463313f9bc4a6e6aff297b4969615e7a688615c4c4d2"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/be/56/990d2aa2f5775bc339709c333b06863cb2855696581665c6e94f7f922175/coverage-4.4.1-cp26-cp26mu-manylinux1_i686.whl",
+                    "hash": "483ed14080c5301048128bb027b77978c632dd9e92e3ecb09b7e28f5b92abfcf"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c0/67/0fa2361d4ad370ec4c69ceca8701e150099d8c8046b77bae4ed9573a2c4b/coverage-4.4.1-cp26-cp26mu-manylinux1_x86_64.whl",
+                    "hash": "ef574ab9640bcfa2f3c671831faf03f65788945fdf8efa4d4a1fffc034838e2a"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/2d/e1/8e9c43128d459a386e8340dbb5ffeb38c467b18abaf9687b041c726e5796/coverage-4.4.1-cp27-cp27m-macosx_10_10_x86_64.whl",
+                    "hash": "f9e83b39d29c2815a38e4118d776b482d4082b5bf9c9147fbc99a3f83abe480a"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/27/7d/a4c959bd6086f3d45cedbf2b7952f3dbbced42ad30e4079eeebb43e7061f/coverage-4.4.1-cp27-cp27m-macosx_10_12_intel.whl",
+                    "hash": "700040c354f0230287906b1276635552a3def4b646e0145555bc9e2e5da9e365"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/70/a0/feb561b542f0ad3545b926c2aa70bc83a4e14cc1dc118c96334949f0cfd9/coverage-4.4.1-cp27-cp27m-manylinux1_i686.whl",
+                    "hash": "7f1eacae700c66c3d7362a433b228599c9d94a5a3a52613dddd9474e04deb6bc"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/85/be/e8eaf43a50a2c188adf03c6ae43f059885910ea0bff649f6bd336742bbbe/coverage-4.4.1-cp27-cp27m-manylinux1_x86_64.whl",
+                    "hash": "13ef9f799c8fb45c446a239df68034de3a6f3de274881b088bebd7f5661f79f8"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/8d/3d/a76fda010c7a51273b772852187fcb5acb586f1bc1fcc980d3f82c751fd8/coverage-4.4.1-cp27-cp27m-win32.whl",
+                    "hash": "83a477ac4f55a6ef59552683a0544d47b68a85ce6a80fd0ca6b3dc767f6495fb"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/71/1f/a6c61366e325756f7573c678696586199209e2bb013e946aa33cf66abe93/coverage-4.4.1-cp27-cp27m-win_amd64.whl",
+                    "hash": "dfd35f1979da31bcabbe27bcf78d4284d69870731874af629082590023a77336"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c1/d9/b5139059d7e9ae844afca10df5b729da1f982ef19f91a7d59e45c62a7a26/coverage-4.4.1-cp27-cp27mu-manylinux1_i686.whl",
+                    "hash": "dfb011587e2b7299112f08a2a60d2601706aac9abde37aa1177ea825adaed923"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/0c/1e/e6184bd25266554d1443393b36163680689e988266550f4560d16e814ba2/coverage-4.4.1-cp27-cp27mu-manylinux1_x86_64.whl",
+                    "hash": "381be5d31d3f0d912334cf2c159bc7bea6bfe6b0e3df6061a3bf2bf88359b1f6"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/04/91/558a8517f4d302e8814f9553fb4dca1bc7dd46517c76f23c881974ff22ab/coverage-4.4.1-cp33-cp33m-macosx_10_10_x86_64.whl",
+                    "hash": "9681efc2d310cfc53863cc6f63e88ebe7a48124550fa822147996cb09390b6ab"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/b2/7c/dde541732ceac8b905d466583bf21c15e98ef145781d713ffd81825b997f/coverage-4.4.1-cp33-cp33m-manylinux1_i686.whl",
+                    "hash": "53770b20ac5b4a12e99229d4bae57af0945be87cc257fce6c6c7571a39f0c5d4"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/57/81/521ff8936150da3472959f53c4c1fdbf0ca387be3043212245a6db594079/coverage-4.4.1-cp33-cp33m-manylinux1_x86_64.whl",
+                    "hash": "8801880d32f11b6df11c32a961e186774b4634ae39d7c43235f5a24368a85f07"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/cd/c7/2f4280974d848a3cae16084e8a0064f432b087f7dbbc414bffee3072b091/coverage-4.4.1-cp34-cp34m-macosx_10_10_x86_64.whl",
+                    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a7/80/0649c42a6412636944d42d50c0c7d6850952c5ee0f719b47e2d7babbc2b9/coverage-4.4.1-cp34-cp34m-manylinux1_i686.whl",
+                    "hash": "ef43a06a960b46c73c018704051e023ee6082030f145841ffafc8728039d5a88"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/d5/89/bfc9d0767830168668f01bd992b99b3fa87f98819c88be2ae07c11aa6428/coverage-4.4.1-cp34-cp34m-manylinux1_x86_64.whl",
+                    "hash": "c3e2736664a6074fc9bd54fb643f5af0fc60bfedb2963b3d3f98c7450335e34c"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/73/ed/76a333488a402d3c1fe34c730e677b64eb661ad1b77f10f55bb13f2e2b2d/coverage-4.4.1-cp34-cp34m-win32.whl",
+                    "hash": "17709e22e4c9f5412ba90f446fb13b245cc20bf4a60377021bbff6c0f1f63e7c"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/60/71/5a98dbea9c3a478753d1f075fef58982f65ef5eb122131df8b56ddc42d21/coverage-4.4.1-cp34-cp34m-win_amd64.whl",
+                    "hash": "a2f7106d1167825c4115794c2ba57cc3b15feb6183db5328fa66f94c12902d8b"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ce/36/8264ad67371737e80604c7dc6c6d8c9b51eaa5867cde7f8cf7e667c43f82/coverage-4.4.1-cp35-cp35m-macosx_10_10_x86_64.whl",
+                    "hash": "2a08e978f402696c6956eee9d1b7e95d3ad042959b71bafe1f3e4557cbd6e0ac"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a4/03/79fbf3f5090bb9793a12d05b79d9e2b43ff8d6a2ef63dad4ca04b330699e/coverage-4.4.1-cp35-cp35m-manylinux1_i686.whl",
+                    "hash": "57f510bb16efaec0b6f371b64a8000c62e7e3b3e48e8b0a5745ade078d849814"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c4/15/87d9388a21dce70b1cb9a4db98cf7b114009cf0a68f11918bacabd129dd0/coverage-4.4.1-cp35-cp35m-manylinux1_x86_64.whl",
+                    "hash": "0f1883eab9c19aa243f51308751b8a2a547b9b817b721cc0ecf3efb99fafbea7"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a0/e7/a958dae66bed8ca1ab971703e3f44342538e0a34db6e843f02d30a498f5d/coverage-4.4.1-cp35-cp35m-win32.whl",
+                    "hash": "e00fe141e22ce6e9395aa24d862039eb180c6b7e89df0bbaf9765e9aebe560a9"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/1c/72/3fcea6bfffd43b5439e1c59df479ce3a94239e308d9554d30476c8106e37/coverage-4.4.1-cp35-cp35m-win_amd64.whl",
+                    "hash": "ec596e4401553caa6dd2e3349ce47f9ef82c1f1bcba5d8ac3342724f0df8d6ff"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c2/15/ea17c2b00c623015ea8345aebee68f6b4e7ab0a80865714ee0deb7829ddc/coverage-4.4.1-cp36-cp36m-macosx_10_10_x86_64.whl",
+                    "hash": "c820a533a943ebc860acc0ce6a00dd36e0fdf2c6f619ff8225755169428c5fa2"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/85/6c/c85bc4017b8da9aaeaeab358944f5d4929e0a415882a3558938a1a145c2d/coverage-4.4.1-cp36-cp36m-manylinux1_i686.whl",
+                    "hash": "b7f7283eb7badd2b8a9c6a9d6eeca200a0a24db6be79baee2c11398f978edcaa"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/12/9f/b5030263383b551ae844b2365b9a607a3266c48b0f7cc55fc2a6c852d6e3/coverage-4.4.1-cp36-cp36m-manylinux1_x86_64.whl",
+                    "hash": "a5ed27ad3e8420b2d6b625dcbd3e59488c14ccc06030167bcf14ffb0f4189b77"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a2/c7/e371155c9c9c4a223f218db5796952a9b4c826a94e50b2d4005d294a92c8/coverage-4.4.1-cp36-cp36m-win32.whl",
+                    "hash": "d7b70b7b4eb14d0753d33253fe4f121ca99102612e2719f0993607deb30c6f33"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e9/2a/f7bc560b1754a41f85d2b62091903816881d2fd3615f586f2800b771e36a/coverage-4.4.1-cp36-cp36m-win_amd64.whl",
+                    "hash": "4047dc83773869701bde934fb3c4792648eda7c0e008a77a0aec64157d246801"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/36/db/690ee79312bb60f121c0da1c973856ddb751afe09cc10caec1452208eaf4/coverage-4.4.1.tar.gz",
+                    "hash": "7a9c44400ee0f3b4546066e0710e1250fd75831adc02ab99dda176ad8726f424"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/bc/3a/0b8cdbeb97b3d71307485c7f22c26c675134cfce2a2cf54496e28d789bc6/coverage-4.4.1.win-amd64-py2.6.exe",
+                    "hash": "8bb7c8dca54109b61013bc4114d96effbf10dea136722c586bce3a5d9fc4e730"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/6a/00/a07f3c51d5b05d7433e1ae604d28f7998ce9471812d6f1421037bce085ac/coverage-4.4.1.win-amd64-py2.7.exe",
+                    "hash": "1a41d621aa9b6ab6457b557a754d50aaff0813fad3453434de075496fca8a183"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/00/c1/63280c27c8721bf59ca4a818265db5ff2829a7a0a421cf7479e829a08ec6/coverage-4.4.1.win-amd64-py3.4.exe",
+                    "hash": "0fa423599fc3d9e18177f913552cdb34a8d9ad33efcf52a98c9d4b644edb42c5"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/7f/bb/9d518a4fc1c0e3f193ad32706c56386f0bd8fe1d01ad3de2ddd5090e4e6c/coverage-4.4.1.win-amd64-py3.5.exe",
+                    "hash": "e61a4ba0b2686040cb4828297c7e37bcaf3a1a1c0bc0dbe46cc789dde51a80fa"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/2f/64/5ae2cd6db2fefa1d1521ff081aa5e5ef10dbf7bef61128b8aeb53267d5f6/coverage-4.4.1.win-amd64-py3.6.exe",
+                    "hash": "ce9ef0fc99d11d418662e36fd8de6d71b19ec87c2eab961a117cc9d087576e72"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/cf/c4/361224285ca313a1f98571335b710b60a18d56ab9f92cc1b539bbc0c8fdf/coverage-4.4.1.win32-py2.6.exe",
+                    "hash": "0f649e68db74b1b5b8ca4161d08eb2b8fa8ae11af1ebfb80e80e112eb0ef5300"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/44/05/1d6c211c249a8678fae3225fe1f43b6c96be01e6c652b25c7a97c8407c80/coverage-4.4.1.win32-py2.7.exe",
+                    "hash": "52964fae0fafef8bd283ad8e9a9665205a9fdf912535434defc0ec3def1da26b"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/f2/a8/adafbef7cec055437e0594ef882319d90dbe4b28c764d31c6f96384d3af5/coverage-4.4.1.win32-py3.4.exe",
+                    "hash": "36aa6c8db83bc27346ddcd8c2a60846a7178ecd702672689d3ea1828eb1a4d11"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/cb/84/903ac6b46a893c1631a29c6acedda1904599e02b87ebc1a8f1e54d6a5480/coverage-4.4.1.win32-py3.5.exe",
+                    "hash": "9824e15b387d331c0fc0fef905a539ab69784368a1d6ac3db864b4182e520948"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/d6/28/74db04bf8ec98629fa5045b297a62b5782c319fa5645a48d642f7b25bb9e/coverage-4.4.1.win32-py3.6.exe",
+                    "hash": "4a678e1b9619a29c51301af61ab84122e2f8cc7a0a6b40854b808ac6be604300"
+                }
+            ]
+        },
+        "coveralls": {
+            "line": "coveralls==1.2.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "coveralls",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.2.0"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/7e/26/7a820800615866b624cb5612f7f661405f713b2292cd94ace8b648705747/coveralls-1.2.0-py2.py3-none-any.whl",
+                    "hash": "84dd8c88c5754e8db70a682f537e2781366064aa3cdd6b24c2dcecbd3181187c"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/90/f0/e648c5185a19391e9b0b1e93fb5af05e337f52418d9193f87188e5fb830d/coveralls-1.2.0.tar.gz",
+                    "hash": "510682001517bcca1def9f6252df6ce730fcb9831c62d9fff7c7d55b6fdabdf3"
+                }
+            ]
+        },
+        "cryptography": {
+            "line": "cryptography==2.0.3",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "cryptography",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.0.3"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/b5/a9/0acc61ca1410aad1c0baab467f0e26250026c76f056432ba0c1d225ee4e2/cryptography-2.0.3-cp26-cp26m-macosx_10_12_intel.whl",
+                    "hash": "b17e4244212c9ec6526b6ad47534a12e0378387ad86228141053c112e759769d"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/8c/88/5a475aa4f98cff37610206d12c614a9596bc086c55fb9b7069f04345ec06/cryptography-2.0.3-cp26-cp26m-manylinux1_i686.whl",
+                    "hash": "1fb7dbf630daba53494da88de1e87429f2740e6ffdc92bbdcb385ddb9ff67b32"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ca/01/1a09a530c86a9182c6cd020501197ff37b897815d6a77f608d35b13fddcd/cryptography-2.0.3-cp26-cp26m-manylinux1_x86_64.whl",
+                    "hash": "369e4669cac8296e320f86d0a3c9f489b7593d2a144e7b0504b884bed56fd5d7"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/0a/62/8cf4b5ee4aa74444fa6238a8fd8673bca1ac81f29ae525fb93e441ebf599/cryptography-2.0.3-cp26-cp26m-win32.whl",
+                    "hash": "59d2b285fb24d30deaf4143c2d048fcefdd7e560f30cd1745da881705ca965c6"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/64/73/64eb5d9db4d293f3ddc18eee1af2f5a80818cee6a0e8039e11888caafa51/cryptography-2.0.3-cp26-cp26m-win_amd64.whl",
+                    "hash": "fe6d56a4ff08875d70cc9b336fcd6e938db5808cb47cbc33c6927affb659aded"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/d2/4f/2a113f80e9068c068704f7a3adc9f2524887ffa3ff90444c8d7635b999eb/cryptography-2.0.3-cp26-cp26mu-manylinux1_i686.whl",
+                    "hash": "15d655434cf6f350462c6c97f24cbf42ee0e6270886a7937eaaa52fd09e474ce"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/54/2d/a7d0df0307ceb6e668e01a89acdc2ac5781f772cc533120f557542721ac9/cryptography-2.0.3-cp26-cp26mu-manylinux1_x86_64.whl",
+                    "hash": "b25d97585f1d2b2f16560737aba6257a10ca18aa3a2a70407c05fe8b64b375f9"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ca/f5/3e6edfedb029929c2986a9767cbf307aa12ac4903f3bb8463ff29030758e/cryptography-2.0.3-cp27-cp27m-macosx_10_6_intel.whl",
+                    "hash": "d32dad8448ea88fe8eb02dc943d46db658cf9e618386761e498802c79e97c937"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a8/20/1c5d304a9273e1c39c886396293c944eddf51d43a5c044bb520601dd5dd8/cryptography-2.0.3-cp27-cp27m-manylinux1_i686.whl",
+                    "hash": "d44db8e4435a10dcbf22fbc03072d18b31e6c1100084a2010239efd359f2f162"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/df/05/b80a206ed9a7c8766ed33313354e611e6dbefd18c82fe5083cd2b14f4886/cryptography-2.0.3-cp27-cp27m-manylinux1_x86_64.whl",
+                    "hash": "a972eb37b6409a2d67ddd956e6bf74f2e9315105083d1fdaa8bbe6eb520dc367"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e2/0d/fc96ee2c40ec47f9395df684aa1bb16fb9fea422bc09dfd24a0b714e42a1/cryptography-2.0.3-cp27-cp27m-win32.whl",
+                    "hash": "4ffc706fbe4c12146050d432250896f2fcad8b77c6fd89d3c3bd456884dbf421"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/fc/40/a40b97e5653ad12645d9ec148db4391c3bab0c6942ce8c1dd59b6174f491/cryptography-2.0.3-cp27-cp27m-win_amd64.whl",
+                    "hash": "317127295b14f5c943ed789ab60ade0d7d39041f8975d58a214af19dd1148705"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/37/bf/90c8458fded51823a291d70dd4d5aa40b975fac9fdaaa67ae2ba2828066f/cryptography-2.0.3-cp27-cp27mu-manylinux1_i686.whl",
+                    "hash": "fb7dfc4b3a79ca4b9233803b80617fd302374e57771c9a28e32ee6c1296cdea3"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/0c/eb/afcc830a9de40fe0b0c7c7f57b4ece118814bf38572bb42d45babc82b405/cryptography-2.0.3-cp27-cp27mu-manylinux1_x86_64.whl",
+                    "hash": "795af466e52daf404d783877157b106bc79e0cffa55f8d6360fa9f9fd03148bd"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/66/03/b9cf6035c2a98bfcabcc11a2d15419078d1beef0f83de7b0526dadc05107/cryptography-2.0.3-cp34-cp34m-macosx_10_6_intel.whl",
+                    "hash": "5c9e46b219e2b65ab9192e10407d7698589794407f15f11f39abbf3b04d16890"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/65/cf/117343569bbd0a844b9e948ffaab41dce3b967868fa2ae9b564e4ff334bf/cryptography-2.0.3-cp34-cp34m-manylinux1_i686.whl",
+                    "hash": "27b7b005debcf4c0562299d5ceeaea151120eaad7bd84ef91fb22c204a958f03"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/7c/95/beb63b4329a43e2f1e3f9bcf83d987310a18d18adc0a129592246ce72fb2/cryptography-2.0.3-cp34-cp34m-manylinux1_x86_64.whl",
+                    "hash": "8bbff1de3002db5c7146b88fea392526260becc153adc8810103fc750c3eb333"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/44/2e/87aaf50bc866653b61bb8df2082a455ffb686c0ae46380701a902098cdd6/cryptography-2.0.3-cp34-cp34m-win32.whl",
+                    "hash": "bb715b0d8d5c9111e9656eabe58ee7b95842a797c04608aef7f52439ab73d5f3"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/c1/46/96e715b3ae1903a117011d10266b4684a407dbf4c27bfd608df76e23ceb8/cryptography-2.0.3-cp34-cp34m-win_amd64.whl",
+                    "hash": "bc86d3de2c7d63f3c73dff24fa43c55c00c7b8ea8102ed638c903c939b85e6a6"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/05/b0/6de9b8a233187753c4ae1b76d3a1cd180d6fe8af9bf1a29f432aae8657fb/cryptography-2.0.3-cp35-cp35m-macosx_10_6_intel.whl",
+                    "hash": "2f0b681e89530750e4c0adf98701cafd0384ac160ceafe39c9d10be6034d2cc7"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a9/98/165b7d5f30b600023898b799f4bed8062bc5d5a5a31e95ead2b5d3aee97a/cryptography-2.0.3-cp35-cp35m-manylinux1_i686.whl",
+                    "hash": "5544d9433f9c25d55d609e2b014d47c390288bb98ae84e35b8cf93e9f6a6c832"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/13/61/3d014030fa9e621ab397b0e34a119ce33c7041035ca1758620098221f2f4/cryptography-2.0.3-cp35-cp35m-manylinux1_x86_64.whl",
+                    "hash": "55cc98c93323efcf6f3300b6e9a7d435146a9d451ffd27aa14074f576f275786"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/42/72/9155dea8af0bbf020f47cfde43a9b3bdf82e84a1895903874587c26b1515/cryptography-2.0.3-cp35-cp35m-win32.whl",
+                    "hash": "4ef205496c518aae7e699731dfff4b630c046ea9dbbe34e8ec8ce77bb399c1c7"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/41/b4/28a13ba73e1c1987d6bbc2a8f13b6eb32cc41fe2dfb9cefb52a67de2ce0a/cryptography-2.0.3-cp35-cp35m-win_amd64.whl",
+                    "hash": "886759453c5b93b1e8953e92abee65ee09fdf78bf655c95d0a206d6387adbfed"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/69/7f/1c62e38501263c7d0574813eb2cfbb977d1fdf91b20e303c496805f5dfb7/cryptography-2.0.3-cp36-cp36m-macosx_10_6_intel.whl",
+                    "hash": "0f3dcdd06c5491cad2ed283ebc802805e3ac77ffe4789ad1b44ff0f0f891f59b"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a6/d3/e6e1a5494ab4ec694840347990d0a0bf83faaa10558bf21ab1990819adf4/cryptography-2.0.3-cp36-cp36m-manylinux1_i686.whl",
+                    "hash": "8067fce92ec98cb52fabe2e10205ff27dba5755d9ffc1f521be9c504f9a6d5fc"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/f7/d9/199f989f6267fc99c4830905809f6eb3b651b318b7a00aeae169cd5aa52e/cryptography-2.0.3-cp36-cp36m-manylinux1_x86_64.whl",
+                    "hash": "5a266ff306683cd82b2f19203f469b7580aee115f1818d2b2d1e12f1ee7fd12b"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/7c/48/42d35ebc735f64e88c42336b274aa6a474fa865a92f9e66cce33c5b700fe/cryptography-2.0.3-cp36-cp36m-win32.whl",
+                    "hash": "d5341dac22e8ab080e637c632d1b1e92acaa8e66a02d139c0c795c1797531384"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/a7/ab/b6677cbc6536fcc4d5e1b3875a67d5c7f3017a90edf5ad900c67056efef4/cryptography-2.0.3-cp36-cp36m-win_amd64.whl",
+                    "hash": "a83318144a0037f264891ddfcbae9b75303949bb0efaece9713df5e04388b7ef"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/9c/1a/0fc8cffb04582f9ffca61b15b0681cf2e8588438e55f61403eb9880bd8e0/cryptography-2.0.3.tar.gz",
+                    "hash": "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a"
+                }
+            ]
+        },
+        "docopt": {
+            "line": "docopt==0.6.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "docopt",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.6.2"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz",
+                    "hash": "49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"
+                }
+            ]
+        },
+        "enum34": {
+            "line": "enum34==1.1.6",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "enum34",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.1.6"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/c5/db/e56e6b4bbac7c4a06de1c50de6fe1ef3810018ae11732a50f15f62c7d050/enum34-1.1.6-py2-none-any.whl",
+                    "hash": "6bd0f6ad48ec2aa117d3d141940d484deccda84d4fcd884f5c3d93c23ecd8c79"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/af/42/cb9355df32c69b553e72a2e28daee25d1611d2c0d9c272aa1d34204205b2/enum34-1.1.6-py3-none-any.whl",
+                    "hash": "644837f692e5f550741432dd3f223bbb9852018674981b1664e5dc339387588a"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/bf/3e/31d502c25302814a7c2f1d3959d2a3b3f78e509002ba91aea64993936876/enum34-1.1.6.tar.gz",
+                    "hash": "8ad8c4783bf61ded74527bffb48ed9b54166685e4230386a9ed9b1279e2df5b1"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e8/26/a6101edcf724453845c850281b96b89a10dac6bd98edebc82634fccce6a5/enum34-1.1.6.zip",
+                    "hash": "2d81cbbe0e73112bdfe6ef8576f2238f2ba27dd0d55752a776c41d38b7da2850"
+                }
+            ]
+        },
+        "idna": {
+            "line": "idna==2.6",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "idna",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.6"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/27/cc/6dd9a3869f15c2edfab863b992838277279ce92663d334df9ecf5106f5c6/idna-2.6-py2.py3-none-any.whl",
+                    "hash": "8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/f4/bd/0467d62790828c23c47fc1dfa1b1f052b24efdf5290f071c7a91d0d82fd3/idna-2.6.tar.gz",
+                    "hash": "2c6a5de3089009e3da7c5dde64a141dbc8551d5b7f6cf4ed7c2568d0cc520a8f"
+                }
+            ]
+        },
+        "ipaddress": {
+            "line": "ipaddress==1.0.18",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "ipaddress",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.0.18"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/17/93/28f4dd560780dd70fe75ce7e2662869770dfac181f6bbb472179ea8da516/ipaddress-1.0.18-py2-none-any.whl",
+                    "hash": "d34cf15d95ce9a734560f7400a8bd2ac2606f378e2a1d0eadbf1c98707e7c74a"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/4e/13/774faf38b445d0b3a844b65747175b2e0500164b7c28d78e34987a5bfe06/ipaddress-1.0.18.tar.gz",
+                    "hash": "5d8534c8e185f2d8a1fda1ef73f2c8f4b23264e8e30063feeb9511d492a413e1"
+                }
+            ]
+        },
+        "pexpect": {
+            "line": "pexpect==4.2.1",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pexpect",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "4.2.1"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/5b/16/4859a0376be8b87bf3920b1f6e63b8a3c0ee42488babee07c87ca9316e03/pexpect-4.2.1-py2.py3-none-any.whl",
+                    "hash": "f853b52afaf3b064d29854771e2db509ef80392509bde2dd7a6ecf2dfc3f0018"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/e8/13/d0b0599099d6cd23663043a2a0bb7c61e58c6ba359b2656e6fb000ef5b98/pexpect-4.2.1.tar.gz",
+                    "hash": "3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92"
+                }
+            ]
+        },
+        "ptyprocess": {
+            "line": "ptyprocess==0.5.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "ptyprocess",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "0.5.2"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/ff/4e/fa4a73ccfefe2b37d7b6898329e7dbcd1ac846ba3a3b26b294a78a3eb997/ptyprocess-0.5.2-py2.py3-none-any.whl",
+                    "hash": "e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/51/83/5d07dc35534640b06f9d9f1a1d2bc2513fb9cc7595a1b0e28ae5477056ce/ptyprocess-0.5.2.tar.gz",
+                    "hash": "e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365"
+                }
+            ]
+        },
+        "py": {
+            "line": "py==1.4.34",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "py",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.4.34"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/53/67/9620edf7803ab867b175e4fd23c7b8bd8eba11cb761514dcd2e726ef07da/py-1.4.34-py2.py3-none-any.whl",
+                    "hash": "2ccb79b01769d99115aa600d7eed99f524bf752bba8f041dc1c184853514655a"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/68/35/58572278f1c097b403879c1e9369069633d1cbad5239b9057944bb764782/py-1.4.34.tar.gz",
+                    "hash": "0f2d585d22050e90c7d293b6451c83db097df77871974d90efd5a30dc12fcde3"
+                }
+            ]
+        },
+        "pycparser": {
+            "line": "pycparser==2.18",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pycparser",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.18"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/8c/2d/aad7f16146f4197a11f8e91fb81df177adcc2073d36a17b1491fd09df6ed/pycparser-2.18.tar.gz",
+                    "hash": "99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"
+                }
+            ]
+        },
+        "pyopenssl": {
+            "line": "pyOpenSSL==17.3.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pyOpenSSL",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "17.3.0"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/24/37/89bf12e53f1d27e8b2c8e5f8f9c7a958a3905f6916a9294a57a9d83fa165/pyOpenSSL-17.3.0-py2.py3-none-any.whl",
+                    "hash": "aade9985b93eaec51b0c0a2a60d14bb8dcff1ff8e36fe542e3c22812ec07315e"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ee/6a/cd78737dd990297205943cc4dcad3d3c502807fd2c5b18c5f33dc90ca214/pyOpenSSL-17.3.0.tar.gz",
+                    "hash": "29630b9064a82e04d8242ea01d7c93d70ec320f5e3ed48e95fcabc6b1d0f6c76"
+                }
+            ]
+        },
+        "pytest": {
+            "line": "pytest==3.2.2",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "pytest",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "3.2.2"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/e3/fd/75728643baacf174d58e50b69053cc9e2ebcdc97f3b6ad967aec12a59e33/pytest-3.2.2-py2.py3-none-any.whl",
+                    "hash": "b84f554f8ddc23add65c411bf112b2d88e2489fd45f753b1cae5936358bdf314"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/63/4a/db317d848325ba77e4ed498860b40ab53a8b49f1ae13612bc8aee75634f0/pytest-3.2.2.tar.gz",
+                    "hash": "f46e49e0340a532764991c498244a60e3a37d7424a532b3ff1a6a7653f1a403a"
+                }
+            ]
+        },
+        "requests": {
+            "line": "requests==2.0.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "requests",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "2.0.0"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/bf/78/be2b4c440ea767336d8448fe671fe1d78ca499e49d77dac90f92191cca0e/requests-2.0.0-py2.py3-none-any.whl",
+                    "hash": "2ef65639cb9600443f85451df487818c31f993ab288f313d29cc9db4f3cbe6ed"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/8e/88/102742c48605aef8d39fa719d932c67783d789679628fa1433cb4b2c7a2a/requests-2.0.0.tar.gz",
+                    "hash": "78536038f54cff6ade3be6863403146665b5a3923dd61108c98d8b64141f9d70"
+                }
+            ]
+        },
+        "six": {
+            "line": "six==1.11.0",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "six",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.11.0"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl",
+                    "hash": "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/16/d8/bc6316cf98419719bd59c91742194c111b6f2e85abac88e496adefaf7afe/six-1.11.0.tar.gz",
+                    "hash": "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+                }
+            ]
+        },
+        "urllib3": {
+            "line": "urllib3==1.22",
+            "editable": false,
+            "local_file": false,
+            "specifier": true,
+            "vcs": null,
+            "name": "urllib3",
+            "uri": null,
+            "path": null,
+            "revision": null,
+            "extras": [],
+            "specs": [
+                [
+                    "==",
+                    "1.22"
+                ]
+            ],
+            "hashes": [
+                {
+                    "url": "https://pypi.python.org/packages/63/cb/6965947c13a94236f6d4b8223e21beb4d576dc72e8130bd7880f600839b8/urllib3-1.22-py2.py3-none-any.whl",
+                    "hash": "06330f386d6e4b195fbfc736b297f58c5a892e4440e54d294d7004e3a9bbea1b"
+                },
+                {
+                    "url": "https://pypi.python.org/packages/ee/11/7c59620aceedcc1ef65e156cc5ce5a24ef87be4107c2b74458464e437a5d/urllib3-1.22.tar.gz",
+                    "hash": "cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f"
+                }
+            ]
         }
     }
 }

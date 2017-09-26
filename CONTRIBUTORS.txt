@@ -1,0 +1,5 @@
+Authors:
+    James Pacileo
+
+Patch contributions:
+    Dan Stephenson

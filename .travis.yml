@@ -1,10 +1,10 @@
 language: python
 os:
   - "linux"
-  - "osx"
+#   - "osx"
 matrix:
   allow_failures:
-    - os: osx
+    # - os: osx
     - python: pypy
     - python: 3.7-dev
 python:
@@ -19,11 +19,13 @@ python:
 # command to install dependencies
 install:
 #   - "pip install -r ./requirements.txt"
-  - "pip install -r ./requirements/dev-locked.txt"
+  - "pip install mr-piper"
+  - "piper install"
+  - "pip install -e ."
 
 # command to run the dependencies
 script:
-  - "pytest tests/test_piper.py"
+  - "pytest tests"
 #   - "coverage run --source ./mrpiper tests/test_piper.py"
 #   - "coveralls"
 

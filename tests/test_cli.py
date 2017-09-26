@@ -30,7 +30,14 @@ else:
     TEMP_LOCATION = tempfile.mkdtemp()
     project_dir = Path(TEMP_LOCATION)
 
-project_dir.chdir()
+try:
+    command = 'code-insiders.cmd "{}"'.format(project_dir)
+    if (platform.system() == "Windows"):
+        delegator.run(command, block=False)
+except:
+    pass
+
+
 # TEMP_LOCATION = (Path("temp") / "cli_testing_project")
 # Path("temp").mkdir_p()
 # TEMP_LOCATION.rmtree_p()
@@ -47,14 +54,18 @@ except:
     pass
 
 def test_init():
+    project_dir.chdir()
     print("Testing init...")
-    c = delegator.run("piper init --yes")
+    print(project_dir)
+    c = delegator.run("piper init --yes", block=True)
     print(c.out + c.err)
     assert c.return_code == 0
     # print((PROJECT_DIR / "piper.lock").abspath())
+    print(project_dir.files())
+    print(project_dir.dirs())
+    assert (project_dir / ".virtualenvs").exists()
     assert (project_dir / "piper.lock").isfile()
     assert (project_dir / "piper.json").isfile()
-    assert (project_dir / ".virtualenvs").exists()
     assert (project_dir / "requirements").exists()
     # result = runner.invoke(cli.init, [])
     # print(result.output)
@@ -63,7 +74,7 @@ def test_init():
 
 def test_add():
     print("Testing add...")
-    delegator.run("piper add requests git+https://github.com/django/django.git@1.11.5#egg=django").return_code == 0
+    # delegator.run("piper add requests git+https://github.com/django/django.git@1.11.5#egg=django").return_code == 0
     delegator.run("piper add Werkzeug~=0.11.0").return_code == 0
     delegator.run("piper add pytest --dev").return_code == 0
     delegator.run("piper add coverage pytest --dev").return_code == 0
@@ -83,7 +94,7 @@ def test_remove():
     c = delegator.run("piper remove requests")
     print(c.out + c.err)
     assert c.return_code == 0
-    delegator.run("piper remove django").return_code == 0
+    # delegator.run("piper remove django").return_code == 0
     delegator.run("piper remove coverage pytest").return_code == 0
     # result = runner.invoke(cli.remove, ["requests"])
     # print(result.output)
@@ -118,20 +129,21 @@ def test_why():
     assert c.return_code == 0
     assert "dependencies" in c.out
 
-    delegator.run("piper add pytest").return_code == 0
+    delegator.run("piper add pytest --dev").return_code == 0
     c = delegator.run("piper why pytest")
     assert c.return_code == 0
-    assert "devDpendencies" in c.out
+    assert "dev_dependencies" in c.out
 
 def test_install():
     print("Testing install...")
     delegator.run("piper install").return_code == 0
 
+# assert 'dev_dpendencies' in "pytest exists because it's specified in dev_dependencies\n"
 
 if __name__=="__main__":
     test_init()
-    # test_add()
-    # test_remove()
+    test_add()
+    test_remove()
     test_outdated()
     test_upgrade()
-    # test_install()
+    test_install()

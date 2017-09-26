@@ -36,6 +36,8 @@ from .vendor.requirements.requirement import Requirement
 from .vendor.requirements.parser import parse as parse_requirements
 from .vendor import pipdeptree
 
+from .overrides import parse as special_parse_requirements
+
 # import pipfile
 
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
@@ -43,6 +45,7 @@ from .utils import add_to_requirements_file, compile_requirements, add_to_requir
     shellquote, python_version, IGNORED_PACKAGES, resolve_git_shortcut
 from . import overrides
 from .project import PythonProject
+from . import pyenv_utils
 
 project = PythonProject()
 
@@ -127,6 +130,16 @@ def get_dependency_tree():
         return {}
     return json.loads(c.out)
 
+def pip_wheel(output_dir, requirements):
+    pip_command = "{0} wheel --wheel-dir={1} -r {2}".format(
+        which_pip(),
+        shellquote(output_dir),
+        shellquote(requirements)
+    )
+    c = delegator.run(pip_command)
+    return c
+    # return c.return_code == 0
+
 def pip_freeze():
     # temp = tempfile.TemporaryFile()
     # pip_command = '{0} freeze > {1}'.format(which_pip(), temp.name)
@@ -148,12 +161,25 @@ def pip_freeze():
     # # Return the result of the first one that runs ok, or the last one that didn't work.
     # return c
 
-def pip_install_list(packages, allow_global=False):
+def pip_install_list(packages, allow_global=False, cache_url=None, require_hashes=False):
 
-    pip_command = "{0} install --no-deps {1}".format(
-        which_pip(),
-        " ".join(packages)
-    )
+    hashes_string = "--require-hashes" if require_hashes else ""
+
+    if cache_url:
+        # --no-cache-dir
+        pip_command = "{0} install {1} --no-index --no-deps --find-links={2} {3}".format(
+            which_pip(),
+            hashes_string,
+            shellquote(cache_url),
+            " ".join(packages)
+        )
+    else:
+        pip_command = "{0} install {1} --no-deps {2}".format(
+            which_pip(),
+            hashes_string,
+            " ".join(packages)
+        )
+    logger.debug(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -174,6 +200,18 @@ def pip_install_list(packages, allow_global=False):
 
     # map(lambda x: x.block(), delegated_commands)
     # return delegated_commands
+
+def pip_install_from_cache(
+    cache_dir, requirements_file, require_hashes=False
+):
+    pip_command = "{0} install --no-index --find-links={1} -r {2}".format(
+        which_pip(),
+        shellquote(cache_dir),
+        shellquote(requirements_file)
+    )
+    c = delegator.run(pip_command)
+    return c
+
 
 def pip_install(
     package_name=None, r=None, allow_global=False, editable=False, no_deps=False, block=True, upgrade=False
@@ -260,7 +298,25 @@ def pip_outdated():
     return c
 
 
+def check_before_running(func):
+    def wrapper(*args, **kwargs):
+
+        if not project.has_virtualenv:
+            click.secho("There is no virtualenv setup for this project, please use " + crayons.yellow("piper init"), fg="red")
+            sys.exit(1)
+        if not project.has_piper_file:
+            click.secho("There is no project piper file for this project, please use " + crayons.yellow("piper init"), fg="red")
+            sys.exit(1)
+        if not project.has_piper_lock:
+            click.secho("There is no project lock file for this project, please use " + crayons.yellow("piper init"), fg="red")
+            sys.exit(1)
+        # if not project.has_piper_file:
+        #     click.secho("There is no project piper file for this project, please use " + crayons.yellow("piper init"), fg="red")
+        return func(*args, **kwargs)
+    return wrapper
+
 def init(noinput=False, private=False, python=None, virtualenv_location="inside", installable=False):
+    click.echo("🔨  Initializing project")
     # create requirements structure
     # create virtualenv
     if python:
@@ -272,6 +328,9 @@ def init(noinput=False, private=False, python=None, virtualenv_location="inside"
             sys.exit(1)
         else:
             python = found_python
+            click.echo(
+                "found python version" + python
+            )
 
     if noinput:
         init_data = {
@@ -285,14 +344,15 @@ def init(noinput=False, private=False, python=None, virtualenv_location="inside"
         crayons.green(emoji.emojize("\n:sparkles:  Initialization complete", use_aliases=True))
     )
 
-
+@check_before_running
 def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements
     # init()
-    if editable:
-        click.secho("Installing {0} in editable mode...".format(crayons.yellow(package_line)))
-    else:
-        click.secho("Installing {0}...".format(crayons.yellow(package_line)))
+    click.secho("[1/2] 🔍  Locating package {}...".format(crayons.yellow(package_line), fg="yellow"))
+    # if editable:
+    #     click.secho("Installing {0} in editable mode...".format(crayons.yellow(package_line)))
+    # else:
+    #     click.secho("Installing {0}...".format(crayons.yellow(package_line)))
 
     could_be_github = parse.parse("{:w}/{:w}#{:w}", package_line) or parse.parse("{:w}/{:w}", package_line)
     if could_be_github:
@@ -335,8 +395,9 @@ def add(package_line, editable=False, dev=False, dont_install=False):
 
     if is_vcs and (not req.name):
         click.secho("Make sure to add #egg=<name> to your url", fg="red")
-        return
+        sys.exit(1)
 
+    click.secho("[2/2] 🔨  Installing {}...".format(crayons.yellow(package_line), fg="yellow"))
     with click_spinner.spinner():
         c = pip_install(package_line, editable=is_editable, allow_global=False, block=True)
 
@@ -412,14 +473,19 @@ def add(package_line, editable=False, dev=False, dont_install=False):
     )
 
 
+@check_before_running
 def find_removable_dependencies(package_name):
     pass
 
+@check_before_running
 def remove(package_line, dev=False):
     req = Requirement.parse(package_line)
     logger.debug(req.__dict__)
     logger.debug(package_line)
-    click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
+
+    click.secho("[1/2] 🔍  Locating package {}...".format(crayons.yellow(req.name), fg="yellow"))
+    click.secho("[1/2] 🗑️  Removing package {}...".format(crayons.yellow(req.name), fg="yellow"))
+    # click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
 
     with click_spinner.spinner():
         removable_packages = project.find_removable_dependencies(req.name)
@@ -461,7 +527,8 @@ def remove(package_line, dev=False):
         crayons.green(emoji.emojize("\n:sparkles:  Package removal complete", use_aliases=True))
     )
 
-def install(dev=False, force_lockfile=False):
+# @check_before_running
+def install(dev=False, force_lockfile=False, cache_url=False, require_hashes=False):
     # should run project setup
 
     virtualenv_exists = project.virtualenv_dir.exists()
@@ -479,53 +546,99 @@ def install(dev=False, force_lockfile=False):
 
     packages = None
 
-    if piper_lock_exists:
-        click.echo("Installing from the piper lock file")
-        packages = [item[1]["line"] for item in project.piper_lock["frozen_deps"].items()]
-    else:
-        click.secho("Piper lock doesn't exist. Using next best option...", fg="yellow")
+    # First look for locks
+    # Otherwise use plain
 
-    if piper_file_exists and (packages == None):
-        click.echo("Installing from the piper file piper.json")
-        packages = [x[1] for x in project.piper_file["dependencies"].items()]
-        if dev:
-            packages += [x[1] for x in project.piper_file["dev_dependencies"].items()]
-
-    elif (packages == None):
-        click.secho("No piper.json file. Using next best option...", fg="yellow")
+    which_requirements_file = None
+    which_packages = None
 
     if dev:
-        if dev_locked_txt_exists and (packages == None):
-            click.echo("Installing from requirements/dev-locked.txt")
-            packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
-        if dev_txt_exists and (packages == None):
-            click.echo("Installing from requirements/dev.txt")
-            packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev.txt"))]
+        if piper_lock_exists:
+            project.update_requirement_files_from_piper_lock()
+            which_requirements_file = project.requirements_file("dev-locked.txt")
+        elif project.requirements_file("dev-locked.txt").exists():
+            which_requirements_file = project.requirements_file("dev-locked.txt")
+        elif piper_file_exists:
+            if require_hashes:
+                click.secho("Error: no lock file with hashes available.")
+                sys.exit(1)
+            which_packages = [x[1] for x in project.piper_file["dev_dependencies"].items()]
+        elif project.requirements_file("dev.txt").exists():
+            which_requirements_file = project.requirements_file("dev.txt")
+        else:
+            click.secho("Error: no requirement files available. Please use " + crayons.yellow("piper init"))
+            sys.exit(1)
+    else:
+        if piper_lock_exists:
+            project.update_requirement_files_from_piper_lock()
+            which_requirements_file = project.requirements_file("base-locked.txt")
+        elif project.requirements_file("base-locked.txt").exists():
+            which_requirements_file = project.requirements_file("base-locked.txt")
+        elif piper_file_exists:
+            if require_hashes:
+                click.secho("Error: no lock file with hashes available.")
+                sys.exit(1)
+            which_packages = [x[1] for x in project.piper_file["dependencies"].items()]
+        elif project.requirements_file("base.txt").exists():
+            which_requirements_file = project.requirements_file("base.txt")
+        else:
+            click.secho("Error: no requirement files available. Please use " + crayons.yellow("piper init"))
+            sys.exit(1)
 
-    if base_locked_txt_exists and (packages == None):
-        click.echo("Installing from requirements/base-locked.txt")
-        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))]
-    if base_txt_exists and (packages == None):
-        click.echo("Installing from requirements/base.txt")
-        packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base.txt"))]
+    # if piper_lock_exists:
+    #     click.echo("Installing from the piper lock file")
+    #     # packages = [item[1]["line"] for item in project.piper_lock["frozen_deps"].items()] #TODO: separate base and dev
+    #     project.update_requirement_files_from_piper_lock()
+    # else:
+    #     click.secho("Piper lock doesn't exist. Using next best option...", fg="yellow")
 
-    if packages == []:
-        click.secho("No installable packages found", fg="red")
-        sys.exit(0)
+    # if piper_file_exists and (packages == None):
+    #     click.echo("Installing from the piper file piper.json")
+    #     packages = [x[1] for x in project.piper_file["dependencies"].items()]
+    #     if dev:
+    #         packages += [x[1] for x in project.piper_file["dev_dependencies"].items()]
 
-    if packages == None:
-        click.echo(
-            crayons.red("No available files to install packages from. Please run ") + crayons.yellow("piper init")
-            )
-        sys.exit()
+    # elif (packages == None):
+    #     click.secho("No piper.json file. Using next best option...", fg="yellow")
+
+    # if dev:
+    #     if dev_locked_txt_exists and (packages == None):
+    #         click.echo("Installing from requirements/dev-locked.txt")
+    #         packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))]
+    #     if dev_txt_exists and (packages == None):
+    #         click.echo("Installing from requirements/dev.txt")
+    #         packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("dev.txt"))]
+
+    # if base_locked_txt_exists and (packages == None):
+    #     click.echo("Installing from requirements/base-locked.txt")
+    #     packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))]
+    # if base_txt_exists and (packages == None):
+    #     click.echo("Installing from requirements/base.txt")
+    #     packages = [item.line for item in get_packages_from_requirements_file(project.requirements_file("base.txt"))]
+
+    # if packages == []:
+    #     click.secho("No installable packages found", fg="red")
+    #     sys.exit(0)
+
+    # if packages == None:
+    #     click.echo(
+    #         crayons.red("No available files to install packages from. Please run ") + crayons.yellow("piper init")
+    #         )
+    #     sys.exit()
 
     # if dev:
     #     packages = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
     # else:
     #     packages = get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))
+    if packages:
+        c = pip_install_list(packages, cache_url=cache_url, require_hashes=require_hashes)
+    elif which_requirements_file:
+        c = pip_install_list(["-r", which_requirements_file.abspath()], cache_url=cache_url, require_hashes=require_hashes)
 
-    c = pip_install_list(packages)
     click.secho(c.out, fg="blue")
+    if c.return_code != 0:
+        click.secho(c.err, fg="red")
+        sys.exit(0)
 
     tree = get_dependency_tree()
 
@@ -543,6 +656,12 @@ def install(dev=False, force_lockfile=False):
         #             "dependencies": [dep["package_name"] for dep in node["dependencies"]],
         #             "line":
         #         })
+
+        if which_requirements_file:
+            packages = [_item.line for _item in special_parse_requirements("-r " + which_requirements_file)]
+        else:
+            packages = which_packages
+
         for package_line in packages:
             editable = False
             if package_line.startswith("-e "):
@@ -577,13 +696,15 @@ def install(dev=False, force_lockfile=False):
         crayons.green(emoji.emojize("\n:sparkles:  Install complete", use_aliases=True))
     )
 
+@check_before_running
 def outdated(all_pkgs=False, verbose=False, output_format="table"):
     # format can be table, json
 
     # logger.error("test error 2")
 
     if not (output_format == "json"):
-        click.echo("Fetching outdated packages...")
+        click.secho("[1/2] 🔍  Fetching dependency versions...", fg="yellow")
+        # click.echo("Fetching outdated packages...")
     # c = pip_outdated()
     # click.echo([c.return_code, c.out, c.err])
 
@@ -699,6 +820,9 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                     latest_version,
                 ])
 
+    if not (output_format == "json"):
+        click.secho("[2/2] 🔨  Normalising results...", fg="yellow")
+
     if output_format == "table":
         if verbose:
             click.echo(tabulate.tabulate(outdated_map, headers=["Name", "Current", "Wanted", "Patch", "Minor", "Latest"]))
@@ -716,6 +840,7 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
 
 
 
+@check_before_running
 def upgrade(package_line, upgrade_level="latest", noinput=False):
     # get current version
 
@@ -899,12 +1024,14 @@ def upgrade(package_line, upgrade_level="latest", noinput=False):
         crayons.green(emoji.emojize("\n:sparkles:  Upgrade complete", use_aliases=True))
     )
 
+@check_before_running
 def upgrade_all(upgrade_level="latest", noinput=False):
 
     pkgs = get_packages_from_requirements_file(project.requirements_file("dev-locked.txt"))
     for package in pkgs:
         upgrade(upgrade_level, noinput=noinput)
 
+@check_before_running
 def why(package_name):
     piper_file = project.piper_file
     if package_name.lower() in piper_file["dependencies"]:
@@ -923,7 +1050,7 @@ def why(package_name):
     for parent in parents:
         click.echo('The module {0} depends on {1}'.format(crayons.green(parent["package_name"]), crayons.yellow(package_name)))
 
-def list(depth=None):
+def dependency_list(depth=None):
     tree = get_dependency_tree()
     # click.echo(json.dumps(tree, indent=4))
 
@@ -956,14 +1083,17 @@ def list(depth=None):
     )
 
 
+@check_before_running
 def wipe():
     click.confirm("Are you sure you want to wipe?", abort=True)
     project.wipe()
 
+@check_before_running
 def info(package_name):
     text = pip_show(package_name)
     click.echo(text)
 
+@check_before_running
 def version(noinput=False, set_version=None, set_git=False):
     # if new:
     #     # update version
@@ -1002,12 +1132,65 @@ def version(noinput=False, set_version=None, set_git=False):
         click.secho("Done", fg="green")
 
 
+@check_before_running
 def activate():
     activate_bin = which("activate")
     if os.name == 'nt':
         click.echo(activate_bin.replace(".exe", ".bat"))
     else:
         click.echo("source {}".format(shellquote(activate_bin)))
+
+
+from .vendor.hashin import get_package_hashes
+
+@check_before_running
+def hash():
+    click.secho("[1/2] ⌛  Calculating hashes...", fg="yellow")
+    lock = project.piper_lock
+
+    frozen = list(lock["frozen_deps"].items())
+    with click.progressbar(frozen, length=len(frozen)) as bar:
+        for key, val in bar:
+            try:
+                version = val["specs"][0][1]
+                hashes = get_package_hashes(key, version)
+                lock["frozen_deps"][key]["hashes"] = hashes["hashes"]
+                logger.debug("Saved hashes for: {}".format(val["line"]))
+            except Exception as err:
+                logger.error("Couldn't get hashes for {0} {1}".format(val["line"], err))
+                continue
+
+    click.secho("[2/2] 💾  Storing hashes...", fg="yellow")
+    project.save_to_piper_lock(lock)
+    project.update_requirement_files_from_piper_lock()
+
+    click.secho("Done", fg="green")
+
+@check_before_running
+def cache(output_dir="./piper_cache", dev=False):
+    click.secho("[1/2] 🔍  Collecting packages to cache...", fg="yellow")
+    # click.secho("Output dir selected: {}".format(output_dir))
+
+    if dev:
+        requirements = project.requirements_file("dev-locked.txt").abspath()
+    else:
+        requirements = project.requirements_file("base-locked.txt").abspath()
+
+    click.secho("[2/2] 📦  Caching packages...", fg="yellow")
+
+    with click_spinner.spinner():
+        c = pip_wheel(output_dir, requirements)
+        # click.secho(c.out + c.err)
+    click.secho("Caching complete! Your cahce is stored at: {}".format(output_dir), fg="green")
+
+def check_integrity():
+    pass
+
+@check_before_running
+def fix():
+    project.denormalise_piper_lock()
+    project.prune_frozen_deps()
+    project.update_requirement_files_from_piper_lock()
 
 # def run_bin(bin_name, args):
 #     path = which(bin_name)
