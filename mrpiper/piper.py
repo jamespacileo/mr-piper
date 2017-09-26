@@ -36,6 +36,8 @@ from .vendor.requirements.requirement import Requirement
 from .vendor.requirements.parser import parse as parse_requirements
 from .vendor import pipdeptree
 
+from .overrides import parse as special_parse_requirements
+
 # import pipfile
 
 from .utils import add_to_requirements_file, compile_requirements, add_to_requirements_lockfile,  \
@@ -654,6 +656,12 @@ def install(dev=False, force_lockfile=False, cache_url=False, require_hashes=Fal
         #             "dependencies": [dep["package_name"] for dep in node["dependencies"]],
         #             "line":
         #         })
+
+        if which_requirements_file:
+            packages = special_parse_requirements(which_requirements_file)
+        else:
+            packages = which_packages
+
         for package_line in packages:
             editable = False
             if package_line.startswith("-e "):
