@@ -250,17 +250,17 @@ class PythonProject(object):
 
     def create_virtualenv(self, python=None, virtualenv_location="inside"):
         virtualenv_dir = self.virtualenv_inside_dir if (virtualenv_location == "inside") else self.virtualenv_outside_dir
-        # click.echo("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
+        logger.debug("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
         if python:
 
             if pyenv_utils.is_python_pyenv(python):
                 versions = pyenv_utils.get_pyenv_version(python)
-                click.echo("versions {}".format(versions))
+                logger.debug("versions {}".format(versions))
                 if versions:
                     pyenv_utils.set_local(versions[-1])
 
 
-            click.echo("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
+            logger.debug("creating virtualenv {0} {1} {2}".format(python, virtualenv_location, virtualenv_dir.abspath()))
             command = "virtualenv {0} --python={1}".format(
                 utils.shellquote(virtualenv_dir.abspath()),
                 utils.shellquote(python)
@@ -274,8 +274,9 @@ class PythonProject(object):
         self._virtualenv_location = virtualenv_location
         # click.echo(command)
         c = delegator.run(command)
-        # click.echo(c.err)
-        # click.echo(c.out)
+        click.echo(c.err)
+        click.echo(c.out)
+        # click.echo(c.return_code)
         return c.return_code == 0
 
     @property
@@ -424,14 +425,21 @@ class PythonProject(object):
         dev_main = []
         dev_locked = []
 
+        list_of_dependables =  [_i.lower() for _i in itertools.chain.from_iterable(
+            map(lambda x: x[1]["depends_on"], dependencies.items())
+            )]
+        list_of_dev_dependables =  [_i.lower() for _i in itertools.chain.from_iterable(
+            map(lambda x: x[1]["depends_on"], dev_dependencies.items())
+            )]
+
         # iterate frozen and detect if needs to be in base.txt or dev.txt
         for key, item in frozen.items():
             if key.lower() in dependencies: #.keys():
                 base_main.append(item)
                 base_locked.append(item)
                 continue
-            list_of_dependables = map(lambda x: x[1]["depends_on"], dependencies.items())
-            if key.lower() in itertools.chain.from_iterable(list_of_dependables):
+
+            if key.lower() in list_of_dependables:
                 base_locked.append(item)
                 continue
 
@@ -439,25 +447,59 @@ class PythonProject(object):
                 dev_main.append(item)
                 dev_locked.append(item)
                 continue
-            list_of_dev_dependables = map(lambda x: x[1]["depends_on"], dev_dependencies.items())
-            if key.lower() in itertools.chain.from_iterable(list_of_dev_dependables):
+
+            if key.lower() in list_of_dev_dependables:
                 dev_locked.append(item)
                 continue
 
-        logger.debug([base_main, base_locked, dev_main, dev_locked])
+        # logger.debug([base_main, base_locked, dev_main, dev_locked])
+
+        # logger.debug(json.dumps(dev_locked, indent=4))
+
+        def convert_to_line(_item):
+            lines = []
+            line = _item["line"]
+            if _item.get("hashes"):
+                hashes = _item.get("hashes")
+                for _hash in hashes:
+                    lines.append(line + " \\")
+                    line = "    --hash=sha256:{}".format(_hash["hash"])
+            lines.append(line)
+            return lines
 
         self.requirements_file("base.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + [item["line"] for item in base_main]
+            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in base_main]))
         )
         self.requirements_file("base-locked.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + [item["line"] for item in base_locked]
+            [REQUIREMENT_FILE_GENERATED_TEXT, ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in base_locked]))
         )
         self.requirements_file("dev.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base.txt", ""] + [item["line"] for item in dev_main]
+            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base.txt", ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in dev_main]))
         )
         self.requirements_file("dev-locked.txt").write_lines(
-            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base-locked.txt", ""] + [item["line"] for item in dev_locked]
+            [REQUIREMENT_FILE_GENERATED_TEXT, "-r base-locked.txt", ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in dev_locked]))
         )
+        # logger.debug([REQUIREMENT_FILE_GENERATED_TEXT, "-r base-locked.txt", ""] + list(itertools.chain.from_iterable([convert_to_line(item) for item in dev_main])))
+
+    def prune_frozen_deps(self):
+        lock = self.piper_lock
+
+        list_of_dependables = itertools.chain.from_iterable(map(lambda x: x[1]["depends_on"], lock["dependencies"].items()))
+        list_of_dev_dependables = itertools.chain.from_iterable(map(lambda x: x[1]["depends_on"], lock["dev_dependencies"].items()))
+
+        combined_deps = [i.lower() for i in list_of_dependables] + [i.lower() for i in list_of_dev_dependables]
+
+        logger.debug([i for i in list_of_dependables])
+        logger.debug([i for i in list_of_dev_dependables])
+        # all_dependables = list_of_dependables + list_of_dev_dependables
+
+        for key, item in list(lock["frozen_deps"].items()):
+            if (key.lower() in combined_deps):
+                pass
+            else:
+                lock["frozen_deps"].pop(key)
+
+        self.save_to_piper_lock(lock)
 
     def denormalise_piper_lock(self):
         lock = self.piper_lock

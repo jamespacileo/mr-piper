@@ -128,6 +128,16 @@ def get_dependency_tree():
         return {}
     return json.loads(c.out)
 
+def pip_wheel(output_dir, requirements):
+    pip_command = "{0} wheel --wheel-dir={1} -r {2}".format(
+        which_pip(),
+        shellquote(output_dir),
+        shellquote(requirements)
+    )
+    c = delegator.run(pip_command)
+    return c
+    # return c.return_code == 0
+
 def pip_freeze():
     # temp = tempfile.TemporaryFile()
     # pip_command = '{0} freeze > {1}'.format(which_pip(), temp.name)
@@ -149,12 +159,25 @@ def pip_freeze():
     # # Return the result of the first one that runs ok, or the last one that didn't work.
     # return c
 
-def pip_install_list(packages, allow_global=False):
+def pip_install_list(packages, allow_global=False, cache_url=None, require_hashes=False):
 
-    pip_command = "{0} install --no-deps {1}".format(
-        which_pip(),
-        " ".join(packages)
-    )
+    hashes_string = "--require-hashes" if require_hashes else ""
+
+    if cache_url:
+        # --no-cache-dir
+        pip_command = "{0} install {1} --no-index --no-deps --find-links={2} {3}".format(
+            which_pip(),
+            hashes_string,
+            shellquote(cache_url),
+            " ".join(packages)
+        )
+    else:
+        pip_command = "{0} install {1} --no-deps {2}".format(
+            which_pip(),
+            hashes_string,
+            " ".join(packages)
+        )
+    logger.debug(pip_command)
     c = delegator.run(pip_command)
     return c
 
@@ -175,6 +198,18 @@ def pip_install_list(packages, allow_global=False):
 
     # map(lambda x: x.block(), delegated_commands)
     # return delegated_commands
+
+def pip_install_from_cache(
+    cache_dir, requirements_file, require_hashes=False
+):
+    pip_command = "{0} install --no-index --find-links={1} -r {2}".format(
+        which_pip(),
+        shellquote(cache_dir),
+        shellquote(requirements_file)
+    )
+    c = delegator.run(pip_command)
+    return c
+
 
 def pip_install(
     package_name=None, r=None, allow_global=False, editable=False, no_deps=False, block=True, upgrade=False
@@ -465,7 +500,7 @@ def remove(package_line, dev=False):
         crayons.green(emoji.emojize("\n:sparkles:  Package removal complete", use_aliases=True))
     )
 
-def install(dev=False, force_lockfile=False):
+def install(dev=False, force_lockfile=False, cache_url=False, require_hashes=False):
     # should run project setup
 
     virtualenv_exists = project.virtualenv_dir.exists()
@@ -485,7 +520,7 @@ def install(dev=False, force_lockfile=False):
 
     if piper_lock_exists:
         click.echo("Installing from the piper lock file")
-        packages = [item[1]["line"] for item in project.piper_lock["frozen_deps"].items()]
+        packages = [item[1]["line"] for item in project.piper_lock["frozen_deps"].items()] #TODO: separate base and dev
     else:
         click.secho("Piper lock doesn't exist. Using next best option...", fg="yellow")
 
@@ -528,8 +563,10 @@ def install(dev=False, force_lockfile=False):
     # else:
     #     packages = get_packages_from_requirements_file(project.requirements_file("base-locked.txt"))
 
-    c = pip_install_list(packages)
+    c = pip_install_list(packages, cache_url=cache_url, require_hashes=require_hashes)
     click.secho(c.out, fg="blue")
+    if c.err:
+        click.secho(c.err, fg="red")
 
     tree = get_dependency_tree()
 
@@ -927,7 +964,7 @@ def why(package_name):
     for parent in parents:
         click.echo('The module {0} depends on {1}'.format(crayons.green(parent["package_name"]), crayons.yellow(package_name)))
 
-def list(depth=None):
+def dependency_list(depth=None):
     tree = get_dependency_tree()
     # click.echo(json.dumps(tree, indent=4))
 
@@ -1012,6 +1049,46 @@ def activate():
         click.echo(activate_bin.replace(".exe", ".bat"))
     else:
         click.echo("source {}".format(shellquote(activate_bin)))
+
+
+from .vendor.hashin import get_package_hashes
+
+def hash():
+    lock = project.piper_lock
+    for key, val in list(lock["frozen_deps"].items()):
+        try:
+            version = val["specs"][0][1]
+            hashes = get_package_hashes(key, version)
+            lock["frozen_deps"][key]["hashes"] = hashes["hashes"]
+            logger.debug("Saved hashes for: {}".format(val["line"]))
+        except Exception as err:
+            logger.error("Couldn't get hashes for {0} {1}".format(val["line"], err))
+            continue
+
+    project.save_to_piper_lock(lock)
+    project.update_requirement_files_from_piper_lock()
+
+
+def cache(output_dir="./piper_cache", dev=False):
+
+    # click.secho("Output dir selected: {}".format(output_dir))
+
+    if dev:
+        requirements = project.requirements_file("dev-locked.txt").abspath()
+    else:
+        requirements = project.requirements_file("base-locked.txt").abspath()
+
+    click.secho("Caching packages...", fg="yellow")
+
+    with click_spinner.spinner():
+        c = pip_wheel(output_dir, requirements)
+        # click.secho(c.out + c.err)
+    click.secho("Caching complete! Your cahce is stored at: {}".format(output_dir), fg="green")
+
+def fix():
+    project.denormalise_piper_lock()
+    project.prune_frozen_deps()
+    project.update_requirement_files_from_piper_lock()
 
 # def run_bin(bin_name, args):
 #     path = which(bin_name)
