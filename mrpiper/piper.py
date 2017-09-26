@@ -658,7 +658,7 @@ def install(dev=False, force_lockfile=False, cache_url=False, require_hashes=Fal
         #         })
 
         if which_requirements_file:
-            packages = special_parse_requirements(which_requirements_file)
+            packages = [_item.line for _item in special_parse_requirements("-r " + which_requirements_file)]
         else:
             packages = which_packages
 
