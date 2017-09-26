@@ -25,7 +25,7 @@ RUN pip install piper
 # COPY piper.lock piper.lock
 # RUN piper install
 COPY ./requirements ./requirements
-COPY ./wheelhouse ./wheelhouse
+# COPY ./wheelhouse ./wheelhouse
 # RUN piper install
 # RUN pip install -r requirements/dev-locked.txt
 # RUN pip install --no-index --find-links=./wheelhouse -r requirements/dev-locked.txt
