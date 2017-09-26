@@ -81,7 +81,6 @@ def install(dev, cache_url, require_hashes):
 @click_log.simple_verbosity_option(logger)
 def init(file_to_import, virtualenv_location, noinput, private, python, is_global, installable):
     "Initialise project with virtual environment, requirements structure and package lock."
-    click.echo("Initializing project")
     piper.init(noinput=noinput, python=python, virtualenv_location=virtualenv_location, installable=installable)
 
 @cli.command()

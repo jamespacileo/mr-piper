@@ -314,6 +314,7 @@ def check_before_running(func):
     return wrapper
 
 def init(noinput=False, private=False, python=None, virtualenv_location="inside", installable=False):
+    click.echo("🔨  Initializing project")
     # create requirements structure
     # create virtualenv
     if python:
@@ -345,10 +346,11 @@ def init(noinput=False, private=False, python=None, virtualenv_location="inside"
 def add(package_line, editable=False, dev=False, dont_install=False):
     # create requirements
     # init()
-    if editable:
-        click.secho("Installing {0} in editable mode...".format(crayons.yellow(package_line)))
-    else:
-        click.secho("Installing {0}...".format(crayons.yellow(package_line)))
+    click.secho("[1/2] 🔍  Locating package {}...".format(crayons.yellow(package_line), fg="yellow"))
+    # if editable:
+    #     click.secho("Installing {0} in editable mode...".format(crayons.yellow(package_line)))
+    # else:
+    #     click.secho("Installing {0}...".format(crayons.yellow(package_line)))
 
     could_be_github = parse.parse("{:w}/{:w}#{:w}", package_line) or parse.parse("{:w}/{:w}", package_line)
     if could_be_github:
@@ -391,8 +393,9 @@ def add(package_line, editable=False, dev=False, dont_install=False):
 
     if is_vcs and (not req.name):
         click.secho("Make sure to add #egg=<name> to your url", fg="red")
-        return
+        sys.exit(1)
 
+    click.secho("[2/2] 🔨  Installing {}...".format(crayons.yellow(package_line), fg="yellow"))
     with click_spinner.spinner():
         c = pip_install(package_line, editable=is_editable, allow_global=False, block=True)
 
@@ -477,7 +480,10 @@ def remove(package_line, dev=False):
     req = Requirement.parse(package_line)
     logger.debug(req.__dict__)
     logger.debug(package_line)
-    click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
+
+    click.secho("[1/2] 🔍  Locating package {}...".format(crayons.yellow(req.name), fg="yellow"))
+    click.secho("[1/2] 🗑️  Removing package {}...".format(crayons.yellow(req.name), fg="yellow"))
+    # click.secho("Removing package {0}...".format(crayons.yellow(req.name)) )
 
     with click_spinner.spinner():
         removable_packages = project.find_removable_dependencies(req.name)
@@ -519,7 +525,7 @@ def remove(package_line, dev=False):
         crayons.green(emoji.emojize("\n:sparkles:  Package removal complete", use_aliases=True))
     )
 
-@check_before_running
+# @check_before_running
 def install(dev=False, force_lockfile=False, cache_url=False, require_hashes=False):
     # should run project setup
 
@@ -628,8 +634,9 @@ def install(dev=False, force_lockfile=False, cache_url=False, require_hashes=Fal
         c = pip_install_list(["-r", which_requirements_file.abspath()], cache_url=cache_url, require_hashes=require_hashes)
 
     click.secho(c.out, fg="blue")
-    if c.err:
+    if c.return_code != 0:
         click.secho(c.err, fg="red")
+        sys.exit(0)
 
     tree = get_dependency_tree()
 
@@ -688,7 +695,8 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
     # logger.error("test error 2")
 
     if not (output_format == "json"):
-        click.echo("Fetching outdated packages...")
+        click.secho("[1/2] 🔍  Fetching dependency versions...", fg="yellow")
+        # click.echo("Fetching outdated packages...")
     # c = pip_outdated()
     # click.echo([c.return_code, c.out, c.err])
 
@@ -803,6 +811,9 @@ def outdated(all_pkgs=False, verbose=False, output_format="table"):
                     wanted_version,
                     latest_version,
                 ])
+
+    if not (output_format == "json"):
+        click.secho("[2/2] 🔨  Normalising results...", fg="yellow")
 
     if output_format == "table":
         if verbose:
@@ -1126,24 +1137,30 @@ from .vendor.hashin import get_package_hashes
 
 @check_before_running
 def hash():
+    click.secho("[1/2] ⌛  Calculating hashes...", fg="yellow")
     lock = project.piper_lock
-    for key, val in list(lock["frozen_deps"].items()):
-        try:
-            version = val["specs"][0][1]
-            hashes = get_package_hashes(key, version)
-            lock["frozen_deps"][key]["hashes"] = hashes["hashes"]
-            logger.debug("Saved hashes for: {}".format(val["line"]))
-        except Exception as err:
-            logger.error("Couldn't get hashes for {0} {1}".format(val["line"], err))
-            continue
 
+    frozen = list(lock["frozen_deps"].items())
+    with click.progressbar(frozen, length=len(frozen)) as bar:
+        for key, val in bar:
+            try:
+                version = val["specs"][0][1]
+                hashes = get_package_hashes(key, version)
+                lock["frozen_deps"][key]["hashes"] = hashes["hashes"]
+                logger.debug("Saved hashes for: {}".format(val["line"]))
+            except Exception as err:
+                logger.error("Couldn't get hashes for {0} {1}".format(val["line"], err))
+                continue
+
+    click.secho("[2/2] 💾  Storing hashes...", fg="yellow")
     project.save_to_piper_lock(lock)
     project.update_requirement_files_from_piper_lock()
 
+    click.secho("Done", fg="green")
 
 @check_before_running
 def cache(output_dir="./piper_cache", dev=False):
-
+    click.secho("[1/2] 🔍  Collecting packages to cache...", fg="yellow")
     # click.secho("Output dir selected: {}".format(output_dir))
 
     if dev:
@@ -1151,7 +1168,7 @@ def cache(output_dir="./piper_cache", dev=False):
     else:
         requirements = project.requirements_file("base-locked.txt").abspath()
 
-    click.secho("Caching packages...", fg="yellow")
+    click.secho("[2/2] 📦  Caching packages...", fg="yellow")
 
     with click_spinner.spinner():
         c = pip_wheel(output_dir, requirements)

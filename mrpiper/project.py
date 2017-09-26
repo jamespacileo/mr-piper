@@ -58,10 +58,11 @@ class PythonProject(object):
 
     def setup(self, noinput=False, init_data={}, python=None, virtualenv_location="inside", installable=False):
 
+        click.secho("[1/5] 🎻  Checking virtualenv...", fg="yellow")
         if not self.has_virtualenv:
-            click.secho("Creating virtualenv...", fg="yellow")
             # self.virtualenv_location = virtualenv_location
             # click.echo([python, virtualenv_location])
+            click.secho("Creating virtualenv...") #, fg="yellow")
             with click_spinner.spinner():
                 self.create_virtualenv(python=python, virtualenv_location=virtualenv_location)
             click.secho("Virtualenv created ✓", fg="green")
@@ -69,27 +70,31 @@ class PythonProject(object):
         else:
             click.secho("Virtualenv already exists ✓", fg="green")
 
+        click.secho("[2/5] 🎻  Checking project file...", fg="yellow")
+        if not self.has_piper_file:
+            click.secho("Creating project file...") #, fg="yellow")
+            self.create_piper_file(noinput=noinput, init_data=init_data)
+            click.secho("Project file created ✓", fg="green")
+        else:
+            click.secho("Project file already exists ✓", fg="green")
+
+        click.secho("[3/5] 🎻  Checking lock file...", fg="yellow")
+        if not self.has_piper_lock:
+            click.secho("Creating lock file...") #, fg="yellow")
+            self.create_piper_lock()
+            click.secho("Lock file created ✓", fg="green")
+        else:
+            click.secho("Lock file already exists ✓", fg="green")
+
+        click.secho("[4/5] 🎻  Cheching requirement files...", fg="yellow")
         if not self.has_requirements_structure:
-            click.secho("Creating requirement files...", fg="yellow")
+            click.secho("Creating requirement files...") #, fg="yellow")
             self.create_requirements_structure()
             click.secho("Requirement files created ✓", fg="green")
         else:
             click.secho("Requirement files already exists ✓", fg="green")
 
-        if not self.has_piper_file:
-            click.secho("Creating piper file...", fg="yellow")
-            self.create_piper_file(noinput=noinput, init_data=init_data)
-            click.secho("Piper file created ✓", fg="green")
-        else:
-            click.secho("Piper file already exists ✓", fg="green")
-
-        if not self.has_piper_lock:
-            click.secho("Creating piper lock...", fg="yellow")
-            self.create_piper_lock()
-            click.secho("Piper lock created ✓", fg="green")
-        else:
-            click.secho("Piper lock already exists ✓", fg="green")
-
+        click.secho("[5/5] 🎻  Checking install-ability...", fg="yellow")
         if not self.has_setup_py:
             if (not installable) and (not noinput):
                 wants_setup_py = click.confirm("Do you want to make the project installable (adding setup.py)?")
@@ -100,6 +105,9 @@ class PythonProject(object):
                 click.secho("setup.py created ✓", fg="green")
             else:
                 click.secho("setup.py creation skipped", fg="yellow")
+        else:
+                click.secho("setup.py already exists ✓", fg="green")
+
 
         logger.debug([
             self.virtualenv_dir,
@@ -325,7 +333,7 @@ class PythonProject(object):
             private = not click.confirm("Is it a public project?")
 
             if not private:
-                licence = click.prompt("Licence", default=licence)
+                licence = click.prompt("Licence", default="MIT")
             else:
                 licence = None
 
