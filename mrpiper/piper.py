@@ -77,6 +77,55 @@ def system_which(command, mult=False):
     else:
         return result.split('\n')[0]
 
+
+# def do_shell(three=None, python=False, fancy=False, shell_args=None):
+
+#     cmd = 'pew'
+#     args = ["workon", project.virtualenv_name]
+
+#     # Grab current terminal dimensions to replace the hardcoded default
+#     # dimensions of pexpect
+#     terminal_dimensions = get_terminal_size()
+
+#     try:
+#         c = pexpect.spawn(
+#             cmd,
+#             args,
+#             dimensions=(
+#                 terminal_dimensions.lines,
+#                 terminal_dimensions.columns
+#             )
+#         )
+
+#     # Windows!
+#     except AttributeError:
+#         import subprocess
+#         p = subprocess.Popen([cmd] + list(args), shell=True, universal_newlines=True)
+#         p.communicate()
+#         sys.exit(p.returncode)
+
+#     # Activate the virtualenv if in compatibility mode.
+#     if compat:
+#         c.sendline(activate_virtualenv())
+
+#     # Send additional arguments to the subshell.
+#     if shell_args:
+#         c.sendline(' '.join(shell_args))
+
+#     # Handler for terminal resizing events
+#     # Must be defined here to have the shell process in its context, since we
+#     # can't pass it as an argument
+#     def sigwinch_passthrough(sig, data):
+#         terminal_dimensions = get_terminal_size()
+#         c.setwinsize(terminal_dimensions.lines, terminal_dimensions.columns)
+#     signal.signal(signal.SIGWINCH, sigwinch_passthrough)
+
+#     # Interact with the new shell.
+#     c.interact(escape_character=None)
+#     c.close()
+#     sys.exit(c.exitstatus)
+
+
 def find_a_system_python(python):
     """Finds a system python, given a version (e.g. 2.7 / 3.6.2), or a full path."""
     if python.startswith('py'):
@@ -300,6 +349,8 @@ def pip_outdated():
 
 def check_before_running(func):
     def wrapper(*args, **kwargs):
+
+        # check pip and virtualenv exists
 
         if not project.has_virtualenv:
             click.secho("There is no virtualenv setup for this project, please use " + crayons.yellow("piper init"), fg="red")
@@ -1192,8 +1243,13 @@ def fix():
     project.prune_frozen_deps()
     project.update_requirement_files_from_piper_lock()
 
+# @check_before_running
+# def run(name, args):
+#     for name in names:
+#         run_single(name)
+
 @check_before_running
-def run(name):
+def run(name, args=[]):
     command = project.get_script_command(name)
     if not command:
         click.secho(
@@ -1210,7 +1266,7 @@ def run(name):
             sys.exit(1)
 
     click.secho("Running command {}...".format(name))
-    c = delegator.run(command["command"], block=True)
+    c = delegator.run("{0} {1}".format(command["command"], " ".join(args)), block=True)
     if c.return_code == 0:
         click.secho(c.out, fg="blue")
     else:
@@ -1228,9 +1284,15 @@ def run(name):
 
     click.secho("Done running command {}".format(name), fg="green")
 
-# def shell():
+def shell():
 
-#     script_file = project.virtualenv_dir / ""
+    # script_file = project.virtualenv_dir / ""
+    command = "{0} workon {1}".format(
+        system_which("pew"),
+        shellquote(project.virtualenv_dir)
+    )
+    logger.debug(command)
+    delegator.run(command, block=False)
 
 # def run_bin(bin_name, args):
 #     path = which(bin_name)

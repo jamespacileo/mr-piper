@@ -176,6 +176,20 @@ def hash():
     "Gather dependency hashes"
     piper.hash()
 
+@cli.command()
+@click.argument("name")
+@click.argument('args', nargs=-1, type=click.UNPROCESSED)
+@click_log.simple_verbosity_option(logger)
+def run(name, args):
+    "Run a list of scripts sequentially"
+    piper.run(name, args)
+
+@cli.command()
+@click_log.simple_verbosity_option(logger)
+def shell():
+    "Run a shell within the virtualenv"
+    piper.shell()
+
 # @cli.command()
 # @click.argument('timeit_args', nargs=-1, type=click.UNPROCESSED)
 # def python(args):
