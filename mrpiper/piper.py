@@ -1192,6 +1192,46 @@ def fix():
     project.prune_frozen_deps()
     project.update_requirement_files_from_piper_lock()
 
+@check_before_running
+def run(name):
+    command = project.get_script_command(name)
+    if not command:
+        click.secho(
+            crayons.red("No command ") + crayons.yellow(name) + crayons.red(". Please add the command in piper.json or check if name is correct.")
+        )
+        sys.exit(1)
+    if command["pre"]:
+        click.secho("Running pre-hook for {}...".format(name), fg="yellow")
+        c = delegator.run(command["pre"])
+        if c.return_code == 0:
+            click.secho(c.out, fg="blue")
+        else:
+            click.secho(c.err, fg="red")
+            sys.exit(1)
+
+    click.secho("Running command {}...".format(name))
+    c = delegator.run(command["command"], block=True)
+    if c.return_code == 0:
+        click.secho(c.out, fg="blue")
+    else:
+        click.secho(c.err, fg="red")
+        sys.exit(1)
+
+    if command["post"]:
+        click.secho("Running post-hook for {}...".format(name), fg="yellow")
+        c = delegator.run(command["post"])
+        if c.return_code == 0:
+            click.secho(c.out, fg="blue")
+        else:
+            click.secho(c.err, fg="red")
+            sys.exit(1)
+
+    click.secho("Done running command {}".format(name), fg="green")
+
+# def shell():
+
+#     script_file = project.virtualenv_dir / ""
+
 # def run_bin(bin_name, args):
 #     path = which(bin_name)
 #     if not Path(path).exists():

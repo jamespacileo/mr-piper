@@ -644,3 +644,22 @@ class PythonProject(object):
         if c.return_code != 0:
             click.secho(c.err, fg="red")
         return c.return_code == 0
+
+    @property
+    def scripts(self):
+        piper_file = self.piper_file
+        return piper_file["scripts"]
+
+    def get_script_command(self, name, platform=None):
+        scripts = self.scripts
+        command = scripts.get(name)
+        # keys = [_key for _key in scripts]
+        precommand = scripts.get("pre{}".format(name))
+        postcommand = scripts.get("post{}".format(name))
+        if command:
+            return {
+                "command": command,
+                "pre": precommand,
+                "post": postcommand
+            }
+        return
