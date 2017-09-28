@@ -10,6 +10,15 @@
     "keywords": "pip piper mrpiper package manager",
     "license": "MIT",
     "readme_filename": "README.rst",
+    "scripts": {
+        "build": "python setup.py sdist bdist_wheel --universal",
+        "publish": "twine upload dist/*",
+        "prebuild": "rm -rf ./dist",
+
+        "build_publish": "piper run build && piper run publish",
+
+        "test": "pytest --verbose tests"
+    },
     "py_modules": [
         "mrpiper.cli"
     ],
@@ -47,12 +56,15 @@
         "tabulate": "tabulate>=0.7.7",
         "crayons": "crayons>=0.1.2",
         "click-spinner": "click-spinner>=0.1.7",
-        "emoji": "emoji>=0.4.5"
+        "emoji": "emoji>=0.4.5",
+        "pew": "pew>=0.1.26",
+        "pexpect": "pexpect>=4.2.1"
     },
     "dev_dependencies": {
         "coverage": "coverage>=4.4.1",
         "coveralls": "coveralls>=1.2.0",
-        "pytest": "pytest>=3.2.2"
+        "pytest": "pytest>=3.2.2",
+        "twine": "twine>=1.9.1"
     },
     "private": false
 }
