@@ -174,7 +174,7 @@ def outdated(output_format, all_pkgs, verbose):
 @click.option("--noinput", is_flag=True)
 def wipe(noinput):
     "Wipe virtualenv, requirements folder/files and piper files."
-    piper.wipe()
+    piper.wipe(noinput=noinput)
 
 @cli.command()
 @click.argument("package_name") #, help="Package name you want to explain why")

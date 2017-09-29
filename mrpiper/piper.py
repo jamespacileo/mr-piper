@@ -1101,8 +1101,9 @@ def dependency_list(depth=None):
 
 
 @check_before_running
-def wipe():
-    click.confirm("Are you sure you want to wipe?", abort=True)
+def wipe(noinput=False):
+    if not noinput:
+        click.confirm("Are you sure you want to wipe?", abort=True)
     project.wipe()
 
 @check_before_running
