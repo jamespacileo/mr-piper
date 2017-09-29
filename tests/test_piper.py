@@ -198,6 +198,40 @@ def test_install():
     # assert ("requests" in dev_txt.text())
 
 
+def test_cache():
+    # delegator.run("piper wipe -y").return_code == 0
+    # delegator.run("piper init -y").return_code == 0
+    # delegator.run("piper add requests").return_code == 0
+    # delegator.run("piper add coverage --dev").return_code == 0
+    # delegator.run("piper cache").return_code == 0
+    # delegator.run("rm -rf .virtualenvs").return_code == 0
+    # delegator.run("piper install --cache ./piper_cache").return_code == 0
+    piper.wipe(True)
+    piper.init(noinput=True)
+    piper.add("requests")
+    piper.add("coverage", dev=True)
+    piper.cache()
+    delegator.run("rm -rf .virtualenvs").return_code == 0
+    piper.install(cache_url="./piper_cache")
+
+
+def test_hashes():
+    # delegator.run("piper wipe -y").return_code == 0
+    # delegator.run("piper init -y").return_code == 0
+    # delegator.run("piper add requests").return_code == 0
+    # delegator.run("piper add coverage --dev").return_code == 0
+    # delegator.run("piper hash").return_code == 0
+    # delegator.run("rm -rf .virtualenvs").return_code == 0
+    # delegator.run("piper install --hashes").return_code == 0
+    piper.wipe(True)
+    piper.init(noinput=True)
+    piper.add("requests")
+    piper.add("coverage", dev=True)
+    piper.hash()
+    delegator.run("rm -rf .virtualenvs").return_code == 0
+    piper.install(require_hashes=True)
+
+
 
 if __name__=="__main__":
     test_init()
