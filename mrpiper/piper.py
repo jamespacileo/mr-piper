@@ -145,6 +145,16 @@ def pip_wheel(output_dir, requirements):
     return c
     # return c.return_code == 0
 
+def pip_download(output_dir, requirements):
+    pip_command = "{0} download --dest={1} -r {2}".format(
+        which_pip(),
+        shellquote(output_dir),
+        shellquote(requirements)
+    )
+    c = delegator.run(pip_command)
+    return c
+
+
 def pip_freeze():
     # temp = tempfile.TemporaryFile()
     # pip_command = '{0} freeze > {1}'.format(which_pip(), temp.name)
@@ -1175,7 +1185,7 @@ def hash():
 
 @check_before_running
 def cache(output_dir="./piper_cache", dev=False):
-    click.secho("[1/2] 🔍  Collecting packages to cache...", fg="yellow")
+    click.secho("[1/3] 🔍  Collecting packages to cache...", fg="yellow")
     # click.secho("Output dir selected: {}".format(output_dir))
 
     if dev:
@@ -1183,10 +1193,16 @@ def cache(output_dir="./piper_cache", dev=False):
     else:
         requirements = project.requirements_file("base-locked.txt").abspath()
 
-    click.secho("[2/2] 📦  Caching packages...", fg="yellow")
+    click.secho("[2/3] 📦  Caching packages...", fg="yellow")
 
     with click_spinner.spinner():
         c = pip_wheel(output_dir, requirements)
+
+    click.secho("[3/3] 📦  Composing cache for other platforms...", fg="yellow")
+
+    with click_spinner.spinner():
+        c2 = pip_download(output_dir, requirements)
+
         # click.secho(c.out + c.err)
     click.secho("Caching complete! Your cahce is stored at: {}".format(output_dir), fg="green")
 
