@@ -46,6 +46,7 @@ from .utils import add_to_requirements_file, compile_requirements, add_to_requir
 from . import overrides
 from .project import PythonProject
 from . import pyenv_utils
+from .shell import do_shell
 
 project = PythonProject()
 
@@ -78,52 +79,7 @@ def system_which(command, mult=False):
         return result.split('\n')[0]
 
 
-# def do_shell(three=None, python=False, fancy=False, shell_args=None):
 
-#     cmd = 'pew'
-#     args = ["workon", project.virtualenv_name]
-
-#     # Grab current terminal dimensions to replace the hardcoded default
-#     # dimensions of pexpect
-#     terminal_dimensions = get_terminal_size()
-
-#     try:
-#         c = pexpect.spawn(
-#             cmd,
-#             args,
-#             dimensions=(
-#                 terminal_dimensions.lines,
-#                 terminal_dimensions.columns
-#             )
-#         )
-
-#     # Windows!
-#     except AttributeError:
-#         import subprocess
-#         p = subprocess.Popen([cmd] + list(args), shell=True, universal_newlines=True)
-#         p.communicate()
-#         sys.exit(p.returncode)
-
-#     # Activate the virtualenv if in compatibility mode.
-#     if compat:
-#         c.sendline(activate_virtualenv())
-
-#     # Send additional arguments to the subshell.
-#     if shell_args:
-#         c.sendline(' '.join(shell_args))
-
-#     # Handler for terminal resizing events
-#     # Must be defined here to have the shell process in its context, since we
-#     # can't pass it as an argument
-#     def sigwinch_passthrough(sig, data):
-#         terminal_dimensions = get_terminal_size()
-#         c.setwinsize(terminal_dimensions.lines, terminal_dimensions.columns)
-#     signal.signal(signal.SIGWINCH, sigwinch_passthrough)
-
-#     # Interact with the new shell.
-#     c.interact(escape_character=None)
-#     c.close()
-#     sys.exit(c.exitstatus)
 
 
 def find_a_system_python(python):
@@ -1284,15 +1240,20 @@ def run(name, args=[]):
 
     click.secho("Done running command {}".format(name), fg="green")
 
+def check_integrity():
+    pass
+
 def shell():
 
     # script_file = project.virtualenv_dir / ""
-    command = "{0} workon {1}".format(
-        system_which("pew"),
-        shellquote(project.virtualenv_dir)
-    )
-    logger.debug(command)
-    delegator.run(command, block=False)
+    # command = "{0} workon {1}".format(
+    #     system_which("pew"),
+    #     shellquote(project.virtualenv_dir)
+    # )
+    # logger.debug(command)
+    # delegator.run(command, block=False)
+
+    do_shell(project, which("python"))
 
 # def run_bin(bin_name, args):
 #     path = which(bin_name)
