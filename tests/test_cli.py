@@ -138,6 +138,25 @@ def test_install():
     print("Testing install...")
     delegator.run("piper install").return_code == 0
 
+def test_cache():
+    delegator.run("piper wipe -y").return_code == 0
+    delegator.run("piper init -y").return_code == 0
+    delegator.run("piper add requests").return_code == 0
+    delegator.run("piper add coverage --dev").return_code == 0
+    delegator.run("piper cache").return_code == 0
+    delegator.run("rm -rf .virtualenvs").return_code == 0
+    delegator.run("piper install --cache ./piper_cache").return_code == 0
+
+def test_hashes():
+    delegator.run("piper wipe -y").return_code == 0
+    delegator.run("piper init -y").return_code == 0
+    delegator.run("piper add requests").return_code == 0
+    delegator.run("piper add coverage --dev").return_code == 0
+    delegator.run("piper hash").return_code == 0
+    delegator.run("rm -rf .virtualenvs").return_code == 0
+    delegator.run("piper install --hashes").return_code == 0
+
+
 # assert 'dev_dpendencies' in "pytest exists because it's specified in dev_dependencies\n"
 
 if __name__=="__main__":
