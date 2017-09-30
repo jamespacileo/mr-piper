@@ -1,12 +1,13 @@
 Mr Piper 🎻🐍 - Super simple project package manager
 ================================================================
 
-|piper| |windows| |linux| |macos|
+|piper_small| |windows| |linux| |macos|
 
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
 
 .. |piper| image:: https://transfer.sh/vIgt8/rsz_11img_1029.jpg
+.. |piper_small| image:: https://transfer.sh/hIfby/rsz_1rsz_11img_1029.jpg
 
 ---------------
 
