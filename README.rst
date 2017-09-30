@@ -6,10 +6,7 @@ Mr Piper 🎻🐍 - Super simple project package manager
 |image0| |image1| |image2| |image3| |image4| |Travis|
 
 
-
-.. |piper| image:: https://transfer.sh/9WyGq/IMG_1029.JPG
-   :height: 150px
-
+.. |piper| image:: https://transfer.sh/vIgt8/rsz_11img_1029.jpg
 
 ---------------
 
