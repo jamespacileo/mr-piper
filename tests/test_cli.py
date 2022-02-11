@@ -18,9 +18,7 @@ import tempfile
 TEMP_LOCATION = tempfile.mkdtemp()
 os.chdir(TEMP_LOCATION)
 
-LOCAL_TEST_PROJECT = False
-
-if LOCAL_TEST_PROJECT:
+if LOCAL_TEST_PROJECT := False:
     TEMP_LOCATION = Path("temp") / "cli_testing_project"
     Path("temp").mkdir_p()
     TEMP_LOCATION.rmtree_p()

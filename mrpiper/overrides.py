@@ -36,10 +36,7 @@ class SmartRequirement(InstallRequirement):
         req.specs = req.helper_req.specs
         req.vcs = req.helper_req.vcs
         req.local_file = req.helper_req.local_file
-        if req.req:
-            req.line = req.req.__str__()
-        else:
-            req.line = req.link.__str__()
+        req.line = req.req.__str__() if req.req else req.link.__str__()
         return req
 
     @classmethod
@@ -50,10 +47,7 @@ class SmartRequirement(InstallRequirement):
         req.specs = req.helper_req.specs
         req.vcs = req.helper_req.vcs
         req.local_file = req.helper_req.local_file
-        if req.req:
-            req.line = req.req.__str__()
-        else:
-            req.line = req.link.__str__()
+        req.line = req.req.__str__() if req.req else req.link.__str__()
         return req
 
 
@@ -88,8 +82,7 @@ def parse(reqstr):
             new_file_path = os.path.join(os.path.dirname(filename or '.'),
                                          new_filename)
             with open(new_file_path) as f:
-                for requirement in parse(f):
-                    yield requirement
+                yield from parse(f)
         elif line.startswith('-f') or line.startswith('--find-links') or \
                 line.startswith('-i') or line.startswith('--index-url') or \
                 line.startswith('--extra-index-url') or \

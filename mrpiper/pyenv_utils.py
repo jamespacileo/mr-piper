@@ -15,8 +15,7 @@ def set_local(version):
     return c.return_code == 0
 
 def is_python_pyenv(filename):
-    PYENV_ROOT = os.environ.get("PYENV_ROOT")
-    if PYENV_ROOT:
+    if PYENV_ROOT := os.environ.get("PYENV_ROOT"):
         PYENV_ROOT = Path(PYENV_ROOT).abspath()
         return Path(filename).abspath().startswith(PYENV_ROOT)
     return False

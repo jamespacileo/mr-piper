@@ -34,7 +34,7 @@ def add_line_to_requirements(filename, line):
 
 def add_to_requirements_file(req, filename):
     # click.echo("Adding module to requirements")
-    old_reqs = [r for r in parse_requirements(filename, session='')]
+    old_reqs = list(parse_requirements(filename, session=''))
 
     if req.editable:
         install_req = InstallRequirement.from_editable(req.line.replace("-e ", ""))
@@ -54,16 +54,12 @@ def add_to_requirements_file(req, filename):
             # click.echo(old_req)
 
     if not replaced:
-        reqs.append(install_req)
-
-    if not replaced:
-        reqs.append(install_req)
-
+        reqs.extend((install_req, install_req))
     # requirements = []
 
     # click.echo("List of requirements: {0}".format(reqs))
 
-    with open(filename + ".tmp", "w") as file:
+    with open(f'{filename}.tmp', "w") as file:
         # click.echo(file.name)
         for package in reqs:
             # click.echo("Adding package {0}".format(package))
@@ -119,7 +115,7 @@ def add_to_requirements_lockfile(reqs, filename):
         # project.recase_pipfile()
 
     os.remove(filename)
-    os.rename(filename+".tmp", filename)
+    os.rename(f'{filename}.tmp', filename)
     return
 
 def compile_requirements(input_filename, output_filename):
@@ -128,7 +124,7 @@ def compile_requirements(input_filename, output_filename):
 
 def remove_from_requirements_file(req, filename):
     # click.echo("Adding module to requirements")
-    old_reqs = [r for r in parse_requirements(filename, session='')]
+    old_reqs = list(parse_requirements(filename, session=''))
 
     if req.editable:
         install_req = InstallRequirement.from_editable(req.line.replace("-e ", ""))
@@ -149,7 +145,7 @@ def remove_from_requirements_file(req, filename):
 
     # click.echo("List of requirements: {0}".format(reqs))
 
-    with open(filename + ".tmp", "w") as file:
+    with open(f'{filename}.tmp', "w") as file:
         # click.echo(file.name)
         for package in reqs:
             # click.echo("Adding package {0}".format(package))
@@ -174,17 +170,14 @@ def remove_from_requirements_file(req, filename):
     return
 
 def get_packages_from_requirements_file(filename):
-    # return [r for r in parse_requirements(filename, session='')]
-    reqstr = filename.text()
-    if reqstr:
+    if reqstr := filename.text():
         with filename.parent:
             return list(parse_requirements_alt(reqstr))
     return []
 
 def get_package_from_requirement_file(package_name, filename):
     pkgs = get_packages_from_requirements_file(filename)
-    package = next(filter(lambda x: x.name.lower() == package_name.lower(), pkgs))
-    return package
+    return next(filter(lambda x: x.name.lower() == package_name.lower(), pkgs))
 
 def map_piper_json_to_requirements():
     pass
@@ -228,11 +221,7 @@ def resolve_git_shortcut(git_shortcut):
     username = result.fixed[0]
     project = result.fixed[1]
 
-    git_tag = None
-    if len(result.fixed) > 2:
-        git_tag = result.fixed[2]
-
-
+    git_tag = result.fixed[2] if len(result.fixed) > 2 else None
     r = requests.get("https://raw.githubusercontent.com/{0}/{1}/master/setup.py".format(username, project))
     if r.status_code == 404:
         return False

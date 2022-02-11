@@ -122,8 +122,7 @@ class PythonProject(object):
     def is_inside_project(self, path):
 
         parent, name = path.splitpath()
-        piper_files = [item for item in path.files("piper.json")]
-        if piper_files:
+        if piper_files := list(path.files("piper.json")):
             return path
 
         # print(parent)
@@ -136,8 +135,7 @@ class PythonProject(object):
     @property
     def project_dir(self):
         if not self._project_dir:
-            result = self.is_inside_project(Path(os.getcwd()))
-            if result:
+            if result := self.is_inside_project(Path(os.getcwd())):
                 self._project_dir = result
             else:
                 self._project_dir = Path(os.getcwd())
@@ -332,11 +330,7 @@ class PythonProject(object):
             # private = click.prompt("Is it a private project?", default=private, type=bool)
             private = not click.confirm("Is it a public project?")
 
-            if not private:
-                licence = click.prompt("Licence", default="MIT")
-            else:
-                licence = None
-
+            licence = click.prompt("Licence", default="MIT") if not private else None
         tpl = collections.OrderedDict([
             ("created", datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')),
             ("name", package_name),
@@ -366,9 +360,12 @@ class PythonProject(object):
         piper_file = self.piper_file
 
         dependency = {
-            "depends_on": list(filter(lambda x: not (x in CORE_PACKAGES), dep["dependencies"])),
-            "line": dep["line"]
+            "depends_on": list(
+                filter(lambda x: x not in CORE_PACKAGES, dep["dependencies"])
+            ),
+            "line": dep["line"],
         }
+
 
         # lock["depended_on"] = set(lock["depended_on"] + dependency["depends_on"]) if ("depended_on" in lock) else set(dependency["depends_on"])
         # lock["depended_on"] = list(lock["depended_on"])
@@ -470,7 +467,7 @@ class PythonProject(object):
             if _item.get("hashes"):
                 hashes = _item.get("hashes")
                 for _hash in hashes:
-                    lines.append(line + " \\")
+                    lines.append(f'{line} \\')
                     line = "    --hash=sha256:{}".format(_hash["hash"])
             lines.append(line)
             return lines
@@ -497,14 +494,12 @@ class PythonProject(object):
 
         combined_deps = [i.lower() for i in list_of_dependables] + [i.lower() for i in list_of_dev_dependables]
 
-        logger.debug([i for i in list_of_dependables])
-        logger.debug([i for i in list_of_dev_dependables])
+        logger.debug(list(list_of_dependables))
+        logger.debug(list(list_of_dev_dependables))
         # all_dependables = list_of_dependables + list_of_dev_dependables
 
         for key, item in list(lock["frozen_deps"].items()):
-            if (key.lower() in combined_deps):
-                pass
-            else:
+            if key.lower() not in combined_deps:
                 lock["frozen_deps"].pop(key)
 
         self.save_to_piper_lock(lock)
@@ -531,8 +526,8 @@ class PythonProject(object):
         piper_file = self.piper_file
         lock = self.piper_lock
 
-        deps = [key for key in piper_file.get("dependencies", {})]
-        devDeps = [key for key in piper_file.get("dev_dependencies", {})]
+        deps = list(piper_file.get("dependencies", {}))
+        devDeps = list(piper_file.get("dev_dependencies", {}))
 
         base_dependencies = {}
         for dep in deps:
@@ -569,10 +564,11 @@ class PythonProject(object):
 
     def update_frozen_dependencies_in_piper_lock(self, frozen_deps):
         lock = self.piper_lock
-        lock["frozen_deps"] = {}
-        for dep in frozen_deps:
-            if not (dep.name.lower() in CORE_PACKAGES):
-                lock["frozen_deps"][dep.name.lower()] = dep.__dict__
+        lock["frozen_deps"] = {
+            dep.name.lower(): dep.__dict__
+            for dep in frozen_deps
+            if dep.name.lower() not in CORE_PACKAGES
+        }
 
         self.save_to_piper_lock(lock)
         # json.dump(lock, self.piper_lock_dir.open("w"), indent=4 * ' ')
@@ -620,8 +616,7 @@ class PythonProject(object):
             for item in value["depends_on"]:
                 locked_dependencies.add(item)
 
-        removable = [item for item in to_remove if not (item in locked_dependencies)]
-        return removable
+        return [item for item in to_remove if item not in locked_dependencies]
 
     @property
     def is_git_repository(self):

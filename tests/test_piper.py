@@ -18,9 +18,7 @@ from path import Path
 # source_path = Path("..") / "mrpiper"
 source_path = Path(Path("mrpiper").abspath())
 
-LOCAL_TEST_PROJECT = False
-
-if LOCAL_TEST_PROJECT:
+if LOCAL_TEST_PROJECT := False:
     TEMP_LOCATION = Path("temp") / "temp_project"
     Path("temp").mkdir_p()
     TEMP_LOCATION.rmtree_p()
@@ -60,12 +58,10 @@ except:
 import errno
 import stat
 def handleRemoveReadonly(func, path, exc):
-  excvalue = exc[1]
-  if func in (os.rmdir, os.remove) and excvalue.errno == errno.EACCES:
-      os.chmod(path, stat.S_IRWXU| stat.S_IRWXG| stat.S_IRWXO) # 0777
-      func(path)
-  else:
-      pass
+    excvalue = exc[1]
+    if func in (os.rmdir, os.remove) and excvalue.errno == errno.EACCES:
+        os.chmod(path, stat.S_IRWXU| stat.S_IRWXG| stat.S_IRWXO) # 0777
+        func(path)
 
 def create_test_project():
     temp_project_dir = tempfile.mkdtemp()
@@ -110,7 +106,7 @@ def test_add():
     piper.add("git+https://github.com/requests/requests.git@v2.18.4#egg=requests")
     assert "requests" in base_txt.text()
 
-    if not (platform.system() == "Windows"):
+    if platform.system() != "Windows":
         piper.add("git+https://github.com/scrapy/scrapy.git#egg=scrapy")
         assert "Scrapy" in base_txt.text()
 
@@ -123,17 +119,17 @@ def test_add():
 def test_remove():
     piper.remove("requests")
     assert base_txt.isfile()
-    assert not ("requests" in base_txt.text())
-    assert not ("requests" in piper.project.piper_file["dependencies"])
+    assert "requests" not in base_txt.text()
+    assert "requests" not in piper.project.piper_file["dependencies"]
 
-    if not (platform.system() == "Windows"):
+    if platform.system() != "Windows":
         piper.remove("scrapy")
         assert base_txt.isfile()
-        assert not ("scrapy" in base_txt.text())
+        assert "scrapy" not in base_txt.text()
 
     piper.remove("path.py")
     assert dev_txt.isfile()
-    assert not ("requests" in dev_txt.text())
+    assert "requests" not in dev_txt.text()
 
     piper.remove("werkzeug")
     piper.remove("regex")

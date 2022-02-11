@@ -232,9 +232,7 @@ def expand_python_version(version):
         'source',
         'py2.py3',
     ]
-    return set(
-        pattern.format(major=major, minor=minor) for pattern in patterns
-    )
+    return {pattern.format(major=major, minor=minor) for pattern in patterns}
 
 
 # This should match the naming convention laid out in PEP 0427
@@ -292,18 +290,16 @@ def release_url_metadata(url):
     }
     simple_classifiers = [CLASSIFY_WHEEL_RE, CLASSIFY_EGG_RE, CLASSIFY_EXE_RE]
     for classifier in simple_classifiers:
-        match = classifier.match(filename)
-        if match:
+        if match := classifier.match(filename):
             defaults.update(match.groupdict())
             return defaults
 
-    match = CLASSIFY_ARCHIVE_RE.match(filename)
-    if match:
+    if match := CLASSIFY_ARCHIVE_RE.match(filename):
         defaults.update(match.groupdict())
         defaults['python_version'] = 'source'
         return defaults
 
-    raise PackageError('Unrecognizable url: ' + url)
+    raise PackageError(f'Unrecognizable url: {url}')
 
 
 def filter_releases(releases, python_versions):

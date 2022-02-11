@@ -33,7 +33,7 @@ def build_dist_index(pkgs):
     :rtype: dict
 
     """
-    return dict((p.key, DistPackage(p)) for p in pkgs)
+    return {p.key: DistPackage(p) for p in pkgs}
 
 
 def construct_tree(index):
@@ -47,9 +47,8 @@ def construct_tree(index):
     :rtype: dict
 
     """
-    return dict((p, [ReqPackage(r, index.get(r.key))
-                     for r in p.requires()])
-                for p in index.values())
+    return {p: [ReqPackage(r, index.get(r.key))
+                     for r in p.requires()] for p in index.values()}
 
 
 def sorted_tree(tree):
@@ -80,8 +79,8 @@ def find_tree_root(tree, key):
 
     """
     result = [p for p in tree.keys() if p.key == key]
-    assert len(result) in [0, 1]
-    return None if len(result) == 0 else result[0]
+    assert len(result) in {0, 1}
+    return None if not result else result[0]
 
 
 def reverse_tree(tree):
@@ -97,7 +96,7 @@ def reverse_tree(tree):
 
     """
     rtree = defaultdict(list)
-    child_keys = set(c.key for c in flatten(tree.values()))
+    child_keys = {c.key for c in flatten(tree.values())}
     for k, vs in tree.items():
         for v in vs:
             node = find_tree_root(rtree, v.key) or v
@@ -183,16 +182,14 @@ class DistPackage(Package):
 
     def render_as_branch(self, frozen):
         assert self.req is not None
-        if not frozen:
-            parent_ver_spec = self.req.version_spec
-            parent_str = self.req.project_name
-            if parent_ver_spec:
-                parent_str += parent_ver_spec
-            return (
-                '{0}=={1} [requires: {2}]'
-            ).format(self.project_name, self.version, parent_str)
-        else:
+        if frozen:
             return self.render_as_root(frozen)
+        parent_str = self.req.project_name
+        if parent_ver_spec := self.req.version_spec:
+            parent_str += parent_ver_spec
+        return (
+            '{0}=={1} [requires: {2}]'
+        ).format(self.project_name, self.version, parent_str)
 
     def as_requirement(self):
         """Return a ReqPackage representation of this DistPackage"""
@@ -246,7 +243,7 @@ class ReqPackage(Package):
         # unknown installed version is also considered conflicting
         if self.installed_version == self.UNKNOWN_VERSION:
             return True
-        ver_spec = (self.version_spec if self.version_spec else '')
+        ver_spec = self.version_spec or ''
         req_version_str = '{0}{1}'.format(self.project_name, ver_spec)
         req_obj = pkg_resources.Requirement.parse(req_version_str)
         return self.installed_version not in req_obj
@@ -260,13 +257,12 @@ class ReqPackage(Package):
             return self.project_name
 
     def render_as_branch(self, frozen):
-        if not frozen:
-            req_ver = self.version_spec if self.version_spec else 'Any'
-            return (
-                '{0} [required: {1}, installed: {2}]'
-                ).format(self.project_name, req_ver, self.installed_version)
-        else:
+        if frozen:
             return self.render_as_root(frozen)
+        req_ver = self.version_spec or 'Any'
+        return (
+            '{0} [required: {1}, installed: {2}]'
+            ).format(self.project_name, req_ver, self.installed_version)
 
     def as_dict(self):
         return {'key': self.key,
@@ -428,13 +424,16 @@ def cyclic_deps(tree):
     :rtype: generator
 
     """
-    key_tree = dict((k.key, v) for k, v in tree.items())
+    key_tree = {k.key: v for k, v in tree.items()}
     get_children = lambda n: key_tree.get(n.key, [])
     cyclic = []
     for p, rs in tree.items():
-        for req in rs:
-            if p.key in map(attrgetter('key'), get_children(req)):
-                cyclic.append((p, req, p))
+        cyclic.extend(
+            (p, req, p)
+            for req in rs
+            if p.key in map(attrgetter('key'), get_children(req))
+        )
+
     return cyclic
 
 

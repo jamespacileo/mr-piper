@@ -35,8 +35,7 @@ def parse(reqstr):
             new_file_path = os.path.join(os.path.dirname(filename or '.'),
                                          new_filename)
             with open(new_file_path) as f:
-                for requirement in parse(f):
-                    yield requirement
+                yield from parse(f)
         elif line.startswith('-f') or line.startswith('--find-links') or \
                 line.startswith('-i') or line.startswith('--index-url') or \
                 line.startswith('--extra-index-url') or \
